@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+
+<tiles-definitions>
+	<definition name="app.default" template="/WEB-INF/layouts/default.jsp">
+		<put-attribute name="title" value="Spring Boot Demo" />
+	</definition>
+
+
+	<definition name="app.homepage" extends="app.default">
+		<put-attribute name="content" value="/WEB-INF/tiles/home.jsp" />
+	</definition>
+	
+	<definition name="app.about" extends="app.default">
+		<put-attribute name="content" value="/WEB-INF/tiles/about.jsp" />
+	</definition>
+	
+	<definition name="app.addStatus" extends="app.default">
+		<put-attribute name="content" value="/WEB-INF/tiles/addstatus.jsp" />
+	</definition>
+
+</tiles-definitions>
