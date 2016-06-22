@@ -13,15 +13,12 @@
 		<div class="panel panel-default">
 
 			<div class="panel-heading">
-				<div class="panel-title">Edit Status Update</div>
+				<div class="panel-title">Add a Status Update</div>
 			</div>
 
 
 
 			<form:form modelAttribute="statusUpdate">
-			
-				<form:input type="hidden" path="id" />
-				<form:input type="hidden" path="added" />
 
 				<div class="errors">
 					<form:errors path="text" />
@@ -30,10 +27,33 @@
 					<form:textarea path="text" name="text" rows="10" cols="50"></form:textarea>
 				</div>
 
-				<input type="submit" name="submit" value="Save" />
+				<input type="submit" name="submit" value="Add Status" />
 			</form:form>
 
+
+
+
 		</div>
+
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<div class="panel-title">
+					Status update added on
+					<fmt:formatDate pattern="EEEE d MMMM y 'at' H:mm:s"
+						value="${latestStatusUpdate.added}" />
+				</div>
+			</div>
+
+			<div class="panel-body">
+
+				${latestStatusUpdate.text}
+
+			</div>
+
+
+		</div>
+
 
 	</div>
 

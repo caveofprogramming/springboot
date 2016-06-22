@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.StatusUpdate;
+import com.caveofprogramming.model.StatusUpdateDao;
 import com.caveofprogramming.service.StatusUpdateService;
 
 @Controller
@@ -38,9 +39,12 @@ public class StatusUpdateController {
 		modelAndView.setViewName("app.editStatus");
 		
 		if(!result.hasErrors()) {
+			System.out.println("=========== SAVE =============");
 			statusUpdateService.save(statusUpdate);
 			modelAndView.setViewName("redirect:/viewstatus");
 		}
+		
+		System.out.println("=========== FINISHED =============");
 		
 		return modelAndView;
 	}

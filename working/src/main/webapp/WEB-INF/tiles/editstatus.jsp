@@ -21,10 +21,13 @@
 			<form:form modelAttribute="statusUpdate">
 			
 				<form:input type="hidden" path="id" />
-				<form:input type="hidden" path="added" />
+				<form:input class="date" type="hidden" path="added" />
 
 				<div class="errors">
 					<form:errors path="text" />
+					
+					<form:errors path="id" />
+					<form:errors path="added" />
 				</div>
 				<div class="form-group">
 					<form:textarea path="text" name="text" rows="10" cols="50"></form:textarea>
@@ -32,6 +35,9 @@
 
 				<input type="submit" name="submit" value="Save" />
 			</form:form>
+
+
+
 
 		</div>
 

@@ -30,7 +30,7 @@ public class StatusUpdate {
 
 	@Column(name = "added")
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern="yyyy/MM/dd hh:mm:ss")
+	@DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
 	private Date added;
 
 	@PrePersist
