@@ -21,8 +21,8 @@ public class AuthController {
 	private UserService userService;
 	
 	@Autowired
-	EmailService mailService;
-
+	private EmailService emailService;
+	
 	@RequestMapping("/login")
 	String admin() {
 		return "app.login";
@@ -50,8 +50,8 @@ public class AuthController {
 		if(!result.hasErrors()) {
 			userService.register(user);
 			
-			mailService.sendVerificationMail(user.getEmail());
-			
+			emailService.sendVerificationEmail(user.getEmail());
+
 			modelAndView.setViewName("redirect:/verifyemail");
 		}
 		return modelAndView;

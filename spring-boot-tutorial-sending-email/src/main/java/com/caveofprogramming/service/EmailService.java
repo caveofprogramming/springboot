@@ -14,46 +14,45 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-
+	
 	@Autowired
 	private JavaMailSender mailSender;
-
+	
 	@Value("${mail.enable}")
-	private Boolean enabled;
-
+	private Boolean enable;
+	
 	private void send(MimeMessagePreparator preparator) {
-
-		if (enabled) {
+		if(enable) {
 			mailSender.send(preparator);
 		}
 	}
-
-	public void sendVerificationMail(String email) {
+	
+	public void sendVerificationEmail(String emailAddress) {
+		
 		StringBuilder sb = new StringBuilder();
-
-		sb.append("<html>");
-		sb.append("<p>Please verify your email address by visiting the following link.</p>");
-		sb.append("<p><a href='#'>Click here</a></p>");
-		sb.append("</html>");
-
+		
+		sb.append("<HTML>");
+		sb.append("<p>Hello there, this is <strong>HTML</strong></p>");
+		sb.append("</HTML>");
+		
+		
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
 			@Override
 			public void prepare(MimeMessage mimeMessage) throws Exception {
-
+				
 				MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-
-				message.setTo(email);
-				message.setFrom(new InternetAddress("bob@caveofprogramming.com"));
-				message.setSubject("Verify Your Email Address");
+				
+				message.setTo(emailAddress);
+				message.setFrom(new InternetAddress("no-reply@caveofprogramming.com"));
+				message.setSubject("Please Verify Your Email Address");
 				message.setSentDate(new Date());
-
+				
 				message.setText(sb.toString(), true);
-
 			}
-
+			
 		};
-
+		
 		send(preparator);
 	}
 }
