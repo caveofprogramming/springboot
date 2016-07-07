@@ -1,0 +1,13 @@
+<html>
+
+<body>
+
+<p>Thankyou for registering to the Spring Boot Tutorial site</p>
+
+<p>Test data: ${test}</p>
+
+<p>Please click <a href="#">here</a> to verify your email address.
+
+</body>
+
+</html>
