@@ -27,16 +27,20 @@ public class EmailService {
 	@Value("${mail.enable}")
 	private Boolean enable;
 	
+	@Value("${site.url}")
+	private String url;
+	
 	private void send(MimeMessagePreparator preparator) {
 		if(enable) {
 			mailSender.send(preparator);
 		}
 	}
 	
-	public void sendVerificationEmail(String emailAddress) {
+	public void sendVerificationEmail(String emailAddress, String token) {
 		
 		HashMap<String, Object> model = new HashMap<>();
-		model.put("test", "This is some dynamic data");
+		model.put("token", token);
+		model.put("url", url);
 		
 		String contents = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/com/caveofprogramming/velocity/verifyemail.vm", "UTF-8", model);
 		

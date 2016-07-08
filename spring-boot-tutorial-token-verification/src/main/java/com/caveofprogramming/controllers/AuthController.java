@@ -3,6 +3,7 @@ package com.caveofprogramming.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,15 @@ public class AuthController {
 	@Autowired
 	private EmailService emailService;
 	
+	@Value("${message.registration.confirmed}")
+	private String registrationConfirmedMessage;
+	
+	@Value("${message.invalid.user}")
+	private String invalidUserMessage;
+	
+	@Value("${message.expired.token}")
+	private String expiredTokenMessage;
+	
 	@RequestMapping("/login")
 	String admin() {
 		return "app.login";
@@ -31,6 +41,30 @@ public class AuthController {
 	@RequestMapping("/verifyemail")
 	String verifyEmail() {
 		return "app.verifyemail";
+	}
+	
+	@RequestMapping("/registrationconfirmed")
+	ModelAndView registrationConfirmed(ModelAndView modelAndView) {
+		
+		modelAndView.getModel().put("message", registrationConfirmedMessage);
+		modelAndView.setViewName("app.message");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/invaliduser")
+	ModelAndView invalidUser(ModelAndView modelAndView) {
+		
+		modelAndView.getModel().put("message", invalidUserMessage);
+		modelAndView.setViewName("app.message");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/expiredtoken")
+	ModelAndView expiredToken(ModelAndView modelAndView) {
+		
+		modelAndView.getModel().put("message", expiredTokenMessage);
+		modelAndView.setViewName("app.message");
+		return modelAndView;
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.GET)
@@ -50,9 +84,14 @@ public class AuthController {
 		if(!result.hasErrors()) {
 			userService.register(user);
 			
-			emailService.sendVerificationEmail(user.getEmail());
+			String token = userService.createEmailVerificationToken(user);
+			
+			emailService.sendVerificationEmail(user.getEmail(), token);
 
 			modelAndView.setViewName("redirect:/verifyemail");
+			
+			user.setEnabled(true);
+			userService.save(user);
 		}
 		return modelAndView;
 	}
