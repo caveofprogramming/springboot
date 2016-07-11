@@ -1,5 +1,7 @@
 package com.caveofprogramming.controllers;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +11,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.SiteUser;
+import com.caveofprogramming.model.VerificationToken;
 import com.caveofprogramming.service.EmailService;
 import com.caveofprogramming.service.UserService;
 
@@ -43,8 +47,32 @@ public class AuthController {
 		return "app.verifyemail";
 	}
 	
-	@RequestMapping("/registrationconfirmed")
-	ModelAndView registrationConfirmed(ModelAndView modelAndView) {
+	@RequestMapping("/confirmregister")
+	ModelAndView registrationConfirmed(ModelAndView modelAndView, @RequestParam("t") String tokenString) {
+		
+		VerificationToken token = userService.getVerificationToken(tokenString);
+		
+		if(token == null) {
+			modelAndView.setViewName("redirect:/invaliduser");
+			return modelAndView;
+		}
+		
+		Date expiryDate = token.getExpiry();
+		
+		if(expiryDate.before(new Date())) {
+			modelAndView.setViewName("redirect:/expiredtoken");
+			return modelAndView;
+		}
+		
+		SiteUser user = token.getUser();
+		
+		if(user == null) {
+			modelAndView.setViewName("redirect:/invaliduser");
+			return modelAndView;
+		}
+		
+		user.setEnabled(true);
+		userService.save(user);
 		
 		modelAndView.getModel().put("message", registrationConfirmedMessage);
 		modelAndView.setViewName("app.message");
@@ -89,9 +117,6 @@ public class AuthController {
 			emailService.sendVerificationEmail(user.getEmail(), token);
 
 			modelAndView.setViewName("redirect:/verifyemail");
-			
-			user.setEnabled(true);
-			userService.save(user);
 		}
 		return modelAndView;
 	}
