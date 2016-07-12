@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/deletestatus",
 						"/viewstatus")
 				.hasRole("ADMIN")
+				
 				.and()
 			.formLogin()
 				.loginPage("/login")

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
@@ -36,6 +37,7 @@ public class EmailService {
 		}
 	}
 	
+	@Async
 	public void sendVerificationEmail(String emailAddress, String token) {
 		
 		HashMap<String, Object> model = new HashMap<>();
