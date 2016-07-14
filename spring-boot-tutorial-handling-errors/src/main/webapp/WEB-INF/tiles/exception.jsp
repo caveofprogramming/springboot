@@ -13,6 +13,7 @@
 		
 		<!-- 
 		
+		Exception: <c:out value="${exception}" />
 		Failed URL: <c:out value="${url}" />
 		Exception message: <c:out value="${exception.message}" />
 		

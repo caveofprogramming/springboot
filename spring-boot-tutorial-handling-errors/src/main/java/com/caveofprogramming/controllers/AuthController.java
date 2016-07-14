@@ -103,9 +103,6 @@ public class AuthController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	ModelAndView register(ModelAndView modelAndView) throws FileNotFoundException {
 
-		if (true)
-			throw new FileNotFoundException("This is a dreadful exception.");
-
 		SiteUser user = new SiteUser();
 
 		modelAndView.getModel().put("user", user);
