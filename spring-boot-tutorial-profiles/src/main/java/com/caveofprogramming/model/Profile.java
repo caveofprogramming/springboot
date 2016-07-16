@@ -1,0 +1,53 @@
+package com.caveofprogramming.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="profile")
+public class Profile {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id")
+	private Long id;
+	
+	@OneToOne(targetEntity=SiteUser.class)
+	@JoinColumn(name="user_id", nullable=false)
+	private SiteUser user;
+	
+	@Column(name="about", length=5000)
+	private String about;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public SiteUser getUser() {
+		return user;
+	}
+
+	public void setUser(SiteUser user) {
+		this.user = user;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	
+	
+}
