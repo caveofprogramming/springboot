@@ -1,8 +1,5 @@
 package com.caveofprogramming;
 
-
-import org.owasp.html.HtmlPolicyBuilder;
-import org.owasp.html.PolicyFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -67,11 +64,4 @@ public class App extends SpringBootServletInitializer {
 		};
 	}
 
-	@Bean
-	PolicyFactory getUserHtmlPolicy() {
-		return new HtmlPolicyBuilder()
-				.allowCommonBlockElements()
-				.allowCommonInlineFormattingElements()
-				.toFactory();
-	}
 }

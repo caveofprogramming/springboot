@@ -2,7 +2,6 @@ package com.caveofprogramming.controllers;
 
 import javax.validation.Valid;
 
-import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,9 +24,6 @@ public class ProfileController {
 	
 	@Autowired
 	ProfileService profileService;
-	
-	@Autowired
-	PolicyFactory htmlPolicy;
 	
 	private SiteUser getUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -74,17 +70,17 @@ public class ProfileController {
 	
 	
 	@RequestMapping(value="/edit-profile-about", method=RequestMethod.POST)
-	public ModelAndView editProfileAbout(ModelAndView modelAndView, @Valid Profile webProfile, BindingResult result) {
+	public ModelAndView editProfileAbout(ModelAndView modelAndView, @Valid Profile profile, BindingResult result) {
 		
 		modelAndView.setViewName("app.editProfileAbout");
 		
 		SiteUser user = getUser();
-		Profile profile = profileService.getUserProfile(user);
+		Profile dbProfile = profileService.getUserProfile(user);
 		
-		profile.safeMergeFrom(webProfile, htmlPolicy);
+		dbProfile.safeMergeFrom(profile);
 		
 		if(!result.hasErrors()) {
-			profileService.save(profile);
+			profileService.save(dbProfile);
 			modelAndView.setViewName("redirect:/profile");
 		}
 		

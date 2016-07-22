@@ -10,8 +10,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import org.owasp.html.PolicyFactory;
-
 @Entity
 @Table(name="profile")
 public class Profile {
@@ -59,9 +57,9 @@ public class Profile {
 		}
 	}
 
-	public void safeMergeFrom(Profile webProfile, PolicyFactory htmlPolicy) {
+	public void safeMergeFrom(Profile webProfile) {
 		if(webProfile.about != null) {
-			this.about = htmlPolicy.sanitize(webProfile.about);
+			this.about = webProfile.about;
 		}
 	}
 	
