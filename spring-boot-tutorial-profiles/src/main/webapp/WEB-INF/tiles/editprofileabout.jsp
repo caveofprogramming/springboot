@@ -9,7 +9,7 @@
 <div class="row">
 
 	<div class="col-md-8 col-md-offset-2">
-	
+
 		<div class="errors">
 			<form:errors path="profile.*" />
 		</div>
@@ -21,7 +21,7 @@
 			</div>
 
 			<form:form modelAttribute="profile">
-	
+
 				<div class="form-group">
 					<form:textarea path="about" name="about" rows="10" cols="50"></form:textarea>
 				</div>
@@ -39,10 +39,8 @@
 
 <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
 <script>
-
 	tinymce.init({
 		selector : 'textarea'
 	});
-
 </script>
 
