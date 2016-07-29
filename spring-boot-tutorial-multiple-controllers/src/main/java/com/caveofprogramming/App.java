@@ -17,6 +17,5 @@ public class App extends SpringBootServletInitializer {
 		return application.sources(App.class);
 	}
 	
-	
 
 }

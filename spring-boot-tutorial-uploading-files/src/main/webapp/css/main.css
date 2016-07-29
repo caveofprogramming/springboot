@@ -1,0 +1,120 @@
+
+.navbar {
+	background-color: orange;
+	border-color: orange;
+}
+
+.navbar > .container > div > .navbar-nav > li > a {
+	background: none;
+	color: white;
+	font-weight: bold;
+}
+
+.navbar > .container > div > .navbar-nav > li > a:hover {
+	background: none;
+	color: yellow;
+	font-weight: bold;
+}
+
+.navbar > .container > .navbar-header > a {
+	background: none;
+	color: white;
+	font-weight: bold;
+}
+
+.navbar > .container > .navbar-header > a:hover {
+	background: none;
+	color: yellow;
+	font-weight: bold;
+}
+
+.navbar-default .navbar-nav > .open > a {
+	background: none !important;
+	color: yellow;
+}
+
+.navbar-default .navbar-nav > .open > a:focus {
+	color: white;
+}
+
+.panel > .panel-heading {
+	background-color: blue;
+	color: white;
+	font-weight: bold;
+}
+
+
+textarea {
+	width: 100%;
+}
+
+.errors {
+	color: red;
+}
+
+.pagination {
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+.homepage-status {
+	text-align: center;
+	margin-top: 30px;
+	font-size: larger;
+}
+
+.edit-links {
+	margin-top: 10px;
+}
+
+.login-form {
+	width: 100%;
+}
+
+.login-form > div {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.login-form > div > button {
+	background-color: blue;
+	color: white;
+	font-weight: bold;
+	border-color: darkblue;
+}
+
+.login-error {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: red;
+	font-weight: bold;
+}
+
+.message {
+	font-size: larger;
+	margin-top: 50px;
+}
+
+.profile-about {
+	width: 100%;
+	border: 1px solid gray;
+	padding: 50px;
+	overflow: auto;
+}
+
+.profile-text {
+	font-size: larger;
+}
+
+.profile-image {
+	float: left;
+	margin-bottom: 10px;
+	margin-right: 30px;
+}
+
+.profile-about-edit {
+	position: absolute;
+	bottom: 0px;
+	right: 50px;
+}
