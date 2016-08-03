@@ -28,7 +28,6 @@ public class GlobalExceptionHandler {
 		modelAndView.getModel().put("exception", e);
 		
 		modelAndView.setViewName("app.exception");
-		
 		return modelAndView;
 	}
 	

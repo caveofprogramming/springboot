@@ -1,9 +1,6 @@
 package com.caveofprogramming.controllers;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.validation.Valid;
 
@@ -20,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.exceptions.InvalidFileException;
 import com.caveofprogramming.model.Profile;
 import com.caveofprogramming.model.SiteUser;
+import com.caveofprogramming.service.FileService;
 import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
 
@@ -36,6 +35,9 @@ public class ProfileController {
 	
 	@Autowired
 	private PolicyFactory htmlPolicy;
+	
+	@Autowired
+	FileService fileService;
 	
 	@Value("${photo.upload.directory}")
 	private String photoUploadDirectory;
@@ -99,34 +101,27 @@ public class ProfileController {
 			modelAndView.setViewName("redirect:/profile");
 		}
 		
-		
 		return modelAndView;
 	}
 	
-	/**
-	 * 
-	 * This doesn't work properly yet!
-	 */
+	
 	@RequestMapping(value="/upload-profile-photo", method=RequestMethod.POST)
 	public ModelAndView handlePhotoUploads(ModelAndView modelAndView, @RequestParam("file") MultipartFile file) {
+		
 		modelAndView.setViewName("redirect:/profile");
 		
-		Path filePath = Paths.get(photoUploadDirectory, file.getOriginalFilename());
-		
 		try {
-			Files.deleteIfExists(filePath);
-			
-			Files.copy(file.getInputStream(), filePath);
-		} catch (Exception e) {
+			fileService.saveImageFile(file, photoUploadDirectory, "photos", "profile");
+		} catch (InvalidFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
-		
 		return modelAndView;
 	}
-	
 	
 	
 	

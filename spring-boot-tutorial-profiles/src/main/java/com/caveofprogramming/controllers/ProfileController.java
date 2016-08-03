@@ -1,15 +1,22 @@
 package com.caveofprogramming.controllers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.validation.Valid;
 
 import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.Profile;
@@ -21,13 +28,16 @@ import com.caveofprogramming.service.UserService;
 public class ProfileController {
 	
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@Autowired
-	ProfileService profileService;
+	private ProfileService profileService;
 	
 	@Autowired
-	PolicyFactory htmlPolicy;
+	private PolicyFactory htmlPolicy;
+	
+	@Value("${photo.upload.directory}")
+	private String photoUploadDirectory;
 	
 	private SiteUser getUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -91,4 +101,5 @@ public class ProfileController {
 		
 		return modelAndView;
 	}
+	
 }

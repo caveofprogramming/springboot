@@ -78,6 +78,10 @@
 			<artifactId>owasp-java-html-sanitizer</artifactId>
 			<version>20160628.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 	</dependencies>
 	
 	<packaging>war</packaging>
