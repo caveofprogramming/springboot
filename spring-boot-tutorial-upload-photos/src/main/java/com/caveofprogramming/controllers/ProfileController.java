@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.exceptions.InvalidFileException;
+import com.caveofprogramming.model.FileInfo;
 import com.caveofprogramming.model.Profile;
 import com.caveofprogramming.model.SiteUser;
 import com.caveofprogramming.service.FileService;
@@ -110,8 +111,15 @@ public class ProfileController {
 		
 		modelAndView.setViewName("redirect:/profile");
 		
+		SiteUser user = getUser();
+		Profile profile = profileService.getUserProfile(user);
+		
 		try {
-			fileService.saveImageFile(file, photoUploadDirectory, "photos", "profile");
+			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "photos", "profile");
+			
+			profile.setPhotoDetails(photoInfo);
+			profileService.save(profile);
+			
 		} catch (InvalidFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
