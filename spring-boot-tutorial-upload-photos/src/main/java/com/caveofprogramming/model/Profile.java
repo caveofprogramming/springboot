@@ -1,5 +1,8 @@
 package com.caveofprogramming.model;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -103,4 +106,13 @@ public class Profile {
 		photoExtension = info.getExtension();
 		photoName = info.getBasename();
 	}
+	
+	public Path getPhoto(String baseDirectory) {
+		if(photoName == null) {
+			return null;
+		}
+		
+		return Paths.get(baseDirectory, photoDirectory, photoName + "." +  photoExtension);
+	}
+	
 }

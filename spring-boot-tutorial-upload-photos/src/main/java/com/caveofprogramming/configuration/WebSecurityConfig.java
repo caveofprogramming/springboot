@@ -51,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(
 						"/profile",
 						"/edit-profile-about",
-						"/upload-profile-photo"
+						"/upload-profile-photo",
+						"/profilephoto"
 						)
 				.authenticated()
 				.anyRequest()
