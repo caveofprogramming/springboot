@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.exceptions.ImageTooSmallException;
 import com.caveofprogramming.exceptions.InvalidFileException;
 import com.caveofprogramming.model.FileInfo;
 import com.caveofprogramming.model.Profile;
@@ -120,23 +121,26 @@ public class ProfileController {
 
 		SiteUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
-
+		
 		Path oldPhotoPath = profile.getPhoto(photoUploadDirectory);
 
 		try {
-			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "photos", "profile");
+			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "photos", "p" + user.getId(), 100, 100);
 
 			profile.setPhotoDetails(photoInfo);
 			profileService.save(profile);
-
-			if (oldPhotoPath != null) {
-				Files.delete(oldPhotoPath);
+			
+			if(oldPhotoPath != null) {
+			Files.delete(oldPhotoPath);
 			}
 
 		} catch (InvalidFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ImageTooSmallException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -149,14 +153,16 @@ public class ProfileController {
 	ResponseEntity<InputStreamResource> servePhoto() throws IOException {
 		SiteUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
-
+		
 		Path photoPath = Paths.get(photoUploadDirectory, "default", "avatar.jpg");
-
-		if (profile != null && profile.getPhoto(photoUploadDirectory) != null) {
+		
+		if(profile != null && profile.getPhoto(photoUploadDirectory) != null) {
 			photoPath = profile.getPhoto(photoUploadDirectory);
 		}
-
-		return ResponseEntity.ok().contentLength(Files.size(photoPath))
+		
+		return ResponseEntity
+				.ok()
+				.contentLength(Files.size(photoPath))
 				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
 				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
 	}
