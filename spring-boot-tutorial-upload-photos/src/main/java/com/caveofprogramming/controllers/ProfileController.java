@@ -34,6 +34,7 @@ import com.caveofprogramming.model.SiteUser;
 import com.caveofprogramming.service.FileService;
 import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
+import com.caveofprogramming.status.PhotoUploadStatus;
 
 @Controller
 public class ProfileController {
@@ -50,6 +51,18 @@ public class ProfileController {
 	@Autowired
 	FileService fileService;
 
+	@Value("${photo.upload.ok}")
+	private String photoStatusOK;
+	
+	@Value("${photo.upload.invalid}")
+	private String photoStatusInvalid;
+	
+	@Value("${photo.upload.ioexception}")
+	private String photoStatusIOException;
+	
+	@Value("${photo.upload.toosmall}")
+	private String photoStatusTooSmall;
+	
 	@Value("${photo.upload.directory}")
 	private String photoUploadDirectory;
 
@@ -115,37 +128,39 @@ public class ProfileController {
 	}
 
 	@RequestMapping(value = "/upload-profile-photo", method = RequestMethod.POST)
-	public ModelAndView handlePhotoUploads(ModelAndView modelAndView, @RequestParam("file") MultipartFile file) {
-
-		modelAndView.setViewName("redirect:/profile");
+	@ResponseBody // Return data in JSON format
+	public PhotoUploadStatus handlePhotoUploads(@RequestParam("file") MultipartFile file) {
 
 		SiteUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
-		
+
 		Path oldPhotoPath = profile.getPhoto(photoUploadDirectory);
+		
+		PhotoUploadStatus status = new PhotoUploadStatus(photoStatusOK);
 
 		try {
-			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "photos", "p" + user.getId(), 100, 100);
+			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "photos", "p" + user.getId(),
+					100, 100);
 
 			profile.setPhotoDetails(photoInfo);
 			profileService.save(profile);
-			
-			if(oldPhotoPath != null) {
-			Files.delete(oldPhotoPath);
+
+			if (oldPhotoPath != null) {
+				Files.delete(oldPhotoPath);
 			}
 
 		} catch (InvalidFileException e) {
-			// TODO Auto-generated catch block
+			status.setMessage(photoStatusInvalid);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			status.setMessage(photoStatusIOException);
 			e.printStackTrace();
 		} catch (ImageTooSmallException e) {
-			// TODO Auto-generated catch block
+			status.setMessage(photoStatusTooSmall);
 			e.printStackTrace();
 		}
 
-		return modelAndView;
+		return status;
 	}
 
 	@RequestMapping(value = "/profilephoto", method = RequestMethod.GET)
@@ -153,16 +168,14 @@ public class ProfileController {
 	ResponseEntity<InputStreamResource> servePhoto() throws IOException {
 		SiteUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
-		
+
 		Path photoPath = Paths.get(photoUploadDirectory, "default", "avatar.jpg");
-		
-		if(profile != null && profile.getPhoto(photoUploadDirectory) != null) {
+
+		if (profile != null && profile.getPhoto(photoUploadDirectory) != null) {
 			photoPath = profile.getPhoto(photoUploadDirectory);
 		}
-		
-		return ResponseEntity
-				.ok()
-				.contentLength(Files.size(photoPath))
+
+		return ResponseEntity.ok().contentLength(Files.size(photoPath))
 				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
 				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
 	}

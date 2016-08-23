@@ -14,7 +14,12 @@
 		<div class="profile-about">
 
 			<div class="profile-image">
-				<img src="${profilePhoto}" />
+				<div>
+					<img src="${profilePhoto}" />
+				</div>
+				<div class="text-center">
+					<a href="#" id="uploadLink">Upload photo</a>
+				</div>
 			</div>
 
 
@@ -37,16 +42,15 @@
 
 
 		<p>&nbsp;</p>
-		
+
 		<c:url value="/upload-profile-photo" var="uploadPhotoLink" />
-		<form method="post" enctype="multipart/form-data" action="${uploadPhotoLink}">
-			
-			select photo: <input type="file" accept="image/*" name="file" />
-			<input type="submit" value="upload" />
-			
-			<input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" />
-		
+		<form method="post" enctype="multipart/form-data"
+			action="${uploadPhotoLink}">
+
+			select photo: <input type="file" accept="image/*" name="file" id="photoFileInput"/> <input
+				type="submit" value="upload" /> <input type="hidden"
+				name="${_csrf.parameterName}" value="${_csrf.token}" />
+
 		</form>
 
 	</div>
@@ -54,3 +58,22 @@
 
 
 </div>
+
+
+<script>
+
+$(document).ready(function() {
+	console.log("Hello! Document loaded!");
+	
+	$("#uploadLink").click(function(event) {
+		event.preventDefault();
+		$("#photoFileInput").trigger('click');
+	});
+});
+
+</script>
+
+
+
+
+
