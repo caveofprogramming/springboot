@@ -44,7 +44,7 @@
 		<p>&nbsp;</p>
 
 		<c:url value="/upload-profile-photo" var="uploadPhotoLink" />
-		<form method="post" enctype="multipart/form-data"
+		<form method="post" enctype="multipart/form-data" id="photoUploadForm"
 			action="${uploadPhotoLink}">
 
 			select photo: <input type="file" accept="image/*" name="file" id="photoFileInput"/> <input
@@ -62,13 +62,25 @@
 
 <script>
 
+function uploadPhoto(event) {
+	
+	console.log("Form being submitted");
+	
+	event.preventDefault();
+}
+
 $(document).ready(function() {
-	console.log("Hello! Document loaded!");
 	
 	$("#uploadLink").click(function(event) {
 		event.preventDefault();
 		$("#photoFileInput").trigger('click');
 	});
+	
+	$("#photoFileInput").change(function() {
+		$("#photoUploadForm").submit();
+	});
+	
+	$("#photoUploadForm").on("submit", uploadPhoto);
 });
 
 </script>
