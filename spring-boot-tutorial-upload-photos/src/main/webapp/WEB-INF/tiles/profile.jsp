@@ -15,7 +15,7 @@
 
 			<div class="profile-image">
 				<div>
-					<img src="${profilePhoto}" />
+					<img id="profilePhotoImage" src="${profilePhoto}" />
 				</div>
 				<div class="text-center">
 					<a href="#" id="uploadLink">Upload photo</a>
@@ -62,9 +62,27 @@
 
 <script>
 
+function uploadSuccess(data) {
+	
+	$("#profilePhotoImage").attr("src", "${profilePhoto};t=" + new Date());
+	
+	$("#photoFileInput").val("");
+
+}
+
 function uploadPhoto(event) {
 	
-	console.log("Form being submitted");
+	$.ajax({
+		url: $(this).attr("action"),
+		type: 'POST',
+		data: new FormData(this),
+		processData: false,
+		contentType: false,
+		success: uploadSuccess,
+		error: function() {
+			alert("Error");
+		}
+	});
 	
 	event.preventDefault();
 }

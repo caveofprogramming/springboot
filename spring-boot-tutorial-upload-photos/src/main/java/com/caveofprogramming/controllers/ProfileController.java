@@ -13,6 +13,7 @@ import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -129,7 +130,7 @@ public class ProfileController {
 
 	@RequestMapping(value = "/upload-profile-photo", method = RequestMethod.POST)
 	@ResponseBody // Return data in JSON format
-	public PhotoUploadStatus handlePhotoUploads(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<PhotoUploadStatus> handlePhotoUploads(@RequestParam("file") MultipartFile file) {
 
 		SiteUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
@@ -160,7 +161,7 @@ public class ProfileController {
 			e.printStackTrace();
 		}
 
-		return status;
+		return new ResponseEntity(status, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/profilephoto", method = RequestMethod.GET)
