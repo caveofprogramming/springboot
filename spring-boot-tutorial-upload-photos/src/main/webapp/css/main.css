@@ -118,3 +118,11 @@ textarea {
 	bottom: 0px;
 	right: 50px;
 }
+
+#profile-photo-status {
+	position: absolute;
+	top: 5px;
+	left: 30px;
+	font-weight: bold;
+	color: green;
+}

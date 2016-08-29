@@ -10,6 +10,8 @@
 <div class="row">
 
 	<div class="col-md-10 col-md-offset-1">
+	
+	<div id="profile-photo-status"></div>
 
 		<div class="profile-about">
 
@@ -62,11 +64,21 @@
 
 <script>
 
+function setUploadStatusText(text) {
+	$("#profile-photo-status").text(text);
+	
+	window.setTimeout(function() {
+		$("#profile-photo-status").text("");
+	}, 2000);
+}
+
 function uploadSuccess(data) {
 	
 	$("#profilePhotoImage").attr("src", "${profilePhoto};t=" + new Date());
 	
 	$("#photoFileInput").val("");
+	
+	setUploadStatusText(data.message);
 
 }
 
@@ -80,7 +92,7 @@ function uploadPhoto(event) {
 		contentType: false,
 		success: uploadSuccess,
 		error: function() {
-			alert("Error");
+			setUploadStatusText("Server unreachable");
 		}
 	});
 	
@@ -88,6 +100,7 @@ function uploadPhoto(event) {
 }
 
 $(document).ready(function() {
+	
 	
 	$("#uploadLink").click(function(event) {
 		event.preventDefault();
