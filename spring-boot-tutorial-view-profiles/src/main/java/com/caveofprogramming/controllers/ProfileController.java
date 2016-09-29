@@ -96,7 +96,7 @@ public class ProfileController {
 		webProfile.safeCopyFrom(profile);
 
 		
-		
+		modelAndView.getModel().put("userId", user.getId());
 		modelAndView.getModel().put("profile", webProfile);
 
 		modelAndView.setViewName("app.profile");
@@ -192,10 +192,10 @@ public class ProfileController {
 		return new ResponseEntity(status, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/profilephoto", method = RequestMethod.GET)
+	@RequestMapping(value = "/profilephoto/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	ResponseEntity<InputStreamResource> servePhoto() throws IOException {
-		SiteUser user = getUser();
+	ResponseEntity<InputStreamResource> servePhoto(@PathVariable Long id) throws IOException {
+		SiteUser user = userService.get(id);
 		Profile profile = profileService.getUserProfile(user);
 
 		Path photoPath = Paths.get(photoUploadDirectory, "default", "avatar.jpg");

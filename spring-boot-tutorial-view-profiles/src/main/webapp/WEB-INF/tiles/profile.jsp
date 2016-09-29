@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<c:url var="profilePhoto" value="/profilephoto" />
+<c:url var="profilePhoto" value="/profilephoto/${userId}" />
 <c:url var="editProfileAbout" value="/edit-profile-about" />
 
 <div class="row">
