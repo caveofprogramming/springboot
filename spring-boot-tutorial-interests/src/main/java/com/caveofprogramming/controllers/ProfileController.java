@@ -189,7 +189,7 @@ public class ProfileController {
 			e.printStackTrace();
 		}
 
-		return new ResponseEntity(status, HttpStatus.OK);
+		return new ResponseEntity<PhotoUploadStatus>(status, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/profilephoto/{id}", method = RequestMethod.GET)

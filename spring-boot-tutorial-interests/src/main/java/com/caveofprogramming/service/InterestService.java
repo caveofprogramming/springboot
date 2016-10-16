@@ -1,5 +1,7 @@
 package com.caveofprogramming.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,15 @@ public class InterestService {
 	
 	public void save(Interest interest) {
 		interestDao.save(interest);
+	}
+	
+	public Interest createIfNotExists(String interestName) {
+		Interest interest = interestDao.findOneByName(interestName);
+		
+		if(interest == null) {
+			interest = interestDao.save(interest);
+		}
+		
+		return interest;
 	}
 }

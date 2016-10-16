@@ -52,6 +52,14 @@ public class Profile {
 	@OrderColumn(name="display_order")
 	private Set<Interest> interests;
 	
+	public Profile() {
+		
+	}
+	
+	public Profile(SiteUser user) {
+		this.user = user;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -76,12 +84,18 @@ public class Profile {
 		this.about = about;
 	}
 
+	/* Create a profile that is suitable for displaying via JSP */
 	public void safeCopyFrom(Profile other) {
 		if (other.about != null) {
 			this.about = other.about;
 		}
+		
+		if(other.interests != null) {
+			this.interests = other.interests;
+		}
 	}
 
+	/* Create a profile that is suitable for saving */
 	public void safeMergeFrom(Profile webProfile, PolicyFactory htmlPolicy) {
 		if (webProfile.about != null) {
 			this.about = htmlPolicy.sanitize(webProfile.about);
