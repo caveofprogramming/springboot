@@ -25,11 +25,12 @@ public class InterestService {
 		interestDao.save(interest);
 	}
 	
-	public Interest createIfNotExists(String interestName) {
-		Interest interest = interestDao.findOneByName(interestName);
+	public Interest createIfNotExists(String interestText) {
+		Interest interest = interestDao.findOneByName(interestText);
 		
 		if(interest == null) {
-			interest = interestDao.save(interest);
+			interest = new Interest(interestText);
+			interestDao.save(interest);
 		}
 		
 		return interest;

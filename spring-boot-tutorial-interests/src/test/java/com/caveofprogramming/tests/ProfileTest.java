@@ -1,5 +1,10 @@
 package com.caveofprogramming.tests;
 
+import static org.junit.Assert.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -10,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.caveofprogramming.App;
+import com.caveofprogramming.model.Interest;
+import com.caveofprogramming.model.Profile;
 import com.caveofprogramming.model.SiteUser;
 import com.caveofprogramming.service.InterestService;
 import com.caveofprogramming.service.ProfileService;
@@ -45,5 +52,37 @@ public class ProfileTest {
 	@Test
 	public void testInterests() {
 		
+		for(int i=0; i<users.length; i++) {
+			SiteUser user = users[i];
+			String[] interestArray = interests[i];
+			
+			userService.register(user);
+			
+			HashSet<Interest> interestSet = new HashSet<>();
+			
+			for(String interestText: interestArray) {
+				Interest interest = interestService.createIfNotExists(interestText);
+				interestSet.add(interest);
+				
+				assertNotNull("Interest should not be null", interest);
+				assertNotNull("Interest should have ID", interest.getId());
+				assertEquals("Text should match", interestText, interest.getName());
+			}
+			
+			Profile profile = new Profile(user);
+			profile.setInterests(interestSet);
+			profileService.save(profile);
+			
+			Profile retrievedProfile = profileService.getUserProfile(user);
+			
+			assertEquals("Interest sets should match", interestSet, retrievedProfile.getInterests());
+		}
 	}
 }
+
+
+
+
+
+
+

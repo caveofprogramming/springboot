@@ -31,9 +31,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.caveofprogramming.exceptions.ImageTooSmallException;
 import com.caveofprogramming.exceptions.InvalidFileException;
 import com.caveofprogramming.model.FileInfo;
+import com.caveofprogramming.model.Interest;
 import com.caveofprogramming.model.Profile;
 import com.caveofprogramming.model.SiteUser;
 import com.caveofprogramming.service.FileService;
+import com.caveofprogramming.service.InterestService;
 import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
 import com.caveofprogramming.status.PhotoUploadStatus;
@@ -46,12 +48,15 @@ public class ProfileController {
 
 	@Autowired
 	private ProfileService profileService;
+	
+	@Autowired
+	private InterestService interestService;
 
 	@Autowired
 	private PolicyFactory htmlPolicy;
 
 	@Autowired
-	FileService fileService;
+	private FileService fileService;
 
 	@Value("${photo.upload.ok}")
 	private String photoStatusOK;
@@ -208,5 +213,43 @@ public class ProfileController {
 				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
 				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
 	}
+	
+	@RequestMapping(value="/save-interest", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> saveInterest(@RequestParam("name") String interestName) {
+		
+		SiteUser user = getUser();
+		Profile profile = profileService.getUserProfile(user);
+		
+		String cleanedInterestName = htmlPolicy.sanitize(interestName);
+		
+		Interest interest = interestService.createIfNotExists(cleanedInterestName);
+		
+		profile.addInterest(interest);
+		profileService.save(profile);
+		
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/delete-interest", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> deleteInterest(@RequestParam("name") String interestName) {
+		
+		SiteUser user = getUser();
+		Profile profile = profileService.getUserProfile(user);
+	
+		profile.removeInterest(interestName);
+	
+		profileService.save(profile);
+		
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
 
 }
+
+
+
+
+
+

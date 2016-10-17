@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,7 +46,7 @@ public class Profile {
 	@Column(name = "photo_extension", length = 5)
 	private String photoExtension;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="profile_interests", 
 	joinColumns={ @JoinColumn(name="profile_id") },
 	inverseJoinColumns = { @JoinColumn(name="interest_id") } )
@@ -147,6 +148,14 @@ public class Profile {
 	public void setInterests(Set<Interest> interests) {
 		this.interests = interests;
 	}
-	
+
+	public void addInterest(Interest interest) {
+		interests.add(interest);
+	}
+
+	public void removeInterest(String interestName) {
+		interests.remove(new Interest(interestName));
+	}
+
 	
 }
