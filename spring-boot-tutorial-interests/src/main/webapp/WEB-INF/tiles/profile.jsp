@@ -6,12 +6,20 @@
 
 <c:url var="profilePhoto" value="/profilephoto/${userId}" />
 <c:url var="editProfileAbout" value="/edit-profile-about" />
+<c:url var="saveInterest" value="/save-interest" />
+<c:url var="deleteInterest" value="/delete-interest" />
 
 <div class="row">
 
 	<div class="col-md-10 col-md-offset-1">
-	
-	<div id="profile-photo-status"></div>
+
+		<div id="profile-photo-status"></div>
+
+		<div id="interestDiv">
+			<ul id="interestList">
+				<li>Add your interests here (example: music)!</li>
+			</ul>
+		</div>
 
 		<div class="profile-about">
 
@@ -46,8 +54,8 @@
 		<form method="post" enctype="multipart/form-data" id="photoUploadForm"
 			action="${uploadPhotoLink}">
 
-			<input type="file" accept="image/*" name="file" id="photoFileInput"/> <input
-				type="submit" value="upload" /> <input type="hidden"
+			<input type="file" accept="image/*" name="file" id="photoFileInput" />
+			<input type="submit" value="upload" /> <input type="hidden"
 				name="${_csrf.parameterName}" value="${_csrf.token}" />
 
 		</form>
@@ -60,57 +68,89 @@
 
 
 <script>
+	function setUploadStatusText(text) {
+		$("#profile-photo-status").text(text);
 
-function setUploadStatusText(text) {
-	$("#profile-photo-status").text(text);
-	
-	window.setTimeout(function() {
-		$("#profile-photo-status").text("");
-	}, 2000);
-}
+		window.setTimeout(function() {
+			$("#profile-photo-status").text("");
+		}, 2000);
+	}
 
-function uploadSuccess(data) {
-	
-	$("#profilePhotoImage").attr("src", "${profilePhoto};t=" + new Date());
-	
-	$("#photoFileInput").val("");
-	
-	setUploadStatusText(data.message);
+	function uploadSuccess(data) {
 
-}
+		$("#profilePhotoImage").attr("src", "${profilePhoto};t=" + new Date());
 
-function uploadPhoto(event) {
-	
-	$.ajax({
-		url: $(this).attr("action"),
-		type: 'POST',
-		data: new FormData(this),
-		processData: false,
-		contentType: false,
-		success: uploadSuccess,
-		error: function() {
-			setUploadStatusText("Server unreachable");
-		}
-	});
-	
-	event.preventDefault();
-}
+		$("#photoFileInput").val("");
 
-$(document).ready(function() {
-	
-	
-	$("#uploadLink").click(function(event) {
+		setUploadStatusText(data.message);
+
+	}
+
+	function uploadPhoto(event) {
+
+		$.ajax({
+			url : $(this).attr("action"),
+			type : 'POST',
+			data : new FormData(this),
+			processData : false,
+			contentType : false,
+			success : uploadSuccess,
+			error : function() {
+				setUploadStatusText("Server unreachable");
+			}
+		});
+
 		event.preventDefault();
-		$("#photoFileInput").trigger('click');
-	});
+	}
 	
-	$("#photoFileInput").change(function() {
-		$("#photoUploadForm").submit();
-	});
+	function saveInterest(text) {
+		editInterest(text, "${saveInterest}");
+	}
 	
-	$("#photoUploadForm").on("submit", uploadPhoto);
-});
+	function deleteInterest(text) {
+		editInterest(text, "${deleteInterest}");
+	}
+	
+	function editInterest(text, actionUrl) {
+		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+			jqXHR.setRequestHeader(header, token);
+		});
+	}
 
+	$(document).ready(function() {
+
+		$("#interestList").tagit({
+
+			afterTagRemoved : function(event, ui) {
+				deleteInterest(ui.tagLabel);
+			},
+
+			afterTagAdded : function(event, ui) {
+				if (ui.duringInitialization != true) {
+					saveInterest(ui.tagLabel);
+				}
+			},
+
+			caseSensitive : false,
+			allowSpaces : true,
+			tagLimit : 10
+		});
+
+		$("#uploadLink").click(function(event) {
+			event.preventDefault();
+			$("#photoFileInput").trigger('click');
+		});
+
+		$("#photoFileInput").change(function() {
+			$("#photoUploadForm").submit();
+		});
+
+		$("#photoUploadForm").on("submit", uploadPhoto);
+	});
 </script>
 
 

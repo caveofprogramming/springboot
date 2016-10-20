@@ -13,6 +13,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -24,6 +27,17 @@
 <!-- Bootstrap -->
 <link href="${contextRoot}/css/bootstrap.min.css" rel="stylesheet">
 <link href="${contextRoot}/css/main.css" rel="stylesheet">
+
+<!-- This is only for javascript tagging on the profile -->
+<link href="${contextRoot}/css/jquery.tagit.css" rel="stylesheet">
+
+<script
+	src="${contextRoot}/js/jquery-ui.min.js"></script>
+
+<script
+	src="${contextRoot}/js/tag-it.min.js"></script>
+
+
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
