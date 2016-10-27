@@ -115,6 +115,8 @@ public class ProfileController {
 		
 		ModelAndView modelAndView = showProfile(user);
 		
+		modelAndView.getModel().put("ownProfile", true);
+		
 		return modelAndView;
 	}
 	
@@ -124,6 +126,8 @@ public class ProfileController {
 		SiteUser user = userService.get(id);
 		
 		ModelAndView modelAndView = showProfile(user);
+		
+		modelAndView.getModel().put("ownProfile", false);
 		
 		return modelAndView;
 	}

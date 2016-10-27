@@ -17,7 +17,17 @@
 
 		<div id="interestDiv">
 			<ul id="interestList">
-				<li>Add your interests here (example: music)!</li>
+				<c:choose>
+					<c:when test="${empty profile.interests}">
+						<li>Add your interests here (example: music)!</li>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="interest" items="${profile.interests}">
+							<li>${interest}</li>
+						</c:forEach>
+					</c:otherwise>
+
+				</c:choose>
 			</ul>
 		</div>
 
@@ -28,7 +38,9 @@
 					<img id="profilePhotoImage" src="${profilePhoto}" />
 				</div>
 				<div class="text-center">
-					<a href="#" id="uploadLink">Upload photo</a>
+					<c:if test="${ownProfile == true}">
+						<a href="#" id="uploadLink">Upload photo</a>
+					</c:if>
 				</div>
 			</div>
 
@@ -47,7 +59,10 @@
 		</div>
 
 		<div class="profile-about-edit">
-			<a href="${editProfileAbout}">edit</a>
+			<c:if test="${ownProfile == true}">
+				<a href="${editProfileAbout}">edit</a>
+			</c:if>
+
 		</div>
 
 		<c:url value="/upload-profile-photo" var="uploadPhotoLink" />
@@ -102,22 +117,40 @@
 
 		event.preventDefault();
 	}
-	
+
 	function saveInterest(text) {
 		editInterest(text, "${saveInterest}");
 	}
-	
+
 	function deleteInterest(text) {
 		editInterest(text, "${deleteInterest}");
 	}
-	
+
 	function editInterest(text, actionUrl) {
-		
+
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		
+
 		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 			jqXHR.setRequestHeader(header, token);
+		});
+
+		$.ajax({
+			'url' : actionUrl,
+
+			data : {
+				'name' : text
+			},
+
+			type : 'POST',
+
+			success : function() {
+				//alert("Ok");
+			},
+
+			error : function() {
+				//alert("error");
+			}
 		});
 	}
 
@@ -137,7 +170,8 @@
 
 			caseSensitive : false,
 			allowSpaces : true,
-			tagLimit : 10
+			tagLimit : 10,
+			readOnly: '${ownProfile}' == 'false'
 		});
 
 		$("#uploadLink").click(function(event) {

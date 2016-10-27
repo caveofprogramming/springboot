@@ -158,6 +158,18 @@ ul#interestList a.tagit-close:hover > span.text-icon {
 	color: blue;
 }
 
+div[role=status] {
+	display: none;
+}
+
+#ui-id-1 {
+	display: none !important;
+}
+
+
+
+
+
 
 
 
