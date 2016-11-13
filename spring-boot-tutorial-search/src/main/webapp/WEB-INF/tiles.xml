@@ -58,6 +58,9 @@
 		<put-attribute name="content" value="/WEB-INF/tiles/editprofileabout.jsp" />
 	</definition>
 	
-	
+	<definition name="app.search" extends="app.default">
+		<put-attribute name="content" value="/WEB-INF/tiles/results.jsp" />
+	</definition>
+	 
 	
 </tiles-definitions>

@@ -38,9 +38,9 @@ public class ProfileTest {
 	private InterestService interestService;
 	
 	private SiteUser[] users = {
-		new SiteUser("ljlkj@caveofprogramming.com", "lkjlkjlk"),
-		new SiteUser("dafdf@caveofprogramming.com", "gfhgfh"),
-		new SiteUser("ghdgfhg@caveofprogramming.com", "wereretr")
+		new SiteUser("ljlkj@caveofprogramming.com", "lkjlkjlk", "ljlj", "OUOII"),
+		new SiteUser("dafdf@caveofprogramming.com", "lkjlkjlk", "ljlj", "OUOII"),
+		new SiteUser("ghdgfhg@caveofprogramming.com", "lkjlkjlk", "ljlj", "OUOII"),
 	};
 	
 	private String[][] interests = {

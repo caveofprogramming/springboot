@@ -28,7 +28,7 @@ public class StatusUpdateController {
 		modelAndView.getModel().put("statusUpdate", statusUpdate);
 		
 		modelAndView.setViewName("app.editStatus");
-		
+		 
 		return modelAndView;
 	}
 	
