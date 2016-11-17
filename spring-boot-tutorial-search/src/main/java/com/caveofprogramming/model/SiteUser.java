@@ -63,7 +63,7 @@ public class SiteUser {
 
 	public SiteUser(String email, String password, String firstname, String surname) {
 		this.email = email;
-		this.plainPassword = password;
+		this.setPlainPassword(password);
 		this.repeatPassword = password;
 		this.enabled = true;
 		this.firstname=firstname;
@@ -143,4 +143,12 @@ public class SiteUser {
 		this.surname = surname;
 	}
 
+	@Override
+	public String toString() {
+		return "SiteUser [id=" + id + ", email=" + email + ", plainPassword=" + plainPassword + ", password=" + password
+				+ ", enabled=" + enabled + ", firstname=" + firstname + ", surname=" + surname + ", repeatPassword="
+				+ repeatPassword + ", role=" + role + "]";
+	}
+
+	
 }
