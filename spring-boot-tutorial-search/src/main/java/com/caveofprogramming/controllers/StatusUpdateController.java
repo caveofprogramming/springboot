@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.caveofprogramming.model.StatusUpdate;
+import com.caveofprogramming.model.entity.StatusUpdate;
 import com.caveofprogramming.service.StatusUpdateService;
 
 @Controller

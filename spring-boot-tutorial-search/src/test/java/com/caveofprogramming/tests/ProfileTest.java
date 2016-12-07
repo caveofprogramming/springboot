@@ -15,9 +15,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.caveofprogramming.App;
-import com.caveofprogramming.model.Interest;
-import com.caveofprogramming.model.Profile;
-import com.caveofprogramming.model.SiteUser;
+import com.caveofprogramming.model.entity.Interest;
+import com.caveofprogramming.model.entity.Profile;
+import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.service.InterestService;
 import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;

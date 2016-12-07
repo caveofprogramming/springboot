@@ -1,4 +1,4 @@
-package com.caveofprogramming.model;
+package com.caveofprogramming.model.entity;
 
 public enum TokenType {
 	REGISTRATION,

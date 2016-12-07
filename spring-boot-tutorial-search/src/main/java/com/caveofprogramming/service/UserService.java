@@ -12,11 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.caveofprogramming.model.SiteUser;
-import com.caveofprogramming.model.TokenType;
-import com.caveofprogramming.model.UserDao;
-import com.caveofprogramming.model.VerificationDao;
-import com.caveofprogramming.model.VerificationToken;
+import com.caveofprogramming.model.entity.SiteUser;
+import com.caveofprogramming.model.entity.TokenType;
+import com.caveofprogramming.model.entity.VerificationToken;
+import com.caveofprogramming.model.repository.UserDao;
+import com.caveofprogramming.model.repository.VerificationDao;
 
 @Service
 public class UserService implements UserDetailsService {

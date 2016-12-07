@@ -1,4 +1,4 @@
-package com.caveofprogramming.model;
+package com.caveofprogramming.model.dto;
 
 public class FileInfo {
 	private String basename;

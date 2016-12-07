@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.caveofprogramming.model.SiteUser;
-import com.caveofprogramming.model.VerificationToken;
+import com.caveofprogramming.model.entity.SiteUser;
+import com.caveofprogramming.model.entity.VerificationToken;
 import com.caveofprogramming.service.EmailService;
 import com.caveofprogramming.service.UserService;
 

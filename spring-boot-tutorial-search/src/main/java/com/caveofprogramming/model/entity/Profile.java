@@ -1,4 +1,4 @@
-package com.caveofprogramming.model;
+package com.caveofprogramming.model.entity;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.owasp.html.PolicyFactory;
+
+import com.caveofprogramming.model.dto.FileInfo;
 
 @Entity
 @Table(name = "profile")
@@ -155,6 +157,12 @@ public class Profile {
 
 	public void removeInterest(String interestName) {
 		interests.remove(new Interest(interestName));
+	}
+
+	@Override
+	public String toString() {
+		return "Profile [id=" + id + ", user=" + user + ", about=" + about + ", photoDirectory=" + photoDirectory
+				+ ", photoName=" + photoName + ", photoExtension=" + photoExtension + ", interests=" + interests + "]";
 	}
 
 	

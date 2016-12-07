@@ -5,8 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +23,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.caveofprogramming.App;
-import com.caveofprogramming.model.SiteUser;
+import com.caveofprogramming.model.entity.Interest;
+import com.caveofprogramming.model.entity.Profile;
+import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.service.InterestService;
 import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
@@ -29,7 +33,7 @@ import com.caveofprogramming.service.UserService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(App.class)
 @WebAppConfiguration
-@Transactional
+//@Transactional
 public class BulkTests {
 	
 	private static final String namesFile = "/com/caveofprogramming/tests/data/names.txt";
@@ -76,7 +80,7 @@ public class BulkTests {
 		List<String> names = loadFile(namesFile, 25);
 		List<String> interests = loadFile(interestsFile, 25);
 		
-		for(int numUsers=0; numUsers < 200; numUsers++) {
+		for(int numUsers=0; numUsers < 4000; numUsers++) {
 			String firstname = names.get(random.nextInt(names.size()));
 			String surname = names.get(random.nextInt(names.size()));
 			
@@ -94,7 +98,23 @@ public class BulkTests {
 			SiteUser user = new SiteUser(email, password, firstname, surname);
 			user.setEnabled(random.nextInt(5) != 0);
 			
-			System.out.println(user);
+			userService.register(user);
+			
+			Profile profile = new Profile(user);
+			
+			int numberInterests = random.nextInt(7);
+			
+			Set<Interest> userInterests = new HashSet<Interest>();
+			
+			for(int i=0; i<numberInterests; i++) {
+				String interestText = interests.get(random.nextInt(interests.size()));
+				
+				Interest interest = interestService.createIfNotExists(interestText);
+				userInterests.add(interest);
+			}
+			
+			profile.setInterests(userInterests);
+			profileService.save(profile);
 		}
 		
 		assertTrue(true);

@@ -6,8 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.caveofprogramming.model.StatusUpdate;
-import com.caveofprogramming.model.StatusUpdateDao;
+import com.caveofprogramming.model.entity.StatusUpdate;
+import com.caveofprogramming.model.repository.StatusUpdateDao;
 
 @Service
 public class StatusUpdateService {

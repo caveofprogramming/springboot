@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.caveofprogramming.App;
-import com.caveofprogramming.model.StatusUpdate;
-import com.caveofprogramming.model.StatusUpdateDao;
+import com.caveofprogramming.model.entity.StatusUpdate;
+import com.caveofprogramming.model.repository.StatusUpdateDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(App.class)

@@ -3,9 +3,9 @@ package com.caveofprogramming.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caveofprogramming.model.Profile;
-import com.caveofprogramming.model.ProfileDao;
-import com.caveofprogramming.model.SiteUser;
+import com.caveofprogramming.model.entity.Profile;
+import com.caveofprogramming.model.entity.SiteUser;
+import com.caveofprogramming.model.repository.ProfileDao;
 
 @Service
 public class ProfileService {
