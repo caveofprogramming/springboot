@@ -181,6 +181,16 @@ div[role=status] {
 	color: yellow;
 }
 
+/* List of results */
+
+.results-photo {
+	display: inline-block;
+}
+
+.results-details {
+	display: inline-block;
+}
+
 
 
 

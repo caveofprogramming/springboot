@@ -36,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/invaliduser",
 						"/expiredtoken",
 						"/verifyemail",
-						"/confirmregister"
+						"/confirmregister",
+						"/profilephoto/*"
 						)
 				.permitAll()
 				.antMatchers(
@@ -54,7 +55,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/profile/*",
 						"/edit-profile-about",
 						"/upload-profile-photo",
-						"/profilephoto/*",
 						"/save-interest",
 						"/delete-interest"
 						)
