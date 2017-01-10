@@ -72,6 +72,12 @@ textarea {
 	margin-top: 10px;
 }
 
+.register-prompt {
+	font-size: 1.3em;
+	text-align: center;
+	padding: 20px;
+}
+
 .login-form {
 	width: 100%;
 }
@@ -189,9 +195,22 @@ div[role=status] {
 
 .results-details {
 	display: inline-block;
+	margin-left: 20px;
 }
 
+.results-name {
+	font-size: 1.5em;
+	font-weight: bold;
+}
 
+.results-interests {
+	font-size: 1.3em;
+}
+
+.person-row {
+	border: 1px solid orange;
+	margin-bottom: 1em;
+}
 
 
 

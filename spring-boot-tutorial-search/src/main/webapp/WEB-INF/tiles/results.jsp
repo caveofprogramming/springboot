@@ -15,23 +15,29 @@
 <c:forEach var="result" items="${results}">
 
 	<c:url var="profilePhoto" value="/profilephoto/${result.userId}" />
+	<c:url var="profileLink" value="/profile/${result.userId}" />
 
-	<div class="row">
+	<div class="row person-row">
 		<div class="col-md-12">
 
 			<div class="results-photo">
-				<img id="profilePhotoImage" src="${profilePhoto}" />
+				<a href="${profileLink}"><img id="profilePhotoImage" src="${profilePhoto}" /></a>
 			</div>
 			
 			<div class="results-details">
 			
 				<div class="results-name">
-					<c:out value="${result.firstname}"/> <c:out value="${result.surname}"/>
+					<a href="${profileLink}"><c:out value="${result.firstname}"/> <c:out value="${result.surname}"/></a>
 				</div>
 				
-				<c:forEach var="interest" items="${result.interests}">
-					<c:out value="${interest}" /> 
-				</c:forEach>
+				<div class="results-interests">
+					<c:forEach var="interest" items="${result.interests}" varStatus="status">
+						
+						<c:out value="${interest}" /> 
+						
+						<c:if test="${!status.last}"> | </c:if>
+					</c:forEach>
+				</div>
 			</div>
 
 		</div>
