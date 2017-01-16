@@ -33,7 +33,8 @@
 				<div class="results-interests">
 					<c:forEach var="interest" items="${result.interests}" varStatus="status">
 						
-						<c:out value="${interest}" /> 
+						<c:url var="interestLink" value="/search?s=${interest}" />
+						<a href="${interestLink}"><c:out value="${interest}" /></a> 
 						
 						<c:if test="${!status.last}"> | </c:if>
 					</c:forEach>

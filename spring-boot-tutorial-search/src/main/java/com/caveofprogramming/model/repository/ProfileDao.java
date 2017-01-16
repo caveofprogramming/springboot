@@ -10,5 +10,5 @@ import com.caveofprogramming.model.entity.SiteUser;
 public interface ProfileDao extends CrudRepository<Profile, Long> {	
 	Profile findByUser(SiteUser user);
 
-	List<Profile> findByInterestsName(String text);
+	List<Profile> findByInterestsNameContainingIgnoreCase(String text);
 }

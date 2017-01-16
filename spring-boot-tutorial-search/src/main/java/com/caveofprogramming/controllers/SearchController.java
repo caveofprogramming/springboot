@@ -18,7 +18,7 @@ public class SearchController {
 	@Autowired
 	SearchService searchService;
 
-	@RequestMapping(value="/search", method=RequestMethod.POST)
+	@RequestMapping(value="/search", method={RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView search(ModelAndView modelAndView, @RequestParam("s") String text) {
 		
 		List<SearchResult> results = searchService.search(text);
