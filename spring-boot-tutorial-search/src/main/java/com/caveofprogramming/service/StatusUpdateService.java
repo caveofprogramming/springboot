@@ -12,7 +12,7 @@ import com.caveofprogramming.model.repository.StatusUpdateDao;
 @Service
 public class StatusUpdateService {
 	
-	private final static int PAGESIZE = 10;
+	private int PAGESIZE = 10;
 	
 	@Autowired
 	private StatusUpdateDao statusUpdateDao;
