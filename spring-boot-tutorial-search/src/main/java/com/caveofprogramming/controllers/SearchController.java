@@ -19,8 +19,9 @@ public class SearchController {
 	SearchService searchService;
 
 	@RequestMapping(value="/search", method={RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView search(ModelAndView modelAndView, @RequestParam("s") String text) {
+	public ModelAndView search(ModelAndView modelAndView, @RequestParam("s") String text, @RequestParam(name="p", defaultValue="1") int pageNumber) {
 		
+		System.out.println(pageNumber);
 		List<SearchResult> results = searchService.search(text);
 		
 		modelAndView.getModel().put("results", results);
