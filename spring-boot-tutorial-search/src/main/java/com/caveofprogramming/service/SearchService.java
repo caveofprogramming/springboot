@@ -20,4 +20,5 @@ public class SearchService {
 	public List<SearchResult> search(String text) {
 		return profileDao.findByInterestsNameContainingIgnoreCase(text).stream().map(SearchResult::new).collect(Collectors.toList());
 	}
+
 }
