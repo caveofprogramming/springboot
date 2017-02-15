@@ -1,12 +1,22 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<%----------ATTRIBUTES----------------%>
+
+<%-- Spring Page object --%>
 <%@ attribute name="page" required="true"
 	type="org.springframework.data.domain.Page"%>
+	
+<%-- Base url of page --%>
 <%@ attribute name="url" required="true"%>
+
+<p>Base url contains question mark: ${fn:contains(url,'?')}</p>
 
 <%-- Number of page numbers to display at once. --%>
 <%@ attribute name="size" required="false"%>
+
+<%----------ATTRIBUTE CALCULATIONS ----------------%>
 
 <c:set var="size" value="${empty size ? 10: size}" />
 
@@ -16,6 +26,9 @@
 <c:set var="endPage" value="${(block + 1) * size}" />
 <c:set var="endPage"
 	value="${endPage > page.totalPages ? page.totalPages : endPage}" />
+
+
+<%----------OUTPUT ----------------%>
 
 <c:if test="${page.totalPages != 1}">
 
@@ -47,7 +60,7 @@
 	</c:forEach>
 
 	<c:if test="${endPage != page.totalPages}">
-		<a href="?b=${block+1}&p=${(block+1)*size + 1}">&gt;&gt;</a>
+		<a href="${url}?b=${block+1}&p=${(block+1)*size + 1}">&gt;&gt;</a>
 	</c:if>
 </div>
 

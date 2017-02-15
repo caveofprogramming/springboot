@@ -11,7 +11,7 @@
 	</div>
 </div>
 
-<c:url var="searchUrl" value="/search" />
+<c:url var="searchUrl" value="/search?s=${s}" />
 
 <div class="row">	
 	<div class="col-md-12">
