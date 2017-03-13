@@ -15,7 +15,7 @@
 
 <div class="row">	
 	<div class="col-md-12">
-	<jwp:pagination url="${searchUrl}" page="${page}" size="3" />
+	<jwp:pagination url="${searchUrl}" page="${page}" size="10" />
 	</div>
 </div>
 
