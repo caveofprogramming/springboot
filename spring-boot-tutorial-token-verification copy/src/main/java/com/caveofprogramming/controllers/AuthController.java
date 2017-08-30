@@ -117,7 +117,7 @@ public class AuthController {
 			userService.register(user);
 			
 			String token = userService.createEmailVerificationToken(user);
-
+			
 			emailService.sendVerificationEmail(user.getEmail(), token);
 
 			modelAndView.setViewName("redirect:/verifyemail");
