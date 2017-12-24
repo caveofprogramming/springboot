@@ -8,3 +8,6 @@
 **/pom_BASE*.xml
 **/pom_LOCAL*.xml
 **/pom_REMOTE*.xml
+**/.vscode/**
+**/.DS_Store
+
