@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.caveofprogramming.tests.WebSocketTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 sec - in com.caveofprogramming.tests.WebSocketTest

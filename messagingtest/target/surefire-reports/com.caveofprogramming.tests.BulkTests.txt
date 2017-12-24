@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.caveofprogramming.tests.BulkTests
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.009 sec - in com.caveofprogramming.tests.BulkTests

@@ -1,0 +1,71 @@
+mvn package
+
+rc=$?
+if [[ $rc -ne 0 ]] ; then
+  echo 'Tests failed.'; 
+  exit $rc;
+fi
+
+targetWar="otherfreaks.war"
+cd target
+warfile=`ls -Art *.war | tail -n 1`
+
+if [ ! -f "$warfile" ];
+then
+        echo "$warfile does not exist";
+        exit;
+fi
+
+md5original=`md5 $warfile  | awk '{print $4}'`
+
+[ -e "$targetWar" ] && rm "$targetWar"
+cp spring-boot-tutorial-1.0.war $targetWar
+
+md5renamed=`md5 otherfreaks.war  | awk '{print $4}'`
+
+if [ ! -f $targetWar ];
+then
+        echo "$targetWar does not exist";
+        exit;
+fi
+
+if [ "$md5original" != "$md5renamed" ];
+then
+	echo "MD5 different after renaming";
+	echo "$md5original";
+        echo "$md5renamed";
+	exit;
+fi
+
+sftp -oBatchMode=no -b - otherfreaks  << !
+   put otherfreaks.war
+   bye
+!
+
+ssh otherfreaks "export md5original='$md5original'; export targetWar='$targetWar'; bash"   <<'ENDSSH'
+cd
+md5uploaded=`sudo md5sum $targetWar  | awk '{print $1}'`
+
+if [ "$md5original" != "$md5uploaded" ];
+then
+        echo "MD5 different after uploading";
+        echo "Original MD5: $md5original";
+        echo "Uploaded MD5: $md5uploaded";
+        exit;
+fi
+
+cd /var/webapps
+sudo systemctl stop otherfreaks
+sudo chattr -i $targetWar
+sudo rm -f $targetWar 
+sudo mv ~/$targetWar .
+sudo chown springboot:www-data $targetWar
+sudo chmod 500 $targetWar
+sudo ls -l $targetWar | awk '{print "targetWar deployed: " $6 " " $7 " " $8 ": " $3 " " $4}'
+sudo chattr +i  $targetWar
+sudo systemctl start otherfreaks
+exit
+ENDSSH
+
+echo "Completed."
+

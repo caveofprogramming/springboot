@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: spring-boot-tutorial
+Implementation-Version: 1.0
+Built-By: johnpurcell
+Implementation-Vendor-Id: com.caveofprogramming
+Build-Jdk: 1.8.0_65
+Implementation-URL: http://projects.spring.io/spring-boot/spring-boot-
+ tutorial/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
