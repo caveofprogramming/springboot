@@ -1,0 +1,11 @@
+*/.classpath
+*/.gitignore
+*/.project
+*/.settings/**
+*/bin/**
+*/target/**
+**/pom_BACKUP*.xml
+**/pom.xml.orig
+**/pom_BASE*.xml
+**/pom_LOCAL*.xml
+**/pom_REMOTE*.xml
