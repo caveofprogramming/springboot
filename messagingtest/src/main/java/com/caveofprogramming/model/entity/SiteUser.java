@@ -32,7 +32,7 @@ public class SiteUser {
 	private String email;
 
 	@Transient
-	@Size(min = 5, max = 15, message = "{register.password.size}")
+	@Size(min = 8, max = 20, message = "{register.password.size}")
 	private String plainPassword;
 
 	@Column(name = "password", length = 60)

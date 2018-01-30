@@ -121,6 +121,8 @@ textarea {
 	font-size: larger;
 }
 
+
+
 .profile-image {
 	float: left;
 	margin-bottom: 10px;
@@ -145,8 +147,9 @@ textarea {
 	display: none;
 }
 
-ul#interestList {
-	border: 1px solid gray;
+ul#interest-list {
+	border: 1px ridge orange;
+	background-color: rgb(255, 255, 240);
 }
 
 ul.tagit>li.tagit-choice {
@@ -157,18 +160,18 @@ ul.tagit>li.tagit-choice {
 	box-shadow: 2px 2px 2px #888888;
 }
 
-ul#interestList a.tagit-close>span.text-icon {
+ul#interest-list a.tagit-close>span.text-icon {
 	display: inline;
 	color: yellow;
 	padding: 6px;
 	font-size: 1.1em;
 }
 
-ul#interestList a.tagit-close:hover {
+ul#interest-list a.tagit-close:hover {
 	text-decoration: none;
 }
 
-ul#interestList a.tagit-close:hover>span.text-icon {
+ul#interest-list a.tagit-close:hover>span.text-icon {
 	color: blue;
 }
 

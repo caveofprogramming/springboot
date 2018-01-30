@@ -16,10 +16,10 @@
 		<div id="profile-photo-status"></div>
 
 		<div id="interestDiv">
-			<ul id="interestList">
+			<ul id="interest-list">
 				<c:choose>
 					<c:when test="${empty profile.interests}">
-						<li>Add your interests here (example: music)!</li>
+						<li>Type here to add your interests here (example: music)!</li>
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="interest" items="${profile.interests}">
@@ -156,7 +156,7 @@
 
 	$(document).ready(function() {
 
-		$("#interestList").tagit({
+		$("#interest-list").tagit({
 
 			afterTagRemoved : function(event, ui) {
 				deleteInterest(ui.tagLabel);

@@ -25,6 +25,10 @@
 		<c:if test="${param.error != null}">
 			<div class="login-error">Incorrect username or password.</div>
 		</c:if>
+		
+		<c:if test="${param.expired != null}">
+			<div class="login-error">Your session has expired. Please log in again.</div>
+		</c:if>
 
 		<div class="panel panel-default">
 
@@ -40,7 +44,7 @@
 						value="${_csrf.token}" />
 
 					<div class="input-group">
-						<input type="text" name="username" placeholder="Username"
+						<input type="text" name="username" placeholder="Email address"
 							class="form-control" />
 					</div>
 

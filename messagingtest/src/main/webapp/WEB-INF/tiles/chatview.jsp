@@ -7,58 +7,123 @@
 <c:url var="fromPoint" value="/user/queue/${toUserId}" />
 <c:url var="getchat" value="/getchat/${toUserId}" />
 <c:url var="thisPage" value="/chatview/${toUserId}" />
+<c:url var="validSession" value="/validsession" />
+<c:url var="authenticated" value="/authenticated" />
 
 
 
 <script>
-
 	$(requestNotificationPermission);
-	
+
 	function connectChat() {
-		
+
 	}
-	
+
 	var messages = [];
-	
+
 	var token = $("meta[name='_csrf']").attr("content");
 	var headerName = $("meta[name='_csrf_header']").attr("content");
-	
+
 	var headers = {};
 	headers[headerName] = token;
 
 	var wsocket = new SockJS('${chat}');
 
-    
 	var client = Stomp.over(wsocket);
-	client.debug = null;
-	
-	client.connect(headers, function(frame) {
-		client.subscribe("${fromPoint}", function(message) {
-			
-			var text = JSON.parse(message.body).text;
-			
-			messages.push({
-				'isReply' : 1,
-				'text' : text
-			});
-			
-			refreshMessages();
-			
-			notifyNewMessage("New message", "You have a new message from <c:out value="${chattingWithName}" />", "${thisPage}");
+	//client.debug = null;
+
+	function isSessionValid() {
+
+		console.log("Error callback");
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+			jqXHR.setRequestHeader(header, token);
 		});
-	});
+
+		$.ajax({
+			dataType : "text",
+			url : "${validSession}",
+			success : function(valid) {
+				console
+						.log(Date(), "Result of session check: ",
+								Boolean(valid));
+
+				if (valid == 'true') {
+					console.log("Valid session");
+				} else {
+					console.log("Invalid session");
+				}
+			},
+			error : function() {
+				console.log(Date(),
+						" Could not contact server to check session.");
+			}
+		});
+
+		$.ajax({
+			dataType : "text",
+			url : "${authenticated}",
+			success : function(authenticated) {
+				console.log(Date(), "Result of authenticated check: ",
+						Boolean(authenticated));
+
+				if (authenticated == 'true') {
+					console.log("Authenticated");
+				} else {
+					console.log("Not authenticated");
+				}
+			},
+			error : function() {
+				console.log(Date(),
+						" Could not contact server to check authentiction.");
+			}
+		});
+	}
+
+	function errorCallback(message) {
+		// Check if sessions has timed out.
+		isSessionValid();
+	}
+
+	function messageCallback() {
+		isSessionValid();
+		console.log(Date(), " message callback");
+		client
+				.subscribe(
+						"${fromPoint}",
+						function(message) {
+
+							var text = JSON.parse(message.body).text;
+
+							messages.push({
+								'isReply' : 1,
+								'text' : text
+							});
+
+							refreshMessages();
+
+							notifyNewMessage(
+									"New message",
+									"You have a new message from <c:out value="${chattingWithName}" />",
+									"${thisPage}");
+						});
+	}
+
+	client.connect(headers, messageCallback, errorCallback);
 
 	function refreshMessages() {
 
 		var count = $("#chat-message-record div").length;
-		
+
 		for (var i = count; i < messages.length; i++) {
 			var message = messages[i];
-			
+
 			var isReply = message.isReply;
 			var text = message.text;
 			var cssClass = isReply ? "chat-message-reply" : "chat-message-sent";
-			
+
 			var div = $("<div>");
 			div.addClass("chat-message");
 			div.addClass(cssClass);
@@ -69,7 +134,9 @@
 	}
 
 	function sendMessage() {
-		
+
+		console.log(Date(), " sending message.");
+
 		var text = $('#chat-message-text').val();
 
 		messages.push({
@@ -84,13 +151,13 @@
 		$('#chat-message-text').val("");
 		$('#chat-message-text').focus();
 	}
-	
-	function addMessagesToList(messageList) {		
+
+	function addMessagesToList(messageList) {
 		messages = messageList;
-		
+
 		refreshMessages();
 	}
-	
+
 	function retrieveMessages() {
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
@@ -98,12 +165,12 @@
 		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
 			jqXHR.setRequestHeader(header, token);
 		});
-		
+
 		$.ajax({
-			  dataType: "json",
-			  url: "${getchat}",
-			  success: addMessagesToList
-			});
+			dataType : "json",
+			url : "${getchat}",
+			success : addMessagesToList
+		});
 	}
 
 	$(document).ready(function() {
@@ -120,14 +187,17 @@
 				return false;
 			}
 		});
-		
+
 		retrieveMessages();
 	});
 </script>
 
 <div class="row">
 	<div class="col-md-12">
-		<h2>You are chatting with <c:out value="${chattingWithName}" /></h2>
+		<h2>
+			You are chatting with
+			<c:out value="${chattingWithName}" />
+		</h2>
 	</div>
 </div>
 

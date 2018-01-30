@@ -89,7 +89,7 @@
 				</sec:authorize>
 
 				<sec:authorize access="isAuthenticated()">
-					<li><a class="profile" href="${contextRoot}/profile"><sec:authentication property="principal.firstname" /> </a></li>
+					<li><a class="profile" href="${contextRoot}/profile"><sec:authentication property="principal.firstname" />'s Profile </a></li>
 					<li><a href="${contextRoot}/messages?p=1">Messages</a></li>
 					<li><a href="javascript:$('#logoutForm').submit();">Logout</a></li>
 				</sec:authorize>

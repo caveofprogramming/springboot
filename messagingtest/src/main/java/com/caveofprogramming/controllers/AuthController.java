@@ -1,8 +1,10 @@
 package com.caveofprogramming.controllers;
 
 import java.io.FileNotFoundException;
+import java.security.Principal;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.entity.SiteUser;
@@ -64,6 +67,18 @@ public class AuthController {
 		modelAndView.setViewName("app.verifyemail");
 
 		return modelAndView;
+	}
+	
+	@RequestMapping("/validsession")
+	@ResponseBody
+	Boolean isSessionValid(HttpServletRequest request) {
+		return request.isRequestedSessionIdValid();
+	}
+	
+	@RequestMapping("/authenticated")
+	@ResponseBody
+	Boolean isAuthenticated(Principal principal) {
+		return principal != null;
 	}
 
 	@RequestMapping("/confirmregister")

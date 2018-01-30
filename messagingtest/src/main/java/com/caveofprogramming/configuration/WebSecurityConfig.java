@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.caveofprogramming.service.UserService;
@@ -13,10 +14,10 @@ import com.caveofprogramming.service.UserService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -45,7 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/expiredtoken",
 						"/verifyemail",
 						"/confirmregister",
-						"/profilephoto/*"
+						"/profilephoto/*",
+						"/validsession",
+						"/authenticated"
 						)
 				.permitAll()
 				.antMatchers(
@@ -76,6 +79,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest()
 				.denyAll()
 				.and()
+			.sessionManagement()
+				.maximumSessions(3)
+                .expiredUrl("/login?expired")
+                .and()
+                .invalidSessionUrl("/login")
+                .and()
 			.formLogin()
 				.loginPage("/login")
 				.defaultSuccessUrl("/")
@@ -83,21 +92,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.permitAll()
-				.logoutSuccessUrl("/logout-success");
+				.logoutSuccessUrl("/login");
 		
 		// @formatter:on
 	}
-	
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		
+
 		// @formatter:off
-		auth
-			.inMemoryAuthentication()
-			.withUser("john")
-			.password("hello")
-			.roles("USER");
-		
+		auth.inMemoryAuthentication().withUser("john").password("hello").roles("USER");
+
 		// @formatter:on
 
 	}
@@ -107,5 +112,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
 	}
 
-	
 }
