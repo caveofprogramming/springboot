@@ -76,8 +76,10 @@ public class AuthController {
 
 		boolean isValidSession = request.isRequestedSessionIdValid();
 		boolean isAuthenticated = principal != null;
+		
+		int sessionTimeout = request.getSession().getMaxInactiveInterval();
 
-		UserStatusCheck statusCheck = new UserStatusCheck(isValidSession, isAuthenticated);
+		UserStatusCheck statusCheck = new UserStatusCheck(sessionTimeout, isValidSession, isAuthenticated);
 
 		return statusCheck;
 	}

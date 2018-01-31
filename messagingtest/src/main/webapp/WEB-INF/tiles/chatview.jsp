@@ -14,17 +14,23 @@
 
 <script>
 	$(requestNotificationPermission);
+	
+	var sessionTimeout = 60; // Sixty seconds by default, but we'll change it later.
 
 	function connectChat(csrfKey, csrfValue, socksEndPoint) {
+		
 		var headers = {};
 		headers[headerName] = token;
 
 		var wsocket = new SockJS(socksEndPoint);
 
 		var client = Stomp.over(wsocket);
-		client.debug = null;
+		//client.debug = null;
 		
 		client.connect(headers, messageCallback, errorCallback);
+		
+		console.log("Connect chat");
+		doStatusCheck();
 		
 		return client;
 	}
@@ -50,14 +56,27 @@
 			dataType : "json",
 			url : "${statuscheck}",
 			success : sessionStatusCheck,
-			error : function() {
-				console.log(Date(),
-						" Could not contact server to check authentication.");
-			}
+			complete: sessionStatusCheckComplete,
+			error : sessionStatusCheckFailure
 		});
+	}
+	
+	function sessionStatusCheckComplete(xhr) {
+		if(xhr.status == 401) {
+			location.reload(true);
+		}
+	}
+	
+	function sessionStatusCheckFailure(xhr, ajaxOptions, thrownError) {
+		console.log(Date(),
+				" Could not contact server to check authentication.");
+		console.log(xhr, ajaxOptions, thrownError);
 	}
 
 	function sessionStatusCheck(statusCheck) {
+		
+		sessionTimeout = statusCheck.sessionTimeout;
+		
 		if (!statusCheck.ok) {
 			location.reload(true);
 		}
@@ -67,6 +86,7 @@
 
 	function errorCallback(message) {
 		// Check if session is still OK
+		console.log("Error callback");
 		doStatusCheck();
 	}
 
@@ -132,6 +152,7 @@
 		$('#chat-message-text').val("");
 		$('#chat-message-text').focus();
 
+		console.log("Send message");
 		doStatusCheck();
 	}
 

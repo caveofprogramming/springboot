@@ -2,16 +2,17 @@ package com.caveofprogramming.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.caveofprogramming.service.UserService;
 
 @Configuration
+@Order(2)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -27,9 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		
 		http
-		.csrf()
-        	.ignoringAntMatchers("/chat/**")
-        .and()
+			.csrf()
+        		.ignoringAntMatchers("/chat/**")
+        		.and()
 			.headers()
 				.frameOptions()
 				.sameOrigin()
@@ -46,10 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/expiredtoken",
 						"/verifyemail",
 						"/confirmregister",
-						"/profilephoto/*",
-						"/validsession",
-						"/authenticated",
-						"/statuscheck"
+						"/profilephoto/*"
 						)
 				.permitAll()
 				.antMatchers(
@@ -61,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/editstatus",
 						"/deletestatus",
 						"/viewstatus")
-				.hasRole("ADMIN")
+					.hasRole("ADMIN")
 				.antMatchers(
 						"/profile",
 						"/profile/*",
@@ -76,24 +74,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/chat/**",
 						"/getchat/*"
 						)
-				.authenticated()
+					.authenticated()
 				.anyRequest()
-				.denyAll()
+					.denyAll()
 				.and()
-			.sessionManagement()
-				.maximumSessions(3)
-                .expiredUrl("/login?expired")
-                .and()
-                .invalidSessionUrl("/login")
-                .and()
-			.formLogin()
-				.loginPage("/login")
-				.defaultSuccessUrl("/")
-				.permitAll()
-				.and()
-			.logout()
-				.permitAll()
-				.logoutSuccessUrl("/login");
+				.sessionManagement()
+					.maximumSessions(3)
+	                .expiredUrl("/login?expired")
+	                .and()
+	                .invalidSessionUrl("/login")
+	                .and()
+				.formLogin()
+					.loginPage("/login")
+					.defaultSuccessUrl("/")
+					.permitAll()
+					.and()
+				.logout()
+					.permitAll()
+					.logoutSuccessUrl("/login")
+					.invalidateHttpSession(true);
 		
 		// @formatter:on
 	}
