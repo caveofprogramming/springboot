@@ -8,15 +8,25 @@
 <c:url var="getchat" value="/getchat/${toUserId}" />
 <c:url var="thisPage" value="/chatview/${toUserId}" />
 <c:url var="validSession" value="/validsession" />
-<c:url var="authenticated" value="/authenticated" />
+<c:url var="statuscheck" value="/statuscheck" />
 
 
 
 <script>
 	$(requestNotificationPermission);
 
-	function connectChat() {
+	function connectChat(csrfKey, csrfValue, socksEndPoint) {
+		var headers = {};
+		headers[headerName] = token;
 
+		var wsocket = new SockJS(socksEndPoint);
+
+		var client = Stomp.over(wsocket);
+		client.debug = null;
+		
+		client.connect(headers, messageCallback, errorCallback);
+		
+		return client;
 	}
 
 	var messages = [];
@@ -24,17 +34,11 @@
 	var token = $("meta[name='_csrf']").attr("content");
 	var headerName = $("meta[name='_csrf_header']").attr("content");
 
-	var headers = {};
-	headers[headerName] = token;
+	var client = connectChat(headerName, token, '${chat}');
 
-	var wsocket = new SockJS('${chat}');
+	
+	function doStatusCheck() {
 
-	var client = Stomp.over(wsocket);
-	//client.debug = null;
-
-	function isSessionValid() {
-
-		console.log("Error callback");
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -43,52 +47,31 @@
 		});
 
 		$.ajax({
-			dataType : "text",
-			url : "${validSession}",
-			success : function(valid) {
-				console
-						.log(Date(), "Result of session check: ",
-								Boolean(valid));
-
-				if (valid == 'true') {
-					console.log("Valid session");
-				} else {
-					console.log("Invalid session");
-				}
-			},
+			dataType : "json",
+			url : "${statuscheck}",
+			success : sessionStatusCheck,
 			error : function() {
 				console.log(Date(),
-						" Could not contact server to check session.");
+						" Could not contact server to check authentication.");
 			}
 		});
+	}
 
-		$.ajax({
-			dataType : "text",
-			url : "${authenticated}",
-			success : function(authenticated) {
-				console.log(Date(), "Result of authenticated check: ",
-						Boolean(authenticated));
+	function sessionStatusCheck(statusCheck) {
+		if (!statusCheck.ok) {
+			location.reload(true);
+		}
 
-				if (authenticated == 'true') {
-					console.log("Authenticated");
-				} else {
-					console.log("Not authenticated");
-				}
-			},
-			error : function() {
-				console.log(Date(),
-						" Could not contact server to check authentiction.");
-			}
-		});
+		console.log("Status check: ", statusCheck);
 	}
 
 	function errorCallback(message) {
-		// Check if sessions has timed out.
-		isSessionValid();
+		// Check if session is still OK
+		doStatusCheck();
 	}
 
 	function messageCallback() {
-		isSessionValid();
+
 		console.log(Date(), " message callback");
 		client
 				.subscribe(
@@ -111,7 +94,7 @@
 						});
 	}
 
-	client.connect(headers, messageCallback, errorCallback);
+	
 
 	function refreshMessages() {
 
@@ -135,8 +118,6 @@
 
 	function sendMessage() {
 
-		console.log(Date(), " sending message.");
-
 		var text = $('#chat-message-text').val();
 
 		messages.push({
@@ -150,6 +131,8 @@
 
 		$('#chat-message-text').val("");
 		$('#chat-message-text').focus();
+
+		doStatusCheck();
 	}
 
 	function addMessagesToList(messageList) {

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.model.dto.UserStatusCheck;
 import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.model.entity.VerificationToken;
 import com.caveofprogramming.service.EmailService;
@@ -63,18 +64,30 @@ public class AuthController {
 		} else {
 			modelAndView.getModel().put("message", noVerificationMessage);
 		}
-		
+
 		modelAndView.setViewName("app.verifyemail");
 
 		return modelAndView;
 	}
-	
+
+	@RequestMapping("/statuscheck")
+	@ResponseBody
+	UserStatusCheck checkUserStatus(HttpServletRequest request, Principal principal) {
+
+		boolean isValidSession = request.isRequestedSessionIdValid();
+		boolean isAuthenticated = principal != null;
+
+		UserStatusCheck statusCheck = new UserStatusCheck(isValidSession, isAuthenticated);
+
+		return statusCheck;
+	}
+
 	@RequestMapping("/validsession")
 	@ResponseBody
 	Boolean isSessionValid(HttpServletRequest request) {
 		return request.isRequestedSessionIdValid();
 	}
-	
+
 	@RequestMapping("/authenticated")
 	@ResponseBody
 	Boolean isAuthenticated(Principal principal) {

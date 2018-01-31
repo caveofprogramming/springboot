@@ -48,7 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/confirmregister",
 						"/profilephoto/*",
 						"/validsession",
-						"/authenticated"
+						"/authenticated",
+						"/statuscheck"
 						)
 				.permitAll()
 				.antMatchers(

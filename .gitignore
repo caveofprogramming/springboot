@@ -11,5 +11,5 @@
 **/.vscode/**
 **/.DS_Store/**
 **/.metadata/**
-
+.recommenders/
 
