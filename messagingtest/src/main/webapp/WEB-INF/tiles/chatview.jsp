@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
+
 <c:url var="chat" value="/chat" />
 <c:url var="sendPoint" value="/app/message/send/${toUserId}" />
 <c:url var="fromPoint" value="/user/queue/${toUserId}" />
@@ -9,116 +11,38 @@
 <c:url var="thisPage" value="/chatview/${toUserId}" />
 <c:url var="validSession" value="/validsession" />
 <c:url var="statuscheck" value="/statuscheck" />
+<c:url var="js" value="/js" />
+<c:url var="notificationUrl" value="/chatview" />
+
+<script src="${js}/chat-connection-manager.js"></script>
 
 
 
 <script>
-	$(requestNotificationPermission);
-	
-	var sessionTimeout = 60; // Sixty seconds by default, but we'll change it later.
-
-	function connectChat(csrfKey, csrfValue, socksEndPoint) {
-		
-		var headers = {};
-		headers[headerName] = token;
-
-		var wsocket = new SockJS(socksEndPoint);
-
-		var client = Stomp.over(wsocket);
-		//client.debug = null;
-		
-		client.connect(headers, messageCallback, errorCallback);
-		
-		console.log("Connect chat");
-		doStatusCheck();
-		
-		return client;
-	}
-
-	var messages = [];
-
 	var token = $("meta[name='_csrf']").attr("content");
 	var headerName = $("meta[name='_csrf_header']").attr("content");
 
-	var client = connectChat(headerName, token, '${chat}');
+	function sizeChatWindow() {
 
-	
-	function doStatusCheck() {
+		$('#chat-message-record').height(0);
 
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
+		var documentHeight = $(document).height();
+		var sendMessageHeight = $('#chat-message-send').height();
+		var messageRecordPos = $('#chat-message-record').offset().top;
+		var panelBodyPadding = 15;
 
-		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-			jqXHR.setRequestHeader(header, token);
-		});
+		var messageRecordHeight = documentHeight
+				- (messageRecordPos + sendMessageHeight + 2 * panelBodyPadding);
 
-		$.ajax({
-			dataType : "json",
-			url : "${statuscheck}",
-			success : sessionStatusCheck,
-			complete: sessionStatusCheckComplete,
-			error : sessionStatusCheckFailure
-		});
-	}
-	
-	function sessionStatusCheckComplete(xhr) {
-		if(xhr.status == 401) {
-			location.reload(true);
-		}
-	}
-	
-	function sessionStatusCheckFailure(xhr, ajaxOptions, thrownError) {
-		console.log(Date(),
-				" Could not contact server to check authentication.");
-		console.log(xhr, ajaxOptions, thrownError);
+		$('#chat-message-record').height(messageRecordHeight);
 	}
 
-	function sessionStatusCheck(statusCheck) {
-		
-		sessionTimeout = statusCheck.sessionTimeout;
-		
-		if (!statusCheck.ok) {
-			location.reload(true);
-		}
-
-		console.log("Status check: ", statusCheck);
-	}
-
-	function errorCallback(message) {
-		// Check if session is still OK
-		console.log("Error callback");
-		doStatusCheck();
-	}
-
-	function messageCallback() {
-
-		console.log(Date(), " message callback");
-		client
-				.subscribe(
-						"${fromPoint}",
-						function(message) {
-
-							var text = JSON.parse(message.body).text;
-
-							messages.push({
-								'isReply' : 1,
-								'text' : text
-							});
-
-							refreshMessages();
-
-							notifyNewMessage(
-									"New message",
-									"You have a new message from <c:out value="${chattingWithName}" />",
-									"${thisPage}");
-						});
-	}
-
-	
-
-	function refreshMessages() {
+	function refreshMessages(messages) {
 
 		var count = $("#chat-message-record div").length;
+
+		console.log("Adding ", messages.length, " messages to ", count,
+				" messages already there.");
 
 		for (var i = count; i < messages.length; i++) {
 			var message = messages[i];
@@ -136,64 +60,53 @@
 		}
 	}
 
-	function sendMessage() {
+	$(document).ready(
+			function() {
 
-		var text = $('#chat-message-text').val();
+				sizeChatWindow();
+				$(window).resize(sizeChatWindow);
 
-		messages.push({
-			'isReply' : 0,
-			'text' : text
-		});
+				var connectionManager = new ConnectionManager({
+					debug : true,
+					socksEndPoint : "${chat}",
+					newMessageCallback : refreshMessages,
+					notificationUrl : "${notificationUrl}",
+					chattingWithName : "${chattingWithName}",
+					csrfTokenName : headerName,
+					csrfTokenValue : token,
+					statusCheckUrl : "${statuscheck}",
+					stompInboundDestination : "${fromPoint}",
+					stompOutboundDestination : "${sendPoint}",
+					restMessageServiceUrl : "${getchat}"
+				});
 
-		client.send("${sendPoint}", {}, JSON.stringify({
-			'text' : text,
-		}));
+				connectionManager.connectChat();
+				connectionManager.requestNotificationPermission();
 
-		$('#chat-message-text').val("");
-		$('#chat-message-text').focus();
+				function sendMessage(text) {
+					var text = $('#chat-message-text').val();
+					connectionManager.sendMessage(text);
+					$('#chat-message-text').val("");
+					$('#chat-message-text').focus();
+				}
 
-		console.log("Send message");
-		doStatusCheck();
-	}
+				$('#chat-send-button').click(function() {
+					sendMessage();
+				});
 
-	function addMessagesToList(messageList) {
-		messages = messageList;
+				$(document).keypress(function(e) {
+					if (e.which == 13) {
+						sendMessage();
+						return false;
+					}
+				});
 
-		refreshMessages();
-	}
+				$('#chat-message-keep-logged-in-checkbox').click(
+						$.proxy(connectionManager.toggleStayLoggedIn,
+								connectionManager));
 
-	function retrieveMessages() {
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-
-		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-			jqXHR.setRequestHeader(header, token);
-		});
-
-		$.ajax({
-			dataType : "json",
-			url : "${getchat}",
-			success : addMessagesToList
-		});
-	}
-
-	$(document).ready(function() {
-
-		$('#chat-send-button').click(function() {
-			sendMessage();
-			refreshMessages();
-		});
-
-		$(document).keypress(function(e) {
-			if (e.which == 13) {
-				sendMessage();
-				refreshMessages();
-				return false;
-			}
-		});
-
-		retrieveMessages();
-	});
+				connectionManager.retrieveMessages();
+			});
 </script>
 
 <div class="row">
@@ -202,6 +115,15 @@
 			You are chatting with
 			<c:out value="${chattingWithName}" />
 		</h2>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="chat-message-keep-logged-in">
+			Keep me logged into this chat; I'm not on a public computer: <input
+				id="chat-message-keep-logged-in-checkbox" type="checkbox" />
+		</div>
 	</div>
 </div>
 

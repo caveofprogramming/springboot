@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,20 @@ public class AuthController {
 
 		return modelAndView;
 	}
+	
+	@RequestMapping("/stayloggedin")
+	@ResponseBody
+	Boolean stayLoggedIn(HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		
+		// Session should not time out at all.
+		session.setMaxInactiveInterval(-1);
+		
+		return true;
+	}
+	
+	
 
 	@RequestMapping("/statuscheck")
 	@ResponseBody
@@ -82,18 +97,6 @@ public class AuthController {
 		UserStatusCheck statusCheck = new UserStatusCheck(sessionTimeout, isValidSession, isAuthenticated);
 
 		return statusCheck;
-	}
-
-	@RequestMapping("/validsession")
-	@ResponseBody
-	Boolean isSessionValid(HttpServletRequest request) {
-		return request.isRequestedSessionIdValid();
-	}
-
-	@RequestMapping("/authenticated")
-	@ResponseBody
-	Boolean isAuthenticated(Principal principal) {
-		return principal != null;
 	}
 
 	@RequestMapping("/confirmregister")

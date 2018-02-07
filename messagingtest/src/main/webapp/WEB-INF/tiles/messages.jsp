@@ -7,33 +7,38 @@
 <c:url var="inboxUrl" value="/messages" />
 
 <div class="row">
-	<div class="col-md-12">
+	<div class="message-list-pagination col-md-12">
 		<jwp:pagination url="${inboxUrl}" page="${page}" size="10" />
 	</div>
 </div>
 
 <div class="row">
+	<div class="col-md-12">
+		<h2 class="message-list-heading">You have received the following
+			messages</h2>
+	</div>
+</div>
+
+<div class="row">
 	<div class="col-md-12 message-empty">
-		<c:if test="${empty page.content}">
+		<c:if test="${empty messageList.content}">
 			<h2>You don't have any messages yet.</h2>
 		</c:if>
 	</div>
 </div>
 
-<c:forEach var="result" items="${page.content}">
+<c:forEach var="result" items="${messageList.content}">
 
 	<c:url var="chatLink" value="/chatview/${result.fromUserId}" />
 
-
-	<div class="row chat-message-row">
+	<div class="row message-list-row">
 		<div class="col-md-12">
-
-			<a href="${chatLink}"> Message from <c:out value="${result.from}"></c:out>
-				on <fmt:formatDate pattern="EEEE d MMMM y 'at' h:mma"
-					value="${result.date}" />
-			</a>
-
+			<a href="${chatLink}"><c:out value="${result.from}" /> <span class="message-list-date">sent
+					you a message on <fmt:formatDate pattern="EEEE d MMMM y 'at' h:mma"
+						value="${result.date}" />
+			</span></a>
 		</div>
+
 	</div>
 
 </c:forEach>

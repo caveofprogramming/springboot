@@ -26,9 +26,6 @@
 
 <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 
-<tiles:insertAttribute ignore="true" name="customCss"/>
-
-
 <!-- Bootstrap -->
 <link href="${contextRoot}/css/bootstrap.min.css" rel="stylesheet">
 <link href="${contextRoot}/css/main.css" rel="stylesheet">
@@ -48,9 +45,6 @@
 <script
 	src="${contextRoot}/js/stomp.min.js"></script>
 	
-<script
-	src="${contextRoot}/js/notifications.js"></script>
-
 
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

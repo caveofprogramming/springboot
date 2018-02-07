@@ -65,7 +65,6 @@
 
 	<definition name="app.chatview" extends="app.default">
 		<put-attribute name="content" value="/WEB-INF/tiles/chatview.jsp" />
-		<put-attribute name="customCss" value="/WEB-INF/tiles/chatviewhead.jsp" />
 	</definition>
 	
 	<definition name="app.messages" extends="app.default">

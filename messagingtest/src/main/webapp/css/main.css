@@ -258,3 +258,36 @@ div[role=status] {
 	font-size: 1.5em;
 	padding: 5px;
 }
+
+.chat-message-keep-logged-in {
+	margin: 10px 0;
+	padding: 5px;
+	font-weight: 500;
+	border: 1px solid orange;
+	display: table;
+	background-color: yellow;
+}
+
+
+#chat-message-keep-logged-in {
+	margin-left: 10px;
+}
+
+.message-list-pagination {
+	font-size: 1.5em;
+}
+
+.message-list-heading {
+	margin-bottom: 1em;
+}
+
+.message-list-date {
+	font-weight: normal;
+	color: gray;
+}
+
+.message-list-row {
+	padding-top: 1em;
+	font-size: 1.5em;
+	font-weight: 500;
+}

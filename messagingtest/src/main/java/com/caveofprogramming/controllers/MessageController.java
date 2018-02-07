@@ -44,7 +44,7 @@ public class MessageController {
 
 		SiteUser thisUser = util.getUser();
 		Page<SimpleMessage> messages = messageService.getMessages(thisUser.getId(), pageNumber);
-		modelAndView.getModel().put("page", messages);
+		modelAndView.getModel().put("messageList", messages);
 		modelAndView.setViewName("app.messages");
 		return modelAndView;
 	}

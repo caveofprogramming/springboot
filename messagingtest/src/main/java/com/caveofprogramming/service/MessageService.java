@@ -22,7 +22,7 @@ public class MessageService {
 
 	@Value("${messages.inbox.pagesize}")
 	private int pageSize;
-	
+
 	@Value("${messages.chatview.pagesize}")
 	private int maxChatMessages;
 
@@ -37,6 +37,9 @@ public class MessageService {
 		messageDao.save(new Message(toUser, fromUser, text));
 	}
 
+	/*
+	 * Get the list of messages sent to the user from one particular other user.
+	 */
 	public List<SimpleMessage> getChat(Long toUserId, Long fromUserId, int pageNumber) {
 
 		PageRequest request = new PageRequest(pageNumber - 1, maxChatMessages);
@@ -56,9 +59,12 @@ public class MessageService {
 		return chatMessages;
 	}
 
+	/*
+	 * Get the list of all messages sent to the user.
+	 */
 	public Page<SimpleMessage> getMessages(Long toUserId, int pageNumber) {
 		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
-		Page<Message> results = messageDao.findByToUserIdOrderBySentDesc(toUserId, request);
+		Page<Message> results = messageDao.findDistinctByToUserIdOrderBySentDesc(toUserId, request);
 
 		Converter<Message, SimpleMessage> converter = new Converter<Message, SimpleMessage>() {
 			public SimpleMessage convert(Message message) {

@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.6.RELEASE</version>
+		<version>1.5.10.RELEASE</version>
 	</parent>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<tiles.version>3.0.5</tiles.version>
+		<tiles.version>3.0.8</tiles.version>
 	</properties>
 
 	<groupId>com.caveofprogramming</groupId>
