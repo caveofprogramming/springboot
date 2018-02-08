@@ -99,6 +99,9 @@ public class ProfileController {
 		
 		modelAndView.getModel().put("userId", user.getId());
 		modelAndView.getModel().put("profile", webProfile);
+		modelAndView.getModel().put("firstname", user.getFirstname());
+		modelAndView.getModel().put("surname", user.getSurname());
+		
 
 		modelAndView.setViewName("app.profile");
 		

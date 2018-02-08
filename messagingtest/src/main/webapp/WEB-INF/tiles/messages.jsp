@@ -8,14 +8,13 @@
 
 <div class="row">
 	<div class="message-list-pagination col-md-12">
-		<jwp:pagination url="${inboxUrl}" page="${page}" size="10" />
+		<jwp:pagination url="${inboxUrl}" page="${messageList}" size="2" />
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-md-12">
-		<h2 class="message-list-heading">You have received the following
-			messages</h2>
+		<h2 class="message-list-heading">Latest Messages:</h2>
 	</div>
 </div>
 

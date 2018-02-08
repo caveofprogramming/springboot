@@ -36,7 +36,7 @@ public class Message {
 	String text;
 	
 	@Column(name = "is_read", nullable = false)
-	Boolean isRead;
+	Boolean read;
 
 	@Column(name = "sent")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -66,7 +66,7 @@ public class Message {
 		this.fromUser = fromUser;
 		this.toUser = toUser;
 		this.text = text;
-		isRead = false;
+		read = false;
 	}
 
 	public Long getId() {
@@ -103,12 +103,12 @@ public class Message {
 		this.fromUser = fromUser;
 	}
 
-	public Boolean getIsRead() {
-		return isRead;
+	public Boolean getRead() {
+		return read;
 	}
 
-	public void setIsRead(Boolean isRead) {
-		this.isRead = isRead;
+	public void setRead(Boolean read) {
+		this.read = read;
 	}
 
 	@Override

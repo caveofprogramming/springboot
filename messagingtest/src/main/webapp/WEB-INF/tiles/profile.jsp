@@ -13,6 +13,11 @@
 
 	<div class="col-md-10 col-md-offset-1">
 
+		<div class="profile-name">
+			<c:out value="${firstname}" />&nbsp;
+			<c:out value="${surname}" />
+		</div>
+
 		<div id="profile-photo-status"></div>
 
 		<div id="interestDiv">
@@ -171,7 +176,7 @@
 			caseSensitive : false,
 			allowSpaces : true,
 			tagLimit : 10,
-			readOnly: '${ownProfile}' == 'false'
+			readOnly : '${ownProfile}' == 'false'
 		});
 
 		$("#uploadLink").click(function(event) {

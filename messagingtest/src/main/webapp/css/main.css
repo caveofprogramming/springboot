@@ -121,6 +121,12 @@ textarea {
 	font-size: larger;
 }
 
+.profile-name {
+	font-size: 2em;
+	text-align: center;
+	font-weight: 500;
+	padding: 0.5em;
+}
 
 
 .profile-image {
