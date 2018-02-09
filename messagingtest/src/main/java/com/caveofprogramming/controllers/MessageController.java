@@ -36,7 +36,7 @@ public class MessageController {
 
 	@Autowired
 	private MessageService messageService;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
 	@RequestMapping("/messages")
@@ -49,20 +49,26 @@ public class MessageController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/getchat/{withUserId}")
+	@RequestMapping("/getchat")
 	@ResponseBody
-	List<SimpleMessage> getchat(ModelAndView modelAndView, @PathVariable Long withUserId) {
+	List<SimpleMessage> getchat(ModelAndView modelAndView, @RequestParam("u") Long withUserId,
+			@RequestParam("p") int page) {
+
 		SiteUser thisUser = util.getUser();
 
-		List<SimpleMessage> messages = messageService.getChat(thisUser.getId(), withUserId, 1);
-		
+		System.err.println("JWP getchat page " + page);
+
+		List<SimpleMessage> messages = messageService.getChat(thisUser.getId(), withUserId, page);
+
 		return messages;
 	}
 
-	@RequestMapping("/chatview/{sendToId}")
-	ModelAndView invalidUser(ModelAndView modelAndView, @PathVariable Long sendToId) {
+	@RequestMapping("/chatview/{sendToId}/{page}")
+	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long sendToId, @PathVariable int page) {
 		SiteUser thisUser = util.getUser();
-		
+
+		System.err.println("JWP Chatview page " + page);
+
 		String chattingWithName = userService.getUserName(sendToId);
 
 		modelAndView.getModel().put("chattingWithName", chattingWithName);
@@ -75,7 +81,7 @@ public class MessageController {
 	@MessageMapping("/message/send/{toUserId}")
 	public SimpleMessage send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserId)
 			throws Exception {
-		
+
 		logger.debug("Sending message to user: " + toUserId);
 
 		String fromUsername = principal.getName();

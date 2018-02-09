@@ -44,6 +44,8 @@ public class MessageService {
 	 */
 	public List<SimpleMessage> getChat(Long toUserId, Long fromUserId, int pageNumber) {
 		
+		System.err.println("JWP getChat messageservice page: " + pageNumber);
+		
 		int retrievalNumber = maxChatMessages/2;
 		
 		PageRequest request = new PageRequest(pageNumber - 1, retrievalNumber);

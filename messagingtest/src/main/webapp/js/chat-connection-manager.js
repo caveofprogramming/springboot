@@ -235,9 +235,7 @@ ConnectionManager.prototype.messageCallback = function() {
 	});
 }
 
-ConnectionManager.prototype.retrieveMessages = function() {
-
-	// TODO FIX 'this'''
+ConnectionManager.prototype.retrieveMessages = function(page) {
 
 	var _self = this;
 

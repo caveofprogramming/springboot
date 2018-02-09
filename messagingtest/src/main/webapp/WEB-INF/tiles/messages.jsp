@@ -28,7 +28,7 @@
 
 <c:forEach var="result" items="${messageList.content}">
 
-	<c:url var="chatLink" value="/chatview/${result.fromUserId}" />
+	<c:url var="chatLink" value="/chatview/${result.fromUserId}/1" />
 
 	<div class="row message-list-row">
 		<div class="col-md-12">

@@ -7,7 +7,7 @@
 <c:url var="chat" value="/chat" />
 <c:url var="sendPoint" value="/app/message/send/${toUserId}" />
 <c:url var="fromPoint" value="/user/queue/${toUserId}" />
-<c:url var="getchat" value="/getchat/${toUserId}" />
+<c:url var="getchat" value="/getchat?u=${toUserId}" />
 <c:url var="thisPage" value="/chatview/${toUserId}" />
 <c:url var="validSession" value="/validsession" />
 <c:url var="statuscheck" value="/statuscheck" />
@@ -105,7 +105,7 @@
 						$.proxy(connectionManager.toggleStayLoggedIn,
 								connectionManager));
 
-				connectionManager.retrieveMessages();
+				connectionManager.retrieveMessages(0);
 			});
 </script>
 
@@ -142,6 +142,8 @@
 
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" />
+						
+					<div id="chat-message-previous"><a href="#">view older messages</a></div>
 
 					<div id="chat-message-record"></div>
 

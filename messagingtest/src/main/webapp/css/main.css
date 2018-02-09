@@ -235,6 +235,11 @@ div[role=status] {
 	
 }
 
+#chat-message-previous {
+	text-align: right;
+	padding-bottom: 0.5em;
+}
+
 #chat-message-record {
 	overflow-y: auto;
 	display: flex;
