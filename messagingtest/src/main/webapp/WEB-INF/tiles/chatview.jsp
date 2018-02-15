@@ -2,20 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
-
 <c:url var="chat" value="/chat" />
 <c:url var="sendPoint" value="/app/message/send/${toUserId}" />
 <c:url var="fromPoint" value="/user/queue/${toUserId}" />
-<c:url var="getchat" value="/getchat?u=${toUserId}" />
-<c:url var="thisPage" value="/chatview/${toUserId}" />
-<c:url var="validSession" value="/validsession" />
+<c:url var="restService" value="/getchat" />
 <c:url var="statuscheck" value="/statuscheck" />
-<c:url var="js" value="/js" />
+
 <c:url var="notificationUrl" value="/chatview" />
 
+<c:url var="js" value="/js" />
 <script src="${js}/chat-connection-manager.js"></script>
-
 
 
 <script>
@@ -48,16 +44,27 @@
 			var message = messages[i];
 
 			var isReply = message.isReply;
+			var sent = message.sent;
 			var text = message.text;
 			var cssClass = isReply ? "chat-message-reply" : "chat-message-sent";
+			
+			var date = new Date(sent);
+			//date.setUTCMilliseconds(sent);
+			
+			text = date.toLocaleString() + ":      " + text;
+			//text = sent + ":      " + text;
 
 			var div = $("<div>");
 			div.addClass("chat-message");
 			div.addClass(cssClass);
 			div.append(document.createTextNode(text));
 
-			$('#chat-message-record').prepend(div);
+			$('#chat-message-record').append(div);
 		}
+	}
+	
+	function addPreviousMessages(messages) {
+		console.log("Got earlier messages: ", messages)
 	}
 
 	$(document).ready(
@@ -70,18 +77,20 @@
 					debug : true,
 					socksEndPoint : "${chat}",
 					newMessageCallback : refreshMessages,
+					earlierMessagesCallback: addPreviousMessages,
 					notificationUrl : "${notificationUrl}",
 					chattingWithName : "${chattingWithName}",
+					toUserId: "${toUserId}",
 					csrfTokenName : headerName,
 					csrfTokenValue : token,
 					statusCheckUrl : "${statuscheck}",
 					stompInboundDestination : "${fromPoint}",
 					stompOutboundDestination : "${sendPoint}",
-					restMessageServiceUrl : "${getchat}"
+					restMessageServiceUrl : "${restService}"
 				});
 
 				connectionManager.connectChat();
-				connectionManager.requestNotificationPermission();
+				ConnectionManager.requestNotificationPermission();
 
 				function sendMessage(text) {
 					var text = $('#chat-message-text').val();
@@ -92,6 +101,10 @@
 
 				$('#chat-send-button').click(function() {
 					sendMessage();
+				});
+				
+				$('#chat-message-previous').click(function() {
+					connectionManager.retrieveEarlierMessages();
 				});
 
 				$(document).keypress(function(e) {
@@ -105,7 +118,7 @@
 						$.proxy(connectionManager.toggleStayLoggedIn,
 								connectionManager));
 
-				connectionManager.retrieveMessages(0);
+				connectionManager.retrieveMessages(refreshMessages);
 			});
 </script>
 

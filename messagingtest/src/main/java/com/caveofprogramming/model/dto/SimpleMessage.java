@@ -7,7 +7,7 @@ import com.caveofprogramming.model.entity.Message;
 public class SimpleMessage {
 	private String from;
 	private String text;
-	private Date date;
+	private Date sent;
 	private Long fromUserId;
 	private Boolean isReply;
 
@@ -26,37 +26,17 @@ public class SimpleMessage {
 		String name = firstname + " " + surname;
 		
 		this.isReply = isReply;
-		date = message.getSent();
+		sent = message.getSent();
 		from = name;
 		fromUserId = message.getFromUser().getId();
 		text = message.getText();
 	}
 	
-	public SimpleMessage(Date date, Long fromUserId, String from, String text) {
+	public SimpleMessage(Date sent, Long fromUserId, String from, String text) {
 		this.text = text;
 		this.from = from;
-		this.date = date;
+		this.sent = sent;
 		this.fromUserId = fromUserId;
-	}
-	
-	public Boolean getIsReply() {
-		return isReply;
-	}
-
-	public void setIsReply(Boolean isReply) {
-		this.isReply = isReply;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-	
-	public Date getDate() {
-		return date;
 	}
 
 	public String getFrom() {
@@ -66,16 +46,45 @@ public class SimpleMessage {
 	public void setFrom(String from) {
 		this.from = from;
 	}
-	
-	
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public Date getSent() {
+		return sent;
+	}
+
+	public void setSent(Date sent) {
+		this.sent = sent;
+	}
 
 	public Long getFromUserId() {
 		return fromUserId;
 	}
 
-	@Override
-	public String toString() {
-		return "Message [text=" + text + "]";
+	public void setFromUserId(Long fromUserId) {
+		this.fromUserId = fromUserId;
 	}
 
+	public Boolean getIsReply() {
+		return isReply;
+	}
+
+	public void setIsReply(Boolean isReply) {
+		this.isReply = isReply;
+	}
+
+	@Override
+	public String toString() {
+		return "SimpleMessage [from=" + from + ", text=" + text + ", sent=" + sent + ", fromUserId=" + fromUserId
+				+ ", isReply=" + isReply + "]";
+	}
+	
+	
+	
 }

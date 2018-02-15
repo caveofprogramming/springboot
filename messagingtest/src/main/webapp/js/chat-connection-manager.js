@@ -32,13 +32,15 @@ function ConnectionManager(args) {
 	});
 }
 
-ConnectionManager.prototype.requestNotificationPermission = function() {
+// Static method
+ConnectionManager.requestNotificationPermission = function() {
 	if (Notification.permission !== "granted") {
 		Notification.requestPermission();
 	}
 }
 
-ConnectionManager.prototype.notifyNewMessage = function(title, text, url) {
+// Note, static method
+ConnectionManager.notifyNewMessage = function(title, text, url) {
 
 	if (!Notification) {
 		this.log("This browser does not allow notifications.");
@@ -146,10 +148,10 @@ ConnectionManager.prototype.sessionStatusCheckSuccess = function(statusCheck) {
 }
 
 ConnectionManager.prototype.enableKeepAlivePing = function(sessionTimeout) {
-	
+
 	// Keep the session alive by pinging at less than the session
 	// timeout interval.
-	
+
 	var _self = this;
 
 	if (this.pingTimerID == null && sessionTimeout >= 60) {
@@ -171,7 +173,6 @@ ConnectionManager.prototype.disableKeepAlivePing = function(sessionTimeout) {
 ConnectionManager.prototype.sessionStatusCheckComplete = function(xhr) {
 	if (xhr.status == 401) {
 		location.reload(true);
-		alert("Timeout");
 		this.log("Session timeout; reloading page");
 	} else {
 		this.log(Date(), "Session OK; not reloading page");
@@ -220,7 +221,7 @@ ConnectionManager.prototype.processMessage = function(message) {
 	this.log("Calling new message callback with ", this.messages);
 	this.args.newMessageCallback(this.messages);
 
-	this.notifyNewMessage("New message", "You have a new message from "
+	ConnectionManager.notifyNewMessage("New message", "You have a new message from "
 			+ this.args.chattingWithName, this.args.notificationUrl);
 }
 
@@ -235,20 +236,37 @@ ConnectionManager.prototype.messageCallback = function() {
 	});
 }
 
-ConnectionManager.prototype.retrieveMessages = function(page) {
+ConnectionManager.prototype.retrieveEarlierMessages = function() {
+	
+}
+
+ConnectionManager.prototype.retrieveMessages = function(messageCallback) {
 
 	var _self = this;
+	
+	var request = JSON.stringify({
+		'page' : 0,
+		'toUserId' : _self.args.toUserId
+	});
 
 	var jqXHR = $.ajax({
-		context : this,
+		method : 'POST',
+		contentType: "application/json",
+		context : _self,
 		dataType : "json",
-		url : this.args.restMessageServiceUrl
+		data : request,
+		url : _self.args.restMessageServiceUrl
+	});
+
+	jqXHR.fail(function(jqXHR, textStatus) {
+		this.log("Failed to retreive messages: ", textStatus);
 	});
 
 	jqXHR.done(function(messages) {
-		_self.messages = messages;
-		_self.log("Calling new message callback with ", this.messages);
-		_self.args.newMessageCallback(messages);
+		this.messages = messages;
+		console.log("Messages: ", messages);
+		this.log("Calling new message callback with: ", messages);
+		messageCallback(messages);
 	});
 }
 

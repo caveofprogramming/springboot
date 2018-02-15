@@ -1,10 +1,6 @@
 package com.caveofprogramming.service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +21,8 @@ public class MessageService {
 	@Value("${messages.inbox.pagesize}")
 	private int pageSize;
 
-	@Value("${messages.chatview.pagesize}")
-	private int maxChatMessages;
+	@Value("${messages.chat.pagesize}")
+	private int messagesPerPage;
 
 	@Autowired
 	private MessageDao messageDao;
@@ -40,33 +36,34 @@ public class MessageService {
 	}
 
 	/*
-	 * Get the list of messages sent to the user from one particular other user.
+	 * Get the conversation between two particular users.
 	 */
-	public List<SimpleMessage> getChat(Long toUserId, Long fromUserId, int pageNumber) {
-		
-		System.err.println("JWP getChat messageservice page: " + pageNumber);
-		
-		int retrievalNumber = maxChatMessages/2;
-		
-		PageRequest request = new PageRequest(pageNumber - 1, retrievalNumber);
-		Slice<Message> sentTo = messageDao.findByToUserIdAndFromUserIdOrderBySentDesc(toUserId, fromUserId, request);
-		Slice<Message> receivedFrom = messageDao.findByToUserIdAndFromUserIdOrderBySentDesc(fromUserId, toUserId,
-				request);
 
-		List<Message> messages = new ArrayList<Message>(sentTo.getSize() + receivedFrom.getSize());
-
-		messages.addAll(sentTo.getContent());
-		messages.addAll(receivedFrom.getContent());
+	public List<SimpleMessage> fetchConversation(Long toUserId, Long fromUserId, int page) {
 		
-		messages.stream().forEach(m -> { m.setRead(true); messageDao.save(m); }); 
+		PageRequest request = new PageRequest(page, messagesPerPage);
+		
+		Slice<Message> conversation = messageDao.fetchConversation(toUserId, fromUserId, request);
 
-		List<SimpleMessage> chatMessages = messages.stream()
-				.map(p -> new SimpleMessage(p, p.getFromUser().getId().compareTo(fromUserId) == 0))
-				.sorted(Comparator.comparing(m -> m.getDate())).collect(Collectors.toList());
-	
-		return chatMessages;
+		// Mark any received messages here as read, although ideally we should
+		// wait until we're certain they've been displayed. 
+		// We can figure out which are replies via the user IDs.
+		conversation.forEach(m -> {
+			if (m.getFromUser().getId().compareTo(fromUserId) == 0) {
+				m.setRead(true);
+				messageDao.save(m);
+			}
+		});
+		
+		// Map messages objects containing full user details to message object
+		// intended
+		// for display purposes. Compare each message's 'fromUser' ID with the
+		// given 'fromUserId'
+		// parameter to figure out whether it counts as a reply or a sent
+		// message.
+		return conversation.map(m -> new SimpleMessage(m, m.getFromUser().getId().compareTo(fromUserId) == 0))
+				.getContent();
 	}
-
 
 	/*
 	 * Get the list of all messages sent to the user.
@@ -74,7 +71,7 @@ public class MessageService {
 	public Page<SimpleMessage> getMessages(Long toUserId, int pageNumber) {
 		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
 		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
-		
+
 		Converter<Message, SimpleMessage> converter = new Converter<Message, SimpleMessage>() {
 			public SimpleMessage convert(Message message) {
 				return new SimpleMessage(message, true);
@@ -83,5 +80,17 @@ public class MessageService {
 		};
 
 		return results.map(converter);
+	}
+	
+	/*
+	 * Get the list of all messages sent to the user.
+	 */
+	public List<SimpleMessage> fetchMessageList(Long toUserId, int pageNumber) {
+		
+		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
+		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
+
+
+		return results.map(m -> new SimpleMessage(m, true)).getContent();
 	}
 }

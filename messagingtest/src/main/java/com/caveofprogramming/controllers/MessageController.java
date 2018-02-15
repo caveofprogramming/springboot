@@ -12,11 +12,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.model.dto.ChatPageRequest;
 import com.caveofprogramming.model.dto.SimpleMessage;
 import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.service.MessageService;
@@ -39,7 +42,7 @@ public class MessageController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
-	@RequestMapping("/messages")
+	@RequestMapping(value="/messages", method=RequestMethod.GET)
 	ModelAndView messages(ModelAndView modelAndView, @RequestParam("p") int pageNumber) {
 
 		SiteUser thisUser = util.getUser();
@@ -48,26 +51,33 @@ public class MessageController {
 		modelAndView.setViewName("app.messages");
 		return modelAndView;
 	}
-
-	@RequestMapping("/getchat")
+	
+	@RequestMapping(value="/messages", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	List<SimpleMessage> getchat(ModelAndView modelAndView, @RequestParam("u") Long withUserId,
-			@RequestParam("p") int page) {
+	List<SimpleMessage> fetchMessageList(@RequestParam("p") int pageNumber) {
 
 		SiteUser thisUser = util.getUser();
+		return messageService.fetchMessageList(thisUser.getId(), pageNumber);
+	}
 
-		System.err.println("JWP getchat page " + page);
+	@RequestMapping(value="/getchat", method=RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	List<SimpleMessage> getchat(@RequestBody ChatPageRequest chatPageRequest) {
+		
+		SiteUser thisUser = util.getUser();
 
-		List<SimpleMessage> messages = messageService.getChat(thisUser.getId(), withUserId, page);
+		List<SimpleMessage> messages = messageService.fetchConversation(thisUser.getId(), chatPageRequest.getToUserId(),
+				chatPageRequest.getPage());
+		
+		messages.stream().forEach(System.err::println);
 
 		return messages;
 	}
 
-	@RequestMapping("/chatview/{sendToId}/{page}")
-	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long sendToId, @PathVariable int page) {
+	@RequestMapping("/chatview/{sendToId}")
+	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long sendToId) {
 		SiteUser thisUser = util.getUser();
-
-		System.err.println("JWP Chatview page " + page);
+		
 
 		String chattingWithName = userService.getUserName(sendToId);
 

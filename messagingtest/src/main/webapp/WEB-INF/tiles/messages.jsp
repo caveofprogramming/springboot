@@ -5,6 +5,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="jwp"%>
 
 <c:url var="inboxUrl" value="/messages" />
+<c:url var="js" value="/js" />
 
 <div class="row">
 	<div class="message-list-pagination col-md-12">
@@ -28,16 +29,21 @@
 
 <c:forEach var="result" items="${messageList.content}">
 
-	<c:url var="chatLink" value="/chatview/${result.fromUserId}/1" />
+	<c:url var="chatLink" value="/chatview/${result.fromUserId}" />
 
 	<div class="row message-list-row">
 		<div class="col-md-12">
 			<a href="${chatLink}"><c:out value="${result.from}" /> <span class="message-list-date">sent
 					you a message on <fmt:formatDate pattern="EEEE d MMMM y 'at' h:mma"
-						value="${result.date}" />
+						value="${result.sent}" />
 			</span></a>
 		</div>
 
 	</div>
 
 </c:forEach>
+
+
+<script>
+ConnectionManager.requestNotificationPermission();
+</script>
