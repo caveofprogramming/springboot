@@ -17,6 +17,7 @@ public class SimpleMessage {
 
 	public SimpleMessage(String text) {
 		this.text = text;
+		this.sent = new Date();
 	}
 	
 	public SimpleMessage(Message message, Boolean isReply) {
@@ -78,6 +79,7 @@ public class SimpleMessage {
 	public void setIsReply(Boolean isReply) {
 		this.isReply = isReply;
 	}
+	
 
 	@Override
 	public String toString() {

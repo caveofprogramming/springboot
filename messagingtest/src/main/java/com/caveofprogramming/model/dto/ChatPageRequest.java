@@ -3,7 +3,7 @@ package com.caveofprogramming.model.dto;
 public class ChatPageRequest {
 
 	private int page;
-	private Long toUserId;
+	private Long chatWithUserID;
 
 	public int getPage() {
 		return page;
@@ -13,12 +13,12 @@ public class ChatPageRequest {
 		this.page = page;
 	}
 
-	public Long getToUserId() {
-		return toUserId;
+	public Long getChatWithUserID() {
+		return chatWithUserID;
 	}
 
-	public void setToUserId(Long withUserId) {
-		this.toUserId = withUserId;
+	public void setChatWithUserID(Long chatWithUserID) {
+		this.chatWithUserID = chatWithUserID;
 	}
 
 }

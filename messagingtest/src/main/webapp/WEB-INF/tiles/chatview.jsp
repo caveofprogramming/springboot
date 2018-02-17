@@ -3,8 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:url var="chat" value="/chat" />
-<c:url var="sendPoint" value="/app/message/send/${toUserId}" />
-<c:url var="fromPoint" value="/user/queue/${toUserId}" />
+<c:url var="sendPoint" value="/app/message/send/${chatWithUserID}" />
+<c:url var="fromPoint" value="/user/queue/${chatWithUserID}" />
 <c:url var="restService" value="/getchat" />
 <c:url var="statuscheck" value="/statuscheck" />
 
@@ -15,8 +15,10 @@
 
 
 <script>
-	var token = $("meta[name='_csrf']").attr("content");
-	var headerName = $("meta[name='_csrf_header']").attr("content");
+	var csrfTokenName = $("meta[name='_csrf_header']").attr("content");
+	var csrfTokenValue = $("meta[name='_csrf']").attr("content");
+	
+	var pagesFetched = 0;
 
 	function sizeChatWindow() {
 
@@ -32,39 +34,66 @@
 
 		$('#chat-message-record').height(messageRecordHeight);
 	}
+	
+	function addMessage(message, isNew) {
+				
+		var isReply = message.isReply;
+		var sent = message.sent;
+		var text = message.text;
+		var messageTypeClass = isReply ? "chat-message-reply" : "chat-message-sent";
 
-	function refreshMessages(messages) {
+		var date = new Date(sent);
 
-		var count = $("#chat-message-record div").length;
+		text = date.toLocaleString() + ":      " + text;
+		
+		var messageDiv = document.createElement('div');
+		messageDiv.className = "chat-message " + messageTypeClass;
+		messageDiv.innerHTML = text;
 
-		console.log("Adding ", messages.length, " messages to ", count,
-				" messages already there.");
-
-		for (var i = count; i < messages.length; i++) {
-			var message = messages[i];
-
-			var isReply = message.isReply;
-			var sent = message.sent;
-			var text = message.text;
-			var cssClass = isReply ? "chat-message-reply" : "chat-message-sent";
-			
-			var date = new Date(sent);
-			//date.setUTCMilliseconds(sent);
-			
-			text = date.toLocaleString() + ":      " + text;
-			//text = sent + ":      " + text;
-
-			var div = $("<div>");
-			div.addClass("chat-message");
-			div.addClass(cssClass);
-			div.append(document.createTextNode(text));
-
-			$('#chat-message-record').append(div);
+		if(isNew) {
+			$('#chat-message-record').append(messageDiv);
 		}
+		else {
+			$('#chat-message-record').prepend(messageDiv);
+		}
+		
+		$('#chat-message-record').scrollTop($('#chat-message-record')[0].scrollHeight);
+		
 	}
 	
+	function sendMessage(connectionManager) {
+		var text = $('#chat-message-text').val();
+		
+		var message = {
+			'text': text			
+		};
+		
+		connectionManager.sendMessage(message);
+		
+		$('#chat-message-text').val("");
+		$('#chat-message-text').focus();
+	}
+	
+	function newMessageReceived(message) {
+		addMessage(message, true);
+	}
+
+	function refreshMessages(messages) {
+		for (var i = 0; i < messages.length; i++) {
+			addMessage(messages[i], false);
+		}
+		
+		pagesFetched++;
+	}
+
 	function addPreviousMessages(messages) {
-		console.log("Got earlier messages: ", messages)
+		for (var i = 0; i < messages.length; i++) {
+			addMessage(messages[i], false);
+		}
+		
+		pagesFetched++;
+		
+		$('#chat-message-record').animate({scrollTop: $('#chat-message-record').height()}, 800);
 	}
 
 	$(document).ready(
@@ -74,15 +103,13 @@
 				$(window).resize(sizeChatWindow);
 
 				var connectionManager = new ConnectionManager({
-					debug : true,
 					socksEndPoint : "${chat}",
-					newMessageCallback : refreshMessages,
-					earlierMessagesCallback: addPreviousMessages,
+					newMessageCallback : newMessageReceived,
 					notificationUrl : "${notificationUrl}",
 					chattingWithName : "${chattingWithName}",
-					toUserId: "${toUserId}",
-					csrfTokenName : headerName,
-					csrfTokenValue : token,
+					chatWithUserID : "${chatWithUserID}",
+					csrfTokenName : csrfTokenName,
+					csrfTokenValue : csrfTokenValue,
 					statusCheckUrl : "${statuscheck}",
 					stompInboundDestination : "${fromPoint}",
 					stompOutboundDestination : "${sendPoint}",
@@ -92,24 +119,18 @@
 				connectionManager.connectChat();
 				ConnectionManager.requestNotificationPermission();
 
-				function sendMessage(text) {
-					var text = $('#chat-message-text').val();
-					connectionManager.sendMessage(text);
-					$('#chat-message-text').val("");
-					$('#chat-message-text').focus();
-				}
 
 				$('#chat-send-button').click(function() {
-					sendMessage();
+					sendMessage(connectionManager);
 				});
-				
+
 				$('#chat-message-previous').click(function() {
-					connectionManager.retrieveEarlierMessages();
+					connectionManager.fetchPreviousMessages(addPreviousMessages, pagesFetched);
 				});
 
 				$(document).keypress(function(e) {
 					if (e.which == 13) {
-						sendMessage();
+						sendMessage(connectionManager);
 						return false;
 					}
 				});
@@ -118,7 +139,7 @@
 						$.proxy(connectionManager.toggleStayLoggedIn,
 								connectionManager));
 
-				connectionManager.retrieveMessages(refreshMessages);
+				connectionManager.fetchMessages(refreshMessages, 0);
 			});
 </script>
 
@@ -155,8 +176,10 @@
 
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" />
-						
-					<div id="chat-message-previous"><a href="#">view older messages</a></div>
+
+					<div id="chat-message-previous">
+						<a href="#">view older messages</a>
+					</div>
 
 					<div id="chat-message-record"></div>
 

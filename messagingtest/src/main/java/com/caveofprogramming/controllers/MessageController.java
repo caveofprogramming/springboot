@@ -1,6 +1,8 @@
 package com.caveofprogramming.controllers;
 
 import java.security.Principal;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -42,48 +44,48 @@ public class MessageController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
-	@RequestMapping(value="/messages", method=RequestMethod.GET)
+	@RequestMapping(value = "/messages", method = RequestMethod.GET)
 	ModelAndView messages(ModelAndView modelAndView, @RequestParam("p") int pageNumber) {
 
 		SiteUser thisUser = util.getUser();
 		Page<SimpleMessage> messages = messageService.getMessages(thisUser.getId(), pageNumber);
 		modelAndView.getModel().put("messageList", messages);
+		modelAndView.getModel().put("pageNumber", pageNumber);
+		modelAndView.getModel().put("userId", thisUser.getId());
+
 		modelAndView.setViewName("app.messages");
 		return modelAndView;
 	}
-	
-	@RequestMapping(value="/messages", method=RequestMethod.POST, produces="application/json")
+
+	@RequestMapping(value = "/messages", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	List<SimpleMessage> fetchMessageList(@RequestParam("p") int pageNumber) {
+	List<SimpleMessage> fetchMessageList(@RequestBody ChatPageRequest chatPageRequest) {
 
 		SiteUser thisUser = util.getUser();
-		return messageService.fetchMessageList(thisUser.getId(), pageNumber);
+		return messageService.fetchMessageList(thisUser.getId(), chatPageRequest.getPage());
 	}
 
-	@RequestMapping(value="/getchat", method=RequestMethod.POST, produces="application/json")
+	@RequestMapping(value = "/getchat", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	List<SimpleMessage> getchat(@RequestBody ChatPageRequest chatPageRequest) {
-		
+
 		SiteUser thisUser = util.getUser();
 
-		List<SimpleMessage> messages = messageService.fetchConversation(thisUser.getId(), chatPageRequest.getToUserId(),
-				chatPageRequest.getPage());
-		
-		messages.stream().forEach(System.err::println);
+		List<SimpleMessage> messages = messageService.fetchConversation(thisUser.getId(),
+				chatPageRequest.getChatWithUserID(), chatPageRequest.getPage());
 
 		return messages;
 	}
 
-	@RequestMapping("/chatview/{sendToId}")
-	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long sendToId) {
+	@RequestMapping("/chatview/{chatWithUserID}")
+	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long chatWithUserID) {
 		SiteUser thisUser = util.getUser();
-		
 
-		String chattingWithName = userService.getUserName(sendToId);
+		String chattingWithName = userService.getUserName(chatWithUserID);
 
 		modelAndView.getModel().put("chattingWithName", chattingWithName);
 		modelAndView.getModel().put("thisUserId", thisUser.getId());
-		modelAndView.getModel().put("toUserId", sendToId);
+		modelAndView.getModel().put("chatWithUserID", chatWithUserID);
 		modelAndView.setViewName("app.chatview");
 		return modelAndView;
 	}
@@ -92,19 +94,39 @@ public class MessageController {
 	public SimpleMessage send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserId)
 			throws Exception {
 
-		logger.debug("Sending message to user: " + toUserId);
-
 		String fromUsername = principal.getName();
 		SiteUser sentFrom = userService.get(fromUsername);
-
-		String replyQueue = String.format("/queue/%d", sentFrom.getId());
 
 		SiteUser sendTo = userService.get(toUserId);
 		String sendToUsername = sendTo.getEmail();
 
+		String replyQueue = String.format("/queue/%d", sentFrom.getId());
+		String returnQueue = String.format("/queue/%d", sendTo.getId());
+
 		messageService.save(sendTo, sentFrom, message.getText());
 
+		message.setFromUserId(sentFrom.getId());
+		message.setSent(new Date());
+
+		logger.debug("Sending message to user: " + toUserId);
+		logger.debug(message.toString());
+
+		message.setFrom(sentFrom.getFirstname() + " " + sentFrom.getSurname());
+		message.setSent(new Date());
+		message.setFromUserId(sentFrom.getId());
+
+		// Send the message to the recipient.
+		System.err.println("Send to " + sendToUsername);
+		message.setIsReply(true);
 		simpleMessagingTemplate.convertAndSendToUser(sendToUsername, replyQueue, message);
+
+		// Also send the message back to the user who sent it, so it appears
+		// after they
+		// type it. If it doesn't appear, they'll know it has failed to send.
+		System.err.println("Send back to " + fromUsername);
+		message.setIsReply(false);
+		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnQueue, message);
+
 		return message;
 	}
 

@@ -242,8 +242,8 @@ div[role=status] {
 
 #chat-message-record {
 	overflow-y: auto;
-	display: flex;
-	flex-direction: column-reverse;
+/*	display: flex;
+	flex-direction: column-reverse; */
 	padding-bottom: 10px;
 }
 
@@ -295,6 +295,10 @@ div[role=status] {
 .message-list-date {
 	font-weight: normal;
 	color: gray;
+}
+
+.message-list-link {
+	color: orange;
 }
 
 .message-list-row {

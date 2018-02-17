@@ -1,25 +1,8 @@
-/*
-new ConnectionManager({
-	socksEndPoint: socksEndPoint,
-	newMessageCallback : refreshMessages,
-	notificationUrl : notificationUrl,
-	chattingWithName : chattingWithName,
-	csrfTokenName : csrfTokenName,
-	csrfTokenValue : csrfTokenValue,
-	statusCheckUrl : statusCheckUrl,
-	stompInboundDestination : stompInboundDestination,
-	stompOutboundDestination : stompOutboundDestination,
-	restMessageServiceUrl : restMessageServiceUrl
-});
- */
-
 function ConnectionManager(args) {
 
 	this.args = args;
-	this.debug = args.debug;
 	this.pingTimerID = null;
 	this.keepLoggedIn = false;
-	this.messages = [];
 
 	this.headers = {};
 	this.headers[this.args.csrfTokenName] = this.args.csrfTokenValue;
@@ -43,12 +26,10 @@ ConnectionManager.requestNotificationPermission = function() {
 ConnectionManager.notifyNewMessage = function(title, text, url) {
 
 	if (!Notification) {
-		this.log("This browser does not allow notifications.");
 		return;
 	}
 
 	if (Notification.permission !== "granted") {
-		this.log("Notification permission not granted.");
 		return;
 	}
 
@@ -59,39 +40,10 @@ ConnectionManager.notifyNewMessage = function(title, text, url) {
 	notification.onclick = function() {
 		window.location.href = url;
 	};
-
-	this.log("Notification sent.");
-
-}
-
-ConnectionManager.prototype.log = function(text) {
-	if (!this.debug) {
-		return;
-	}
-
-	var containsObjects = false;
-
-	for (var i = 0; i < arguments.length; i++) {
-		var argumentType = typeof arguments[i];
-		if (argumentType == 'object' || argumentType == "array") {
-			containsObjects = true;
-			break;
-		}
-	}
-
-	if (containsObjects) {
-		console
-				.log("ConnectionManager ", Date(), ": ", arguments[0],
-						arguments);
-	} else {
-		var debugMessage = $.makeArray(arguments).join(' ');
-		console.log("ConnectionManager ", Date(), ": ", debugMessage);
-	}
 }
 
 ConnectionManager.prototype.toggleStayLoggedIn = function() {
 	this.keepLoggedIn = this.keepLoggedIn ? false : true;
-	this.log("Stay logged in ", this.keepLoggedIn);
 	this.doStatusCheck();
 }
 
@@ -102,10 +54,6 @@ ConnectionManager.prototype.connectChat = function() {
 	this.client = Stomp.over(wsocket);
 
 	this.client.debug = null;
-
-	if (this.debug == true) {
-		this.client.debug = true;
-	}
 
 	var _self = this;
 
@@ -135,13 +83,9 @@ ConnectionManager.prototype.doStatusCheck = function() {
 ConnectionManager.prototype.sessionStatusCheckSuccess = function(statusCheck) {
 	sessionTimeout = statusCheck.sessionTimeout;
 
-	this.log("Status check: ", statusCheck, " with interval ", sessionTimeout);
-
 	if (this.keepLoggedIn) {
-		this.log("Keep alive ping set to ", sessionTimeout);
 		this.enableKeepAlivePing(sessionTimeout);
 	} else {
-		this.log("Keep alive ping disabled.");
 		this.disableKeepAlivePing(sessionTimeout);
 	}
 
@@ -160,8 +104,6 @@ ConnectionManager.prototype.enableKeepAlivePing = function(sessionTimeout) {
 		this.pingTimerID = setInterval(function() {
 			_self.doStatusCheck();
 		}, pingInterval);
-
-		this.log("Set keep-alive ping to", pingInterval, " milliseconds");
 	}
 }
 
@@ -173,61 +115,39 @@ ConnectionManager.prototype.disableKeepAlivePing = function(sessionTimeout) {
 ConnectionManager.prototype.sessionStatusCheckComplete = function(xhr) {
 	if (xhr.status == 401) {
 		location.reload(true);
-		this.log("Session timeout; reloading page");
-	} else {
-		this.log(Date(), "Session OK; not reloading page");
 	}
 }
 
 ConnectionManager.prototype.sessionStatusCheckFailure = function(xhr,
 		ajaxOptions, thrownError) {
-	this.log("Server uncontactable.", xhr, ajaxOptions, thrownError);
+	console.log("Server uncontactable.", xhr, ajaxOptions, thrownError);
 }
 
 ConnectionManager.prototype.stompErrorCallback = function(message) {
 	this.doStatusCheck();
 }
 
-ConnectionManager.prototype.sendMessage = function(text) {
-
-	this.messages.push({
-		'isReply' : 0,
-		'text' : text
-	});
-
-	this.log("Sending message to destination '",
-			this.args.stompOutboundDestination, "'");
+ConnectionManager.prototype.sendMessage = function(message) {
 
 	this.client.send(this.args.stompOutboundDestination, this.headers, JSON
-			.stringify({
-				'text' : text,
-			}));
-
-	this.args.newMessageCallback(this.messages);
-
-	// TODO, currently no check to see if it really was sent.
+			.stringify(message));
 
 	this.doStatusCheck();
 }
 
-ConnectionManager.prototype.processMessage = function(message) {
-	var text = JSON.parse(message.body).text;
+ConnectionManager.prototype.processMessage = function(stompMessage) {
+	var messageContent = JSON.parse(stompMessage.body);
 
-	this.messages.push({
-		'isReply' : 1,
-		'text' : text
-	});
+	this.args.newMessageCallback(messageContent);
 
-	this.log("Calling new message callback with ", this.messages);
-	this.args.newMessageCallback(this.messages);
-
-	ConnectionManager.notifyNewMessage("New message", "You have a new message from "
-			+ this.args.chattingWithName, this.args.notificationUrl);
+	if (messageContent.isReply) {
+		ConnectionManager.notifyNewMessage("New message",
+				"You have a new message from " + this.args.chattingWithName,
+				this.args.notificationUrl);
+	}
 }
 
 ConnectionManager.prototype.messageCallback = function() {
-
-	this.log("Message callback");
 
 	var _self = this;
 
@@ -236,22 +156,23 @@ ConnectionManager.prototype.messageCallback = function() {
 	});
 }
 
-ConnectionManager.prototype.retrieveEarlierMessages = function() {
-	
+ConnectionManager.prototype.fetchPreviousMessages = function(
+		previousMessagesCallback, page) {
+	this.fetchMessages(previousMessagesCallback, page);
 }
 
-ConnectionManager.prototype.retrieveMessages = function(messageCallback) {
+ConnectionManager.prototype.fetchMessages = function(messageCallback, page) {
 
 	var _self = this;
-	
+
 	var request = JSON.stringify({
-		'page' : 0,
-		'toUserId' : _self.args.toUserId
+		'page' : page,
+		'chatWithUserID' : _self.args.chatWithUserID
 	});
 
 	var jqXHR = $.ajax({
 		method : 'POST',
-		contentType: "application/json",
+		contentType : "application/json",
 		context : _self,
 		dataType : "json",
 		data : request,
@@ -259,17 +180,10 @@ ConnectionManager.prototype.retrieveMessages = function(messageCallback) {
 	});
 
 	jqXHR.fail(function(jqXHR, textStatus) {
-		this.log("Failed to retreive messages: ", textStatus);
+		console.log("Failed to retreive messages: ", textStatus);
 	});
 
 	jqXHR.done(function(messages) {
-		this.messages = messages;
-		console.log("Messages: ", messages);
-		this.log("Calling new message callback with: ", messages);
 		messageCallback(messages);
 	});
-}
-
-ConnectionManager.prototype.getMessageQueue = function() {
-	return this.messages;
 }

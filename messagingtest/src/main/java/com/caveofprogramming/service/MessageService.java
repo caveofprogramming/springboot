@@ -90,7 +90,6 @@ public class MessageService {
 		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
 		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
 
-
 		return results.map(m -> new SimpleMessage(m, true)).getContent();
 	}
 }

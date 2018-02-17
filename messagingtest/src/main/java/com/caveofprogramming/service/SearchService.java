@@ -1,16 +1,18 @@
 package com.caveofprogramming.service;
 
-import com.caveofprogramming.model.dto.SearchResult;
-import com.caveofprogramming.model.entity.Profile;
-import com.caveofprogramming.model.repository.ProfileDao;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.caveofprogramming.model.dto.SearchResult;
+import com.caveofprogramming.model.entity.Profile;
+import com.caveofprogramming.model.entity.SiteUser;
+import com.caveofprogramming.model.repository.ProfileDao;
 
 @Service
 public class SearchService {
@@ -23,7 +25,7 @@ public class SearchService {
 	@Autowired
 	private ProfileDao profileDao;
 
-	public Page<SearchResult> search(String text, int pageNumber) {
+	public Page<SearchResult> search(String text, int pageNumber, SiteUser user) {
 
 		if(pageNumber == 0) {
 			pageNumber=1;
@@ -35,7 +37,7 @@ public class SearchService {
 		
 		if(!text.matches(".*\\w.*")) {
 			logger.debug("Finding all....");
-			results = profileDao.findAll(request);
+			results = profileDao.findAllByUserIdNot(user.getId(), request);
 		}
 		else {
 			logger.debug("Searching on '" + text + "'");
