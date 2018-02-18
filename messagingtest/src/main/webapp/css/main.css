@@ -306,3 +306,12 @@ div[role=status] {
 	font-size: 1.5em;
 	font-weight: 500;
 }
+
+.register-tos {
+	margin-bottom: 1em;
+}
+
+.register-alpha {
+	font-weight: 400;
+	font-style: italic;
+}

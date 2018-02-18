@@ -116,14 +116,12 @@ public class MessageController {
 		message.setFromUserId(sentFrom.getId());
 
 		// Send the message to the recipient.
-		System.err.println("Send to " + sendToUsername);
 		message.setIsReply(true);
 		simpleMessagingTemplate.convertAndSendToUser(sendToUsername, replyQueue, message);
 
 		// Also send the message back to the user who sent it, so it appears
 		// after they
 		// type it. If it doesn't appear, they'll know it has failed to send.
-		System.err.println("Send back to " + fromUsername);
 		message.setIsReply(false);
 		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnQueue, message);
 

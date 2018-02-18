@@ -8,6 +8,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.caveofprogramming.model.dto.SimpleMessage;
@@ -31,6 +32,7 @@ public class MessageService {
 		messageDao.save(message);
 	}
 
+	@Async
 	public void save(SiteUser toUser, SiteUser fromUser, String text) {
 		messageDao.save(new Message(toUser, fromUser, text));
 	}

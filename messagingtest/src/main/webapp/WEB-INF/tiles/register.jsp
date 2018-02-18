@@ -5,6 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <c:url var="loginUrl" value="/login" />
+<c:url var="tosUrl" value="/tos" />
 
 <div class="row">
 
@@ -13,6 +14,7 @@
 		<div class="login-error ">
 			<form:errors path="user.*" />
 		</div>
+
 
 		<div class="panel panel-default">
 
@@ -27,7 +29,7 @@
 					<div class="input-group">
 						<form:input type="text" path="firstname" placeholder="First name"
 							class="form-control" />
-						<span class="input-group-btn" style="width:20px;"></span>
+						<span class="input-group-btn" style="width: 20px;"></span>
 						<form:input type="text" path="surname" placeholder="Surname"
 							class="form-control" />
 
@@ -53,6 +55,25 @@
 					</div>
 
 				</form:form>
+
+				<div class="register-tos">
+					By registering on this site, you agree to these <a target="_blank"
+						href="${tosUrl}">Terms of Service (click to open in a popup
+						window)</a>
+				</div>
+				<div class="register-alpha">
+					<p>
+						This is a <strong>pre-alpha test site</strong>, email
+						notifications and verification are disabled, and you are
+						encouraged to use fake email addresses when registering. You may
+						use the example.com domain to ensure a corresponding real email
+						address does not exist; for instance, me@example.com
+					</p>
+				</div>
+				<div class="register-suggestions">
+					Please email bugs and feature suggestions to <a
+						href="mailto:support@cavesupport.com?subject=Otherfeaks.com">support@cavesupport.com</a>
+				</div>
 			</div>
 		</div>
 

@@ -68,9 +68,7 @@
 			'chatWithUserID' : 0,
 			'page' : "${pageNumber}"
 		});
-		
-		console.log(request);
-
+	
 		var jqXHR = $.ajax({
 			method : 'POST',
 			contentType : "application/json",

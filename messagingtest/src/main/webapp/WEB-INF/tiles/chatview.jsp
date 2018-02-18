@@ -93,7 +93,7 @@
 		
 		pagesFetched++;
 		
-		$('#chat-message-record').animate({scrollTop: $('#chat-message-record').height()}, 800);
+		$('#chat-message-record').animate({scrollTop: 0}, 800);
 	}
 
 	$(document).ready(

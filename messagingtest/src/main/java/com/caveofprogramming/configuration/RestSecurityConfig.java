@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.caveofprogramming.filters.ExpiredSessionFilter;
-
 @Configuration
 @Order(1)   
 @EnableWebSecurity
@@ -29,7 +27,7 @@ public class RestSecurityConfig  extends WebSecurityConfigurerAdapter {
 					.sessionManagement()
 			        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 					.and()
-					.addFilterBefore(new ExpiredSessionFilter(), BasicAuthenticationFilter.class);
+					.addFilterBefore(new com.caveofprogramming.filters.ExpiredSessionFilter(), BasicAuthenticationFilter.class);
 				
 		// @formatter:on
 

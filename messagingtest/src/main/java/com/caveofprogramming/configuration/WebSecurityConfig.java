@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 import com.caveofprogramming.service.UserService;
 
@@ -30,16 +31,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		
 		http
-			.csrf()
-        		.ignoringAntMatchers("/chat/**")
-        		.and()
 			.headers()
 				.frameOptions()
 				.sameOrigin()
 			.and()
-			.authorizeRequests()
+				.authorizeRequests()
+			//.csrf()
+        	//	.ignoringAntMatchers("/chat/**")			
 				.antMatchers(
 						"/",
+						"/tos",
 						"/favicon.ico",
 						"/search",
 						"/about",
@@ -86,16 +87,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	                .expiredUrl("/login?expired")
 	                .and()
 	                .invalidSessionUrl("/login")
-	                .and()
+	                .sessionFixation().newSession()
+	            .and()
 				.formLogin()
 					.loginPage("/login")
-					.defaultSuccessUrl("/")
+					.defaultSuccessUrl("/", true)
 					.permitAll()
 					.and()
 				.logout()
-					.permitAll()
+					.clearAuthentication(true)
 					.logoutSuccessUrl("/login")
-					.invalidateHttpSession(true);
+					.invalidateHttpSession(true)
+					.deleteCookies("JSESSIONID");
 		
 		// @formatter:on
 	}

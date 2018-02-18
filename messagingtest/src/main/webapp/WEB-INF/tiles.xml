@@ -70,5 +70,9 @@
 	<definition name="app.messages" extends="app.default">
 		<put-attribute name="content" value="/WEB-INF/tiles/messages.jsp" />
 	</definition>
+	
+	<definition name="app.tos" extends="app.default">
+		<put-attribute name="content" value="/WEB-INF/tiles/tos.jsp" />
+	</definition>
 
 </tiles-definitions>

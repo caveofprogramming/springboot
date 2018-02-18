@@ -43,6 +43,11 @@ public class PageController {
 		return "app.about";
 	}
 	
+	@RequestMapping("/tos")
+	String termsOfService() {
+		return "app.tos";
+	}
+	
 	// TODO map error?
 
 }

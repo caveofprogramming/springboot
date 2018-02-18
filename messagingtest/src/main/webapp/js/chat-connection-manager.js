@@ -52,7 +52,6 @@ ConnectionManager.prototype.connectChat = function() {
 	var wsocket = new SockJS(this.args.socksEndPoint);
 
 	this.client = Stomp.over(wsocket);
-
 	this.client.debug = null;
 
 	var _self = this;

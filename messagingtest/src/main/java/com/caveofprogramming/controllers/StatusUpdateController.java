@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.model.entity.StatusUpdate;
 import com.caveofprogramming.service.StatusUpdateService;
 
@@ -19,6 +20,11 @@ import com.caveofprogramming.service.StatusUpdateService;
 public class StatusUpdateController {
 	@Autowired
 	private StatusUpdateService statusUpdateService;
+	
+
+	@Autowired
+	private Util util;
+
 	
 	@RequestMapping(value="/editstatus", method=RequestMethod.GET)
 	ModelAndView editStatus(ModelAndView modelAndView, @RequestParam(name="id") Long id) {
@@ -48,6 +54,10 @@ public class StatusUpdateController {
 	
 	@RequestMapping(value ="/deletestatus", method=RequestMethod.GET)
 	ModelAndView deleteStatus(ModelAndView modelAndView, @RequestParam(name="id") Long id) {
+		
+		SiteUser user = util.getUser();
+		
+		System.err.println(user.getEmail() + " " + user.getRole()); 
 		
 		statusUpdateService.delete(id);
 		
