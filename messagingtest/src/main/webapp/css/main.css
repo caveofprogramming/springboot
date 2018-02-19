@@ -1,6 +1,12 @@
 .navbar {
-	background-color: orange;
-	border-color: orange;
+	background-color: rgb(69, 139, 0);
+	border-color: rgb(69, 139, 0);
+	padding-top: 1em;
+}
+
+.navbar-logo {
+	position: relative;
+	top: -7px;
 }
 
 .navbar>.container>div>.navbar-nav>li>a.profile {
@@ -42,10 +48,27 @@
 }
 
 .panel>.panel-heading {
-	background-color: blue;
+	background-color: rgb(69, 139, 0);
 	color: white;
 	font-weight: bold;
 }
+
+a:link {
+    color: rgb(69, 139, 0);
+}
+
+a:visited {
+    color: rgb(69, 139, 0);
+}
+
+a:hover {
+    color: rgb(69, 139, 0);
+}
+
+a:active {
+    color: rgb(69, 139, 0);
+}
+
 
 textarea {
 	width: 100%;
@@ -66,9 +89,15 @@ textarea {
 	font-size: larger;
 }
 
-.status-row {
-	margin-top: 4em;
-	margin-bottom: 6em;
+.homepage-logo {
+	margin-bottom: 0.1em;	
+}
+
+.homepage-status-row {
+	height: 5em;
+	margin-top: 1em;
+	margin-bottom: 2.5em;
+	font-weight: 500;
 }
 
 .edit-links {
@@ -92,10 +121,10 @@ textarea {
 }
 
 .login-form>div>button {
-	background-color: blue;
+	background-color: rgb(69, 139, 0);
 	color: white;
 	font-weight: bold;
-	border-color: darkblue;
+	border-color: darkgreen;
 }
 
 .login-error {
@@ -130,6 +159,8 @@ textarea {
 
 
 .profile-image {
+	width: 100px;
+	height: 100px;
 	float: left;
 	margin-bottom: 10px;
 	margin-right: 30px;
@@ -139,6 +170,12 @@ textarea {
 	position: absolute;
 	bottom: 0px;
 	right: 50px;
+}
+
+.profile-about-message {
+	position: absolute;
+	bottom: 10px;
+	left: 50px;
 }
 
 #profile-photo-status {
@@ -154,12 +191,12 @@ textarea {
 }
 
 ul#interest-list {
-	border: 1px ridge orange;
+	border: 1px ridge rgb(69, 139, 0);
 	background-color: rgb(255, 255, 240);
 }
 
 ul.tagit>li.tagit-choice {
-	background-color: orange;
+	background-color: rgb(69, 139, 0);
 	color: white;
 	font-weight: bold;
 	border-radius: 10px;
@@ -178,7 +215,7 @@ ul#interest-list a.tagit-close:hover {
 }
 
 ul#interest-list a.tagit-close:hover>span.text-icon {
-	color: blue;
+	color: rgb(69, 139, 0);
 }
 
 div[role=status] {
@@ -190,12 +227,12 @@ div[role=status] {
 }
 
 #search-button {
-	background-color: orange;
+	background-color: rgb(69, 139, 0);
 	text-shadow: 1px 1px 0px #888888;
 }
 
 #search-button:hover {
-	background-color: orange;
+	background-color: rgb(69, 139, 0);
 	color: yellow;
 }
 
@@ -219,15 +256,19 @@ div[role=status] {
 
 .results-interests {
 	font-size: 1.3em;
+	color: darkblue;
+	margin-bottom: 1em;
 }
 
 .results-message>a {
-	color: orange;
-	text-shadow: 1px 1px 0px #88888855;
+	position: absolute;
+    bottom: 5pxmessage.jpg;
+	color: darkblue;
+	font-size: larger;
 }
 
 .person-row {
-	border: 1px solid orange;
+	border: 1px solid rgb(69, 139, 0);
 	margin-bottom: 1em;
 }
 
@@ -256,7 +297,7 @@ div[role=status] {
 
 .chat-message-sent {
 	width: 80vw;
-	background-color: darkorange;
+	background-color: blue;
 }
 
 .chat-message-reply {
@@ -274,9 +315,26 @@ div[role=status] {
 	margin: 10px 0;
 	padding: 5px;
 	font-weight: 500;
-	border: 1px solid orange;
 	display: table;
-	background-color: yellow;
+}
+
+#chat-message-keep-logged-in-checkbox {
+	position: relative;
+	top: -0.1em;
+	margin-left: 0.5em;
+}
+
+.chat-message-keep-logged-in input:before {
+  content: '';
+  background: white;
+  display: block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid blue;
+}
+
+.chat-message-keep-logged-in input:checked:before {
+  background-color: rgb(69, 139, 0);
 }
 
 
@@ -298,7 +356,7 @@ div[role=status] {
 }
 
 .message-list-link {
-	color: orange;
+	color: rgb(69, 139, 0);
 }
 
 .message-list-row {

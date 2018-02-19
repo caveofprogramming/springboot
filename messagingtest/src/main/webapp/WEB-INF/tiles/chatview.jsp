@@ -155,7 +155,9 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="chat-message-keep-logged-in">
-			Keep me logged into this chat; I'm not on a public computer: <input
+			<label for="chat-message-keep-logged-in-checkbox">Keep me logged into this chat; I'm not on a public computer: </label>
+			
+			<input
 				id="chat-message-keep-logged-in-checkbox" type="checkbox" />
 		</div>
 	</div>

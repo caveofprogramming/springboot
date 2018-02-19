@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="jwp"%>
 
+<c:url var="img" value="/img" />
+
 <div class="row">
 	<div class="col-md-12 results-noresult">
 		<c:if test="${empty page.content}">
@@ -30,7 +32,7 @@
 		<div class="col-md-12">
 
 			<div class="results-photo">
-				<a href="${profileLink}"><img id="profilePhotoImage"
+				<a href="${profileLink}"><img class="profile-image" id="profilePhotoImage"
 					src="${profilePhoto}" /></a>
 			</div>
 
@@ -42,6 +44,11 @@
 				</div>
 
 				<div class="results-interests">
+
+					<c:if test="${!empty result.interests}">
+					Interested in: 
+					</c:if>
+
 					<c:forEach var="interest" items="${result.interests}"
 						varStatus="status">
 
@@ -53,8 +60,8 @@
 				</div>
 
 				<div class="results-message">
-					<a href="${chatViewLink}">Contact <c:out
-							value="${result.firstname}" />
+					<a href="${chatViewLink}"><img 
+						src="${img}/message.jpg" alt="contact" />
 					</a>
 				</div>
 			</div>

@@ -9,6 +9,9 @@
 <c:url var="saveInterest" value="/save-interest" />
 <c:url var="deleteInterest" value="/delete-interest" />
 
+<c:url var="chatViewLink" value="/chatview/${userId}" />
+<c:url var="img" value="/img" />
+
 <div class="row">
 
 	<div class="col-md-10 col-md-offset-1">
@@ -23,6 +26,9 @@
 		<div id="interestDiv">
 			<ul id="interest-list">
 				<c:choose>
+					<c:when test="${empty profile.interests && ownProfile != true}">
+						<li><c:out value="${firstname}" /> hasn't added any interests.</li>
+					</c:when>
 					<c:when test="${empty profile.interests}">
 						<li>Type here to add your interests here (example: music)!</li>
 					</c:when>
@@ -52,8 +58,11 @@
 
 			<div class="profile-text">
 				<c:choose>
-					<c:when test="${profile.about == null}">
+				<c:when test="${profile.about == null && ownProfile == true}">
 				Click 'edit' to add information about yourself to your profile
+				</c:when>
+				<c:when test="${profile.about == null}">
+				<c:out value="${firstname}" /> hasn't added any profile information yet.
 				</c:when>
 					<c:otherwise>
 						${profile.about}
@@ -67,9 +76,14 @@
 			<c:if test="${ownProfile == true}">
 				<a href="${editProfileAbout}">edit</a>
 			</c:if>
-
 		</div>
-
+		
+		<div class="profile-about-message">
+			<c:if test="${ownProfile == false}">
+				<a href="${chatViewLink}"><img src="${img}/message.jpg" alt="contact" /></a>
+			</c:if>
+		</div>
+					
 		<c:url value="/upload-profile-photo" var="uploadPhotoLink" />
 		<form method="post" enctype="multipart/form-data" id="photoUploadForm"
 			action="${uploadPhotoLink}">
