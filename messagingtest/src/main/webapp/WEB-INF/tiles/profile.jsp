@@ -96,9 +96,9 @@
 
 	</div>
 
-
-
 </div>
+
+
 
 
 <script>
@@ -174,6 +174,8 @@
 	}
 
 	$(document).ready(function() {
+		
+
 
 		$("#interest-list").tagit({
 

@@ -11,7 +11,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @Order(1)   
 @EnableWebSecurity
-public class RestSecurityConfig  extends WebSecurityConfigurerAdapter {
+public class AjaxSecurityConfig  extends WebSecurityConfigurerAdapter {
+	
+	/*
+	 * This allows us to return 403 status (forbidden) if session timeout occurs,
+	 * rather than the AJAX client getting redirected to the login page.
+	 * 401 (unauthorized) would seem more appropriate, but apparently
+	 * may cause popups asking for username and password in some browsers.
+	 * 
+	 */
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -19,10 +27,10 @@ public class RestSecurityConfig  extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		
 		http
-			.antMatcher("/statuscheck")
+			.antMatcher("/ajax/*")
 				.authorizeRequests()
 					.anyRequest()
-					.permitAll()
+					.authenticated()
 					.and()
 					.sessionManagement()
 			        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)

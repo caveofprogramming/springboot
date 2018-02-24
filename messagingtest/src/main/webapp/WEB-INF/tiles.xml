@@ -6,7 +6,7 @@
 
 <tiles-definitions>
 	<definition name="app.default" template="/WEB-INF/layouts/default.jsp">
-		<put-attribute name="title" value="Spring Boot Demo" />
+		<put-attribute name="title" value="OtherFreaks" />
 	</definition>
 
 

@@ -35,13 +35,20 @@ public class SearchService {
 		
 		Page<Profile> results = null;
 		
+		// There is no user or user ID if the user is not logged in.
+		Long userId = user == null ? -1: user.getId();
+		
+		if(user == null) {
+			
+		}
+		
 		if(!text.matches(".*\\w.*")) {
 			logger.debug("Finding all....");
-			results = profileDao.findAllByUserIdNot(user.getId(), request);
+			results = profileDao.findAllByUserIdNot(userId, request);
 		}
 		else {
 			logger.debug("Searching on '" + text + "'");
-			results = profileDao.findByInterestsNameContainingIgnoreCase(text, request);
+			results = profileDao.findAllByUserIdNotAndInterestsNameContainingIgnoreCase(userId, text, request);
 		}
 		
 		Converter<Profile, SearchResult> converter = new Converter<Profile, SearchResult>() {

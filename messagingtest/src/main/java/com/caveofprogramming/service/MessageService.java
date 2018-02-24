@@ -94,4 +94,9 @@ public class MessageService {
 
 		return results.map(m -> new SimpleMessage(m, true)).getContent();
 	}
+
+	public Long fetchMessageCount(Long userId) {
+		
+		return messageDao.fetchUnreadMessageCount(userId);
+	}
 }

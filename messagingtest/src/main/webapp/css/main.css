@@ -350,6 +350,12 @@ div[role=status] {
 	margin-bottom: 1em;
 }
 
+.message-list-empty {
+	text-align: center;
+	font-size: 1.5em;
+	color: rgb(69, 139, 0);
+}
+
 .message-list-date {
 	font-weight: normal;
 	color: gray;
@@ -373,3 +379,11 @@ div[role=status] {
 	font-weight: 400;
 	font-style: italic;
 }
+
+.verify-email-message {
+	margin-top: 2em;
+	text-align: center;
+	font-size: 2em;
+}
+
+

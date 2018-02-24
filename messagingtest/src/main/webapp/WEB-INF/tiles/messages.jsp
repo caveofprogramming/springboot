@@ -6,7 +6,7 @@
 
 <c:url var="inboxUrl" value="/messages" />
 <c:url var="chatUrl" value="/chatview/" />
-<c:url var="js" value="/js" />
+
 
 <script>
 
@@ -65,7 +65,6 @@
 		});
 		
 		var request = JSON.stringify({
-			'chatWithUserID' : 0,
 			'page' : "${pageNumber}"
 		});
 	

@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
+<c:url var="deleteAccount" value="/delete-account" />
 
 
 <div class="row">
@@ -33,12 +34,25 @@
 
 	</div>
 
-
-
 </div>
 
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		Click here to delete your profile: <a id="delete-account" class="delete-account" href="${deleteAccount}">delete account</a>
+	</div>
+</div>
+
+		
 <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
 <script>
+
+	$(function() {
+		$('#delete-account').click(function() {
+			return confirm("Are you sure you want to delete your account? This action cannot be undone.");
+		});
+
+	});
+
 	tinymce.init({
 		selector : 'textarea'
 	});

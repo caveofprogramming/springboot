@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.owasp.html.PolicyFactory;
@@ -16,6 +18,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +49,7 @@ public class ProfileController {
 
 	@Autowired
 	private ProfileService profileService;
-	
+
 	@Autowired
 	private InterestService interestService;
 
@@ -55,36 +58,34 @@ public class ProfileController {
 
 	@Autowired
 	private FileService fileService;
-	
+
 	@Autowired
 	private Util util;
 
 	@Value("${photo.upload.ok}")
 	private String photoStatusOK;
-	
+
 	@Value("${photo.upload.invalid}")
 	private String photoStatusInvalid;
-	
+
 	@Value("${photo.upload.ioexception}")
 	private String photoStatusIOException;
-	
+
 	@Value("${photo.upload.toosmall}")
 	private String photoStatusTooSmall;
-	
+
 	@Value("${photo.upload.directory}")
 	private String photoUploadDirectory;
 
-	
-	
 	private ModelAndView showProfile(SiteUser user) {
-		
+
 		ModelAndView modelAndView = new ModelAndView();
-		
-		if(user == null) {
+
+		if (user == null) {
 			modelAndView.setViewName("redirect:/");
 			return modelAndView;
 		}
-		
+
 		Profile profile = profileService.getUserProfile(user);
 
 		if (profile == null) {
@@ -96,38 +97,55 @@ public class ProfileController {
 		Profile webProfile = new Profile();
 		webProfile.safeCopyFrom(profile);
 
-		
 		modelAndView.getModel().put("userId", user.getId());
 		modelAndView.getModel().put("profile", webProfile);
 		modelAndView.getModel().put("firstname", user.getFirstname());
 		modelAndView.getModel().put("surname", user.getSurname());
-		
 
 		modelAndView.setViewName("app.profile");
-		
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/delete-account")
+	public ModelAndView deleteAccount(ModelAndView modelAndView, HttpServletRequest request) {
+		SiteUser user = util.getUser();
+
+		userService.deleteAccount(user);
+
+		// Logout.
+		SecurityContextHolder.clearContext();
+
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+
+		modelAndView.setViewName("redirect:/");
+
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/profile")
 	public ModelAndView showProfile() {
 		SiteUser user = util.getUser();
-		
+
 		ModelAndView modelAndView = showProfile(user);
-		
+
 		modelAndView.getModel().put("ownProfile", true);
-		
+
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/profile/{id}")
 	public ModelAndView showProfile(@PathVariable("id") Long id) {
 
 		SiteUser user = userService.get(id);
-		
+
 		ModelAndView modelAndView = showProfile(user);
-		
+
 		modelAndView.getModel().put("ownProfile", false);
-		
+
 		return modelAndView;
 	}
 
@@ -172,7 +190,7 @@ public class ProfileController {
 		Profile profile = profileService.getUserProfile(user);
 
 		Path oldPhotoPath = profile.getPhoto(photoUploadDirectory);
-		
+
 		PhotoUploadStatus status = new PhotoUploadStatus(photoStatusOK);
 
 		try {
@@ -216,46 +234,38 @@ public class ProfileController {
 				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
 				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
 	}
-	
-	@RequestMapping(value="/save-interest", method=RequestMethod.POST)
+
+	@RequestMapping(value = "/save-interest", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> saveInterest(@RequestParam("name") String interestName) {
-		
+
 		SiteUser user = util.getUser();
 		Profile profile = profileService.getUserProfile(user);
-		
+
 		String cleanedInterestName = htmlPolicy.sanitize(interestName);
-		
+
 		Interest interest = interestService.createIfNotExists(cleanedInterestName);
-		
+
 		profile.addInterest(interest);
 		profileService.save(profile);
-		
+
 		System.out.println("Profile: " + profile.toString());
-		
-		
+
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/delete-interest", method=RequestMethod.POST)
+
+	@RequestMapping(value = "/delete-interest", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> deleteInterest(@RequestParam("name") String interestName) {
-		
+
 		SiteUser user = util.getUser();
 		Profile profile = profileService.getUserProfile(user);
-	
+
 		profile.removeInterest(interestName);
-	
+
 		profileService.save(profile);
-		
+
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
-	
 
 }
-
-
-
-
-
-

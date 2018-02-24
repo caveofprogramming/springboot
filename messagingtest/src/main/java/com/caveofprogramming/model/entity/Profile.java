@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,7 +49,7 @@ public class Profile {
 	@Column(name = "photo_extension", length = 5)
 	private String photoExtension;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
 	@JoinTable(name="profile_interests", 
 	joinColumns={ @JoinColumn(name="profile_id") },
 	inverseJoinColumns = { @JoinColumn(name="interest_id") } )

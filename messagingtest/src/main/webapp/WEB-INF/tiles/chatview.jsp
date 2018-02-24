@@ -2,21 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:url var="chat" value="/chat" />
-<c:url var="sendPoint" value="/app/message/send/${chatWithUserID}" />
-<c:url var="fromPoint" value="/user/queue/${chatWithUserID}" />
-<c:url var="restService" value="/getchat" />
-<c:url var="statuscheck" value="/statuscheck" />
-
+<c:url var="webSocketEndpoint" value="/chat" />
+<c:url var="outboundDestination" value="/app/message/send/${chatWithUserID}" />
+<c:url var="inboundDestination" value="/user/queue/${thisUserId}" />
+<c:url var="conversationAjaxUrl" value="/conversation/${chatWithUserID}" />
+<c:url var="serverPingUrl" value="/ajax/statuscheck" />
+<c:url var="sessionTimeoutUrl" value="/sessiontimeout" />
 <c:url var="notificationUrl" value="/chatview" />
-
-<c:url var="js" value="/js" />
-<script src="${js}/chat-connection-manager.js"></script>
 
 
 <script>
-	var csrfTokenName = $("meta[name='_csrf_header']").attr("content");
-	var csrfTokenValue = $("meta[name='_csrf']").attr("content");
 	
 	var pagesFetched = 0;
 
@@ -68,7 +63,7 @@
 			'text': text			
 		};
 		
-		connectionManager.sendMessage(message);
+		connectionManager.sendMessage("${outboundDestination}", message);
 		
 		$('#chat-message-text').val("");
 		$('#chat-message-text').focus();
@@ -103,29 +98,21 @@
 				$(window).resize(sizeChatWindow);
 
 				var connectionManager = new ConnectionManager({
-					socksEndPoint : "${chat}",
-					newMessageCallback : newMessageReceived,
-					notificationUrl : "${notificationUrl}",
-					chattingWithName : "${chattingWithName}",
-					chatWithUserID : "${chatWithUserID}",
-					csrfTokenName : csrfTokenName,
-					csrfTokenValue : csrfTokenValue,
-					statusCheckUrl : "${statuscheck}",
-					stompInboundDestination : "${fromPoint}",
-					stompOutboundDestination : "${sendPoint}",
-					restMessageServiceUrl : "${restService}"
+					statusCheckUrl: "${serverPingUrl}",
+					sessionTimeoutUrl: "${sessionTimeoutUrl}",
+					debug: true
 				});
+				
+				connectionManager.setNewMessageCallback(newMessageReceived);
 
-				connectionManager.connectChat();
-				ConnectionManager.requestNotificationPermission();
-
+				connectionManager.connectMessaging("${webSocketEndpoint}", "${inboundDestination}");
 
 				$('#chat-send-button').click(function() {
 					sendMessage(connectionManager);
 				});
 
 				$('#chat-message-previous').click(function() {
-					connectionManager.fetchPreviousMessages(addPreviousMessages, pagesFetched);
+					connectionManager.fetchPreviousMessages("${conversationAjaxUrl}", addPreviousMessages, pagesFetched);
 				});
 
 				$(document).keypress(function(e) {
@@ -139,12 +126,13 @@
 						$.proxy(connectionManager.toggleStayLoggedIn,
 								connectionManager));
 
-				connectionManager.fetchMessages(refreshMessages, 0);
+				connectionManager.fetchMessages("${conversationAjaxUrl}", refreshMessages, 0);
 			});
 </script>
 
 <div class="row">
 	<div class="col-md-12">
+	<h2>${sessionTimeoutUrl}</h2>
 		<h2>
 			You are chatting with
 			<c:out value="${chattingWithName}" />

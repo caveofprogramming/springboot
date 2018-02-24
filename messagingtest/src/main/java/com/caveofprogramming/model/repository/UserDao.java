@@ -8,4 +8,7 @@ import com.caveofprogramming.model.entity.SiteUser;
 @Repository
 public interface UserDao extends CrudRepository<SiteUser, Long> {
 	SiteUser findByEmail(String email);
+
+	void deleteById(Long id);
+
 }

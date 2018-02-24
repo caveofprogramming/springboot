@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 import com.caveofprogramming.service.UserService;
 
@@ -50,7 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/expiredtoken",
 						"/verifyemail",
 						"/confirmregister",
-						"/profilephoto/*"
+						"/profilephoto/*",
+						"/sessiontimeout"
 						)
 					.permitAll()
 				.antMatchers(
@@ -71,12 +71,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/upload-profile-photo",
 						"/save-interest",
 						"/delete-interest",
+						"/delete-account",
 						"/chatview/**",
 						"/messages",
 						"/queue/**",
 						"/app/**",
 						"/chat/**",
-						"/getchat"
+						"/conversation/*",
+						"/messagecount"
 						)
 					.authenticated()
 				.anyRequest()

@@ -8,4 +8,5 @@ import com.caveofprogramming.model.entity.VerificationToken;
 @Repository
 public interface VerificationDao extends CrudRepository<VerificationToken, Long> {
 	VerificationToken findByToken(String token);
+	void deleteByUserId(Long id);
 }

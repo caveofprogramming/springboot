@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.caveofprogramming.model.custom.AccountDataDeleter;
 import com.caveofprogramming.model.dto.SpringUser;
 import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.model.entity.TokenType;
@@ -25,6 +26,9 @@ public class UserService implements UserDetailsService {
 	private UserDao userDao;
 	
 	@Autowired
+	private AccountDataDeleter dataDeleter;
+	
+	@Autowired
 	private VerificationDao verificationDao;
 	
 	public void register(SiteUser user) {
@@ -34,6 +38,13 @@ public class UserService implements UserDetailsService {
 
 	public void save(SiteUser user) {
 		userDao.save(user);
+	}
+	
+	public void deleteAccount(SiteUser user) {
+		
+		Long userId = user.getId();
+		
+		dataDeleter.deleteUserById(userId);
 	}
 
 	@Override

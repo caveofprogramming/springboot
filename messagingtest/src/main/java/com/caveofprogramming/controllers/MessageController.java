@@ -1,7 +1,6 @@
 package com.caveofprogramming.controllers;
 
 import java.security.Principal;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -65,14 +64,15 @@ public class MessageController {
 		return messageService.fetchMessageList(thisUser.getId(), chatPageRequest.getPage());
 	}
 
-	@RequestMapping(value = "/getchat", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/conversation/{otherUserId}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	List<SimpleMessage> getchat(@RequestBody ChatPageRequest chatPageRequest) {
+	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId,
+			@RequestBody ChatPageRequest chatPageRequest) {
 
 		SiteUser thisUser = util.getUser();
 
-		List<SimpleMessage> messages = messageService.fetchConversation(thisUser.getId(),
-				chatPageRequest.getChatWithUserID(), chatPageRequest.getPage());
+		List<SimpleMessage> messages = messageService.fetchConversation(thisUser.getId(), otherUserId,
+				chatPageRequest.getPage());
 
 		return messages;
 	}
@@ -94,36 +94,49 @@ public class MessageController {
 	public SimpleMessage send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserId)
 			throws Exception {
 
+		// Get the details of the user that's sending the message.
 		String fromUsername = principal.getName();
 		SiteUser sentFrom = userService.get(fromUsername);
+		Long fromUserId = sentFrom.getId();
+		String sentFromFullName = sentFrom.getFirstname() + " " + sentFrom.getSurname();
 
+		// Get the details of the user we're sending the message to.
 		SiteUser sendTo = userService.get(toUserId);
 		String sendToUsername = sendTo.getEmail();
 
-		String replyQueue = String.format("/queue/%d", sentFrom.getId());
-		String returnQueue = String.format("/queue/%d", sendTo.getId());
+		String sendToQueue = String.format("/queue/%d", toUserId);
+		String returnReceiptQueue = String.format("/queue/%d", fromUserId);
+		String messageAlertQueue = "/queue/newmessage";
 
+		// Save the message to it can be retrieved in future.
+		// This is done asynchronously, so it doesn't hold up
+		// message transmission.
 		messageService.save(sendTo, sentFrom, message.getText());
 
-		message.setFromUserId(sentFrom.getId());
+		// Fill in details so we can send the message immediately
+		// on its way without involving the database.
+		message.setFromUserId(fromUserId);
+		message.setFrom(sentFromFullName);
 		message.setSent(new Date());
-
-		logger.debug("Sending message to user: " + toUserId);
-		logger.debug(message.toString());
-
-		message.setFrom(sentFrom.getFirstname() + " " + sentFrom.getSurname());
 		message.setSent(new Date());
-		message.setFromUserId(sentFrom.getId());
 
 		// Send the message to the recipient.
 		message.setIsReply(true);
-		simpleMessagingTemplate.convertAndSendToUser(sendToUsername, replyQueue, message);
+		logger.debug("Sending message to user on " + sendToQueue);
+		logger.debug(message.toString());
+		simpleMessagingTemplate.convertAndSendToUser(sendToUsername, sendToQueue, message);
 
 		// Also send the message back to the user who sent it, so it appears
-		// after they
-		// type it. If it doesn't appear, they'll know it has failed to send.
+		// after they type it. If it doesn't appear, they'll know it has
+		// failed to send.
 		message.setIsReply(false);
-		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnQueue, message);
+		logger.debug("Sending message back to original user on " + returnReceiptQueue);
+		logger.debug(message.toString());
+		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
+		
+		// Finally send a message alerting the destinations user that they have received
+		// a new message from someone.
+		simpleMessagingTemplate.convertAndSendToUser(fromUsername, messageAlertQueue, sentFromFullName);
 
 		return message;
 	}

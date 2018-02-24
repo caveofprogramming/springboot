@@ -56,7 +56,7 @@ public class SiteUser {
 
 	@Column(name = "role", length = 20)
 	private String role;
-
+	
 	public SiteUser() {
 
 	}
@@ -156,5 +156,4 @@ public class SiteUser {
 				+ repeatPassword + ", role=" + role + "]";
 	}
 
-	
 }

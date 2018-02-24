@@ -48,6 +48,9 @@ public class AuthController {
 
 	@Value("${message.expired.token}")
 	private String expiredTokenMessage;
+	
+	@Value("${message.session.timeout}")
+	private String sessionTimeoutMessage;
 
 	@Value("${mail.enable}")
 	private Boolean emailVerificationEnabled;
@@ -83,9 +86,7 @@ public class AuthController {
 		return true;
 	}
 	
-	
-
-	@RequestMapping("/statuscheck")
+	@RequestMapping("/ajax/statuscheck")
 	@ResponseBody
 	UserStatusCheck checkUserStatus(HttpServletRequest request, Principal principal) {
 
@@ -148,6 +149,14 @@ public class AuthController {
 	ModelAndView expiredToken(ModelAndView modelAndView) {
 
 		modelAndView.getModel().put("message", expiredTokenMessage);
+		modelAndView.setViewName("app.message");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/sessiontimeout")
+	ModelAndView sessionTimeout(ModelAndView modelAndView) {
+
+		modelAndView.getModel().put("message", sessionTimeoutMessage);
 		modelAndView.setViewName("app.message");
 		return modelAndView;
 	}

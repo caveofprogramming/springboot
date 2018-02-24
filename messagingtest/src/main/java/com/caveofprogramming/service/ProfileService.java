@@ -11,7 +11,7 @@ import com.caveofprogramming.model.repository.ProfileDao;
 public class ProfileService {
 	
 	@Autowired
-	ProfileDao profileDao;
+	private ProfileDao profileDao;
 	
 	public void save(Profile profile) {
 		profileDao.save(profile);
