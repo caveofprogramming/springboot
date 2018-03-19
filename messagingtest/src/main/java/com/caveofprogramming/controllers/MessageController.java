@@ -91,7 +91,7 @@ public class MessageController {
 	}
 
 	@MessageMapping("/message/send/{toUserId}")
-	public SimpleMessage send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserId)
+	public void send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserId)
 			throws Exception {
 
 		// Get the details of the user that's sending the message.
@@ -130,15 +130,15 @@ public class MessageController {
 		// after they type it. If it doesn't appear, they'll know it has
 		// failed to send.
 		message.setIsReply(false);
-		logger.debug("Sending message back to original user on " + returnReceiptQueue);
+		logger.debug("Sending message back to current user on " + returnReceiptQueue);
 		logger.debug(message.toString());
 		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
 		
-		// Finally send a message alerting the destinations user that they have received
+		// Finally send a message alerting the destination user that they have received
 		// a new message from someone.
-		simpleMessagingTemplate.convertAndSendToUser(fromUsername, messageAlertQueue, sentFromFullName);
-
-		return message;
+		logger.debug("Sending message alert notification to current user on " + messageAlertQueue);
+		logger.debug(message.toString());
+		simpleMessagingTemplate.convertAndSendToUser(fromUsername, messageAlertQueue, message);
 	}
 
 }

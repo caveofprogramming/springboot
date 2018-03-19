@@ -52,6 +52,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
 </head>
 <body>
 
@@ -122,8 +123,7 @@
 	<script>
 		$(function() {
 
-			$
-					.cookieBar({
+			$.cookieBar({
 						bottom : true,
 						message : 'We use cookies to enhance your experience. Use of this site constitutes agreement.',
 						domain : 'otherfreaks.com',
@@ -134,8 +134,15 @@
 
 	<script src="${contextRoot}/js/sockjs.min.js"></script>
 	<script src="${contextRoot}/js/stomp.min.js"></script>
-	<script src="${js}/connection-manager.js?c=1"></script>
+	<script src="${js}/connection-manager.js"></script>
+	<tiles:insertAttribute name="chatscript" />
+	<tiles:insertAttribute name="chatviewscript" ignore="true" />
 
+	<sec:authorize access="isAuthenticated()">
+		<script>
+			connectionManager.connect("${webSocketEndpoint}");
+		</script>
+	</sec:authorize>
 
 </body>
 </html>

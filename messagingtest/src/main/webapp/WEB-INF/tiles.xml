@@ -3,12 +3,11 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
-
 <tiles-definitions>
 	<definition name="app.default" template="/WEB-INF/layouts/default.jsp">
 		<put-attribute name="title" value="OtherFreaks" />
+		<put-attribute name="chatscript" value="/WEB-INF/tiles/chatnotifications.jsp" />
 	</definition>
-
 
 	<definition name="app.homepage" extends="app.default">
 		<put-attribute name="content" value="/WEB-INF/tiles/home.jsp" />
@@ -65,6 +64,7 @@
 
 	<definition name="app.chatview" extends="app.default">
 		<put-attribute name="content" value="/WEB-INF/tiles/chatview.jsp" />
+		<put-attribute name="chatviewscript" value="/WEB-INF/tiles/chatviewscript.jsp" />
 	</definition>
 	
 	<definition name="app.messages" extends="app.default">
