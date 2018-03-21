@@ -1,14 +1,21 @@
 package com.caveofprogramming.configuration;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.caveofprogramming.service.UserService;
@@ -95,6 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.loginPage("/login")
 					.defaultSuccessUrl("/", true)
 					.permitAll()
+					.authenticationDetailsSource(authenticationDetailsSource())
 					.and()
 				.logout()
 					.clearAuthentication(true)
@@ -103,16 +111,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.deleteCookies("JSESSIONID");
 		
 		// @formatter:on
-	}
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-		// @formatter:off
-		auth.inMemoryAuthentication().withUser("john").password("hello").roles("USER");
-
-		// @formatter:on
-
 	}
 
 	@Override
@@ -125,5 +123,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Ensure security registry is notified if sessions ends.
 	    return new HttpSessionEventPublisher();
 	}
+	
+	private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource() {
+
+        return new AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails>() {
+
+            @Override
+            public WebAuthenticationDetails buildDetails(
+                    HttpServletRequest request) {
+            	
+                return new CustomWebAuthenticationDetails(request);
+            }
+
+        };
+    }
 
 }

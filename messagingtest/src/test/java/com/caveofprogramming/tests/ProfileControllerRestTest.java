@@ -34,7 +34,6 @@ import com.caveofprogramming.service.UserService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations="classpath:test.properties")
-@Transactional
 public class ProfileControllerRestTest {
 
 	@Autowired
@@ -73,7 +72,11 @@ public class ProfileControllerRestTest {
 		String email = auth.getName();
 
 		SiteUser user = userService.get(email);
+		
+		assertNotNull("Test user should exist", user);
 		Profile profile = profileService.getUserProfile(user);
+		
+		assertNotNull("Test user profile should exist", profile);
 
 		assertTrue("Profile should contain interest", profile.getInterests().contains(new Interest(interestText)));
 

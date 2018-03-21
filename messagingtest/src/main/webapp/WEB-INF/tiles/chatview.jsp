@@ -2,24 +2,17 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
 <div class="row">
 	<div class="col-md-12">
-		<h2>
-			You are chatting with
-			<c:out value="${chattingWithName}" />
-		</h2>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-12">
+	
+		<%--
 		<div class="chat-message-keep-logged-in">
 			<label for="chat-message-keep-logged-in-checkbox">Keep me logged into this chat; I'm not on a public computer: </label>
 			
 			<input
 				id="chat-message-keep-logged-in-checkbox" type="checkbox" />
 		</div>
+		--%>
 	</div>
 </div>
 
@@ -29,7 +22,7 @@
 
 
 			<div class="panel-heading">
-				<div class="panel-title">Send Message</div>
+				<div class="panel-title">Chat with <c:out value="${chattingWithName}" /></div>
 			</div>
 
 			<div class="panel-body">
@@ -42,6 +35,7 @@
 					<div id="chat-message-previous">
 						<a href="#">view older messages</a>
 					</div>
+					
 
 					<div id="chat-message-record"></div>
 

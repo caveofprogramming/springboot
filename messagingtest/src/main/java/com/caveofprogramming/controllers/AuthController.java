@@ -88,16 +88,17 @@ public class AuthController {
 	
 	@RequestMapping("/ajax/statuscheck")
 	@ResponseBody
-	UserStatusCheck checkUserStatus(HttpServletRequest request, Principal principal) {
+	Boolean checkUserStatus(HttpServletRequest request, Principal principal) {
 
-		boolean isValidSession = request.isRequestedSessionIdValid();
-		boolean isAuthenticated = principal != null;
+		Boolean isValidSession = request.isRequestedSessionIdValid();
+		Boolean isAuthenticated = principal != null;
 		
-		int sessionTimeout = request.getSession().getMaxInactiveInterval();
+		//int sessionTimeout = request.getSession().getMaxInactiveInterval();
 
-		UserStatusCheck statusCheck = new UserStatusCheck(sessionTimeout, isValidSession, isAuthenticated);
+		//UserStatusCheck statusCheck = new UserStatusCheck(sessionTimeout, isValidSession, isAuthenticated);
 
-		return statusCheck;
+		return isAuthenticated && isValidSession;
+		//return statusCheck;
 	}
 
 	@RequestMapping("/confirmregister")

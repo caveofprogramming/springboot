@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.transaction.Transactional;
+
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,7 +40,7 @@ import com.caveofprogramming.service.UserService;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
-// @Transactional
+@Transactional
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BulkTests {
@@ -47,8 +49,8 @@ public class BulkTests {
 	private static final String namesFile = "/com/caveofprogramming/tests/data/names.txt";
 	private static final String interestsFile = "/com/caveofprogramming/tests/data/hobbies.txt";
 
-	private final int NUM_USERS = 1000;
-	private final int AVERAGE_MESSAGES_PER_USER = 100;
+	private final int NUM_USERS = 100;
+	private final int AVERAGE_MESSAGES_PER_USER = 10;
 	private final int MAX_MESSAGE_LENGTH = 250;
 
 	@Autowired
@@ -64,12 +66,12 @@ public class BulkTests {
 	private MessageService messageService;
 
 	private SiteUser[] testUsers = { new SiteUser("test@example.com", "testtest", "test", "test"),
-			new SiteUser("john@example.com", "hello", "John", "Purcell", "ROLE_ADMIN")
-			// new SiteUser("carollhunter@example.com", "passcaroll", "Caroll",
-			// "Hunter"),
-			// new SiteUser("lacimark@example.com", "passlaci", "Laci", "Mark"),
-			// new SiteUser("dollieun@example.com", "passdollie", "Dollie",
-			// "Un")
+			new SiteUser("johnxyz@example.com", "hellohello", "John", "Purcell", "ROLE_ADMIN"),
+			new SiteUser("carollhunter@example.com", "passcaroll", "Caroll",
+			"Hunter"),
+			new SiteUser("lacimark@example.com", "passlaci", "Laci", "Mark"),
+			new SiteUser("dollieun@example.com", "passdollie", "Dollie",
+			"Un")
 	};
 
 	private List<String> loadFile(String filename, int maxLength) throws IOException {
@@ -94,7 +96,7 @@ public class BulkTests {
 
 
 	@Test
-	@Ignore
+	//@Ignore
 	public void createTestBMessages() throws IOException {
 
 		Random random = new Random();
@@ -127,7 +129,7 @@ public class BulkTests {
 
 	}
 
-	@Ignore
+	//@Ignore
 	@Test
 	public void createSpecificUsers() {
 		for (SiteUser user : testUsers) {

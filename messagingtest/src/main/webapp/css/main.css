@@ -272,7 +272,7 @@ div[role=status] {
 }
 
 #chat-message-view {
-	
+
 }
 
 #chat-message-previous {
@@ -281,13 +281,15 @@ div[role=status] {
 }
 
 #chat-message-record {
+	
 	overflow-y: auto;
-/*	display: flex;
-	flex-direction: column-reverse; */
+	display: flex;
+	flex-direction: column-reverse;
 	padding-bottom: 10px;
 }
 
 .chat-message {
+
 	margin: 5px;
 	padding: 4px;
 	border-radius: 5px;

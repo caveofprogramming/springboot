@@ -20,10 +20,10 @@ function ConnectionManager(args) {
 
 	this.args = args;
 	this.debug = args != null && args.debug != null && args.debug == true;
-	this.pingTimerId = null;
+	// this.pingTimerId = null;
 	this.keepLoggedIn = false;
 
-	this.lastStatusCheckTime = null;
+	//this.lastStatusCheckTime = null;
 
 	this.headers = {};
 	this.headers[csrfTokenName] = csrfTokenValue;
@@ -69,10 +69,12 @@ ConnectionManager.prototype.messageAlert = function(title, text, url) {
 	};
 }
 
+/*
 ConnectionManager.prototype.toggleStayLoggedIn = function() {
 	this.keepLoggedIn = this.keepLoggedIn ? false : true;
 	this.doStatusCheck();
 }
+*/
 
 ConnectionManager.prototype.disconnect = function() {
 	if (this.client != null) {
@@ -218,6 +220,7 @@ ConnectionManager.prototype.processNotification = function(message) {
 
 ConnectionManager.prototype.doStatusCheck = function() {
 
+	/*
 	if (this.lastStatusCheckTime != null) {
 		var currentTime = new Date();
 		var intervalSinceLastCheck = this.lastStatusCheckTime - currentTime;
@@ -230,7 +233,8 @@ ConnectionManager.prototype.doStatusCheck = function() {
 	}
 
 	this.lastStatusCheckTime = currentTime;
-
+*/
+	
 	var _self = this;
 
 	var jqXHR = $.ajax({
@@ -239,12 +243,14 @@ ConnectionManager.prototype.doStatusCheck = function() {
 		url : _self.args.statusCheckUrl
 	});
 
-	jqXHR.done(this.sessionStatusCheckSuccess);
+	//jqXHR.done(this.sessionStatusCheckSuccess);
 	jqXHR.fail(this.sessionStatusCheckFailure);
 	jqXHR.always(this.sessionStatusCheckComplete);
 }
 
+/*
 ConnectionManager.prototype.sessionStatusCheckSuccess = function(statusCheck) {
+	
 	sessionTimeout = statusCheck.sessionTimeout;
 
 	if (this.debug) {
@@ -257,6 +263,7 @@ ConnectionManager.prototype.sessionStatusCheckSuccess = function(statusCheck) {
 		this.disableKeepAlivePing(sessionTimeout);
 	}
 }
+*/
 
 ConnectionManager.prototype.sessionStatusCheckComplete = function(xhr) {
 	if (xhr.status == 403) {
@@ -284,6 +291,7 @@ ConnectionManager.prototype.sessionStatusCheckFailure = function(xhr,
 	}
 }
 
+/*
 ConnectionManager.prototype.enableKeepAlivePing = function(sessionTimeout) {
 
 	// Keep the session alive by pinging at less than the session
@@ -306,6 +314,7 @@ ConnectionManager.prototype.enableKeepAlivePing = function(sessionTimeout) {
 	}
 }
 
+
 ConnectionManager.prototype.disableKeepAlivePing = function(sessionTimeout) {
 
 	if (this.pingTimerId != null) {
@@ -319,6 +328,7 @@ ConnectionManager.prototype.disableKeepAlivePing = function(sessionTimeout) {
 	}
 
 }
+*/
 
 ConnectionManager.prototype.stompErrorCallback = function(message) {
 
@@ -343,6 +353,7 @@ ConnectionManager.prototype.sendMessage = function(stompOutboundDestination,
 	this.client.send(stompOutboundDestination, this.headers, JSON
 			.stringify(message));
 
+	// Keep the session alive.
 	this.doStatusCheck();
 }
 

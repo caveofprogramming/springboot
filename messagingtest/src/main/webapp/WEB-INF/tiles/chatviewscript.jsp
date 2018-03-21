@@ -43,9 +43,9 @@
 		messageDiv.innerHTML = text;
 
 		if (isNew) {
-			$('#chat-message-record').append(messageDiv);
-		} else {
 			$('#chat-message-record').prepend(messageDiv);
+		} else {
+			$('#chat-message-record').append(messageDiv);
 		}
 
 		$('#chat-message-record').scrollTop(
@@ -115,10 +115,12 @@
 		}
 	});
 
+	/*
 	$('#chat-message-keep-logged-in-checkbox').click(
 			$.proxy(connectionManager.toggleStayLoggedIn, connectionManager));
-
+*/
 	connectionManager.fetchMessages("${conversationAjaxUrl}", refreshMessages,
 			0);
+	
 </script>
 

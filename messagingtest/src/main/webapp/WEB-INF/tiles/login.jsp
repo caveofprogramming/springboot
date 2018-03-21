@@ -10,10 +10,12 @@
 
 <div class="row">
 
-	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 register-prompt">
-	
-	Please log in or <a href="${registerUrl}">click here to create an account</a>. It's free!
-	
+	<div
+		class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 register-prompt">
+
+		Please log in or <a href="${registerUrl}">click here to create an
+			account</a>. It's free!
+
 	</div>
 </div>
 
@@ -25,9 +27,10 @@
 		<c:if test="${param.error != null}">
 			<div class="login-error">Incorrect username or password.</div>
 		</c:if>
-		
+
 		<c:if test="${param.expired != null}">
-			<div class="login-error">Your session has expired. Please log in again.</div>
+			<div class="login-error">Your session has expired. Please log
+				in again.</div>
 		</c:if>
 
 		<div class="panel panel-default">
@@ -53,6 +56,12 @@
 							class="form-control" />
 					</div>
 
+					<div class="input-group">
+						<label class="checkbox-inline" for="stayloggedin"><input id="stayloggedin"
+							type="checkbox" name="stayloggedin"/>Keep me logged in
+							on this computer</label>
+
+					</div>
 					<div class="input-group">
 						<button type="submit" class="btn-primary pull-right">Sign
 							In</button>

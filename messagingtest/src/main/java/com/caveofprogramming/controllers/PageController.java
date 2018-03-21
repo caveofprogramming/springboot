@@ -1,5 +1,7 @@
 package com.caveofprogramming.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ public class PageController {
 	private String accessDeniedMessage;
 
 	@RequestMapping("/")
-	ModelAndView home(ModelAndView modelAndView) {
+	ModelAndView home(ModelAndView modelAndView, Principal principal) {
 
 		StatusUpdate statusUpdate = statusUpdateService.getLatest();
 
