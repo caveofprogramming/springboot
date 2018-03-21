@@ -70,9 +70,11 @@ public class MessageService {
 	/*
 	 * Get the list of all messages sent to the user.
 	 */
+
+	/*
 	public Page<SimpleMessage> getMessages(Long toUserId, int pageNumber) {
 		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
-		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
+		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentAsc(toUserId, request);
 
 		Converter<Message, SimpleMessage> converter = new Converter<Message, SimpleMessage>() {
 			public SimpleMessage convert(Message message) {
@@ -83,9 +85,21 @@ public class MessageService {
 
 		return results.map(converter);
 	}
+	*/
 	
 	/*
-	 * Get the list of all messages sent to the user.
+	 * Get the list of all messages sent to the user in page form.
+	 */
+	public Page<SimpleMessage> fetchMessageListPage(Long toUserId, int pageNumber) {
+		
+		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
+		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
+
+		return results.map(m -> new SimpleMessage(m, true));
+	}
+	
+	/*
+	 * Get the list of all messages sent to the user as a list.
 	 */
 	public List<SimpleMessage> fetchMessageList(Long toUserId, int pageNumber) {
 		

@@ -288,6 +288,12 @@ div[role=status] {
 	padding-bottom: 10px;
 }
 
+.chat-date {
+	text-align: center;
+	color: gray;
+	font-weight: bold;
+}
+
 .chat-message {
 
 	margin: 5px;

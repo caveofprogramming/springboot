@@ -10,6 +10,7 @@
 
 <script>
 	var pagesFetched = 0;
+	var lastMessageDate = new Date(2000, 1, 1, 1, 0, 0, 0);
 
 	function sizeChatWindow() {
 
@@ -35,18 +36,38 @@
 				: "chat-message-sent";
 
 		var date = new Date(sent);
-
+		
 		text = date.toLocaleString() + ":      " + text;
+		
+		// Set time to noon so we can compare dates
+		// ignore time.
+		date.setUTCHours(12, 0, 0, 0);
+		
+		// Check if more than 8.64e7 milliseconds (number of milliseconds in one day)
+		// Have passed since the date associated with the last message we output.
+		if(Math.round((date-lastMessageDate) / 8.64e7)) {
+			var dateDiv = document.createElement('div');
+			dateDiv.className = "chat-date";
+			dateDiv.innerHTML = date.toLocaleDateString();
+			lastMessageDate = date;
+			$('#chat-message-record').prepend(dateDiv);
+		}
+
+		
 
 		var messageDiv = document.createElement('div');
 		messageDiv.className = "chat-message " + messageTypeClass;
 		messageDiv.innerHTML = text;
 
+		/*
 		if (isNew) {
 			$('#chat-message-record').prepend(messageDiv);
 		} else {
 			$('#chat-message-record').append(messageDiv);
 		}
+		*/
+		
+		$('#chat-message-record').prepend(messageDiv);
 
 		$('#chat-message-record').scrollTop(
 				$('#chat-message-record')[0].scrollHeight);

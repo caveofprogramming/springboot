@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.caveofprogramming.model.dto.UserStatusCheck;
 import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.model.entity.VerificationToken;
 import com.caveofprogramming.service.EmailService;

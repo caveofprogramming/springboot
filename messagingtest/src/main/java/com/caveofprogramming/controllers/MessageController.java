@@ -43,11 +43,14 @@ public class MessageController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
+	/*
+	 * Display the actual page where we'll output the list of messages uses AJAX.
+	 */
 	@RequestMapping(value = "/messages", method = RequestMethod.GET)
 	ModelAndView messages(ModelAndView modelAndView, @RequestParam("p") int pageNumber) {
 
 		SiteUser thisUser = util.getUser();
-		Page<SimpleMessage> messages = messageService.getMessages(thisUser.getId(), pageNumber);
+		Page<SimpleMessage> messages = messageService.fetchMessageListPage(thisUser.getId(), pageNumber);
 		modelAndView.getModel().put("messageList", messages);
 		modelAndView.getModel().put("pageNumber", pageNumber);
 		modelAndView.getModel().put("userId", thisUser.getId());
@@ -56,6 +59,9 @@ public class MessageController {
 		return modelAndView;
 	}
 
+	/*
+	 * This is for AJAX to fetch the list of messages.
+	 */
 	@RequestMapping(value = "/messages", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	List<SimpleMessage> fetchMessageList(@RequestBody ChatPageRequest chatPageRequest) {
