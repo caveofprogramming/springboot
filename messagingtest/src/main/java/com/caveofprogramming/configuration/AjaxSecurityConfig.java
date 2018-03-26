@@ -1,5 +1,6 @@
 package com.caveofprogramming.configuration;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@Order(1)   
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 4)   
 @EnableWebSecurity
 public class AjaxSecurityConfig  extends WebSecurityConfigurerAdapter {
 	

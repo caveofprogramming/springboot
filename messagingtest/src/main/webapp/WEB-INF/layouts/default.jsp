@@ -52,7 +52,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 
@@ -123,7 +123,8 @@
 	<script>
 		$(function() {
 
-			$.cookieBar({
+			$
+					.cookieBar({
 						bottom : true,
 						message : 'We use cookies to enhance your experience. Use of this site constitutes agreement.',
 						domain : 'otherfreaks.com',

@@ -54,6 +54,11 @@
 						<button type="submit" class="btn-primary pull-right">Register</button>
 					</div>
 
+					<div class="input-group">
+						<div class="g-recaptcha"
+							data-sitekey="6Lf_-E4UAAAAAJobnzML7IVxsNtKWOgcg3vrf0kY"></div>
+					</div>
+
 				</form:form>
 
 				<div class="register-tos">

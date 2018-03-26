@@ -3,6 +3,7 @@ package com.caveofprogramming.configuration;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -18,7 +19,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import com.caveofprogramming.service.UserService;
 
 @Configuration
-@Order(2)
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 5)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
