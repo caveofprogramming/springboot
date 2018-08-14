@@ -7,23 +7,21 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.transaction.Transactional;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.caveofprogramming.App;
 import com.caveofprogramming.model.entity.Interest;
 import com.caveofprogramming.model.entity.Profile;
 import com.caveofprogramming.model.entity.SiteUser;
@@ -32,9 +30,9 @@ import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(App.class)
-@WebAppConfiguration
-@Transactional
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations="classpath:test.properties")
+
 public class ProfileControllerRestTest {
 
 	@Autowired

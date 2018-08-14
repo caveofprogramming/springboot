@@ -1,5 +1,7 @@
 package com.caveofprogramming.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,16 +30,16 @@ public class StatusUpdateService {
 	}
 	
 	public Page<StatusUpdate> getPage(int pageNumber) {
-		PageRequest request = new PageRequest(pageNumber-1, pageSize, Sort.Direction.DESC, "added");
+		PageRequest request = PageRequest.of(pageNumber-1, pageSize, Sort.Direction.DESC, "added");
 		
 		return statusUpdateDao.findAll(request);
 	}
 
 	public void delete(Long id) {
-		statusUpdateDao.delete(id);
+		statusUpdateDao.deleteById(id);
 	}
 
-	public StatusUpdate get(Long id) {
-		return statusUpdateDao.findOne(id);
+	public Optional<StatusUpdate> get(Long id) {
+		return statusUpdateDao.findById(id);
 	}
 }
