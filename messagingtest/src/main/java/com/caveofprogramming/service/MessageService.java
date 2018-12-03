@@ -62,8 +62,12 @@ public class MessageService {
 		// given 'fromUserId'
 		// parameter to figure out whether it counts as a reply or a sent
 		// message.
-		return conversation.map(m -> new SimpleMessage(m, m.getFromUser().getId().compareTo(fromUserId) == 0))
+		List<SimpleMessage> messages = conversation.map(m -> new SimpleMessage(m, m.getFromUser().getId().compareTo(fromUserId) == 0))
 				.getContent();
+		
+		messages.forEach(m -> { System.out.println("LOADED MESSAGE " + m);});
+		
+		return messages;
 	}
 
 	/*

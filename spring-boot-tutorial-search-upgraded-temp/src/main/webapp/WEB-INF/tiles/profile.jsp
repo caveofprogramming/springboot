@@ -93,7 +93,7 @@
 
 	function uploadSuccess(data) {
 
-		$("#profilePhotoImage").attr("src", "${profilePhoto};t=" + new Date());
+		$("#profilePhotoImage").attr("src", "${profilePhoto}?t=" + new Date().getMilliseconds());
 
 		$("#photoFileInput").val("");
 
@@ -110,8 +110,9 @@
 			processData : false,
 			contentType : false,
 			success : uploadSuccess,
-			error : function() {
-				setUploadStatusText("Server unreachable");
+			error : function(status) {
+				console.log(status.statusText);
+				setUploadStatusText("Invalid image (too large?) or connection failed.");
 			}
 		});
 

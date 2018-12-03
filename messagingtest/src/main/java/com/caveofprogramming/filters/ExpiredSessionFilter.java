@@ -14,6 +14,8 @@ public class ExpiredSessionFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
+		System.err.println("Filter checking if session expired.");
 
 		boolean isValidSession = request.isRequestedSessionIdValid();
 

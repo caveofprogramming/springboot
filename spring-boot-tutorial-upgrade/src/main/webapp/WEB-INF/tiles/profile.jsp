@@ -92,8 +92,10 @@
 	}
 
 	function uploadSuccess(data) {
+		
+		console.log("Photo upload success. Set url to : " + "${profilePhoto}?t=" + Date().getMilliseconds());
 
-		$("#profilePhotoImage").attr("src", "${profilePhoto};t=" + new Date());
+		$("#profilePhotoImage").attr("src", "${profilePhoto}?t=" + Date().getMilliseconds());
 
 		$("#photoFileInput").val("");
 
@@ -102,17 +104,22 @@
 	}
 
 	function uploadPhoto(event) {
+		
+		console.log("Uploading photo to: " + $(this).attr("action"));
 
-		$.ajax({
+		var jqXHR = $.ajax({
 			url : $(this).attr("action"),
 			type : 'POST',
 			data : new FormData(this),
 			processData : false,
-			contentType : false,
-			success : uploadSuccess,
-			error : function() {
-				setUploadStatusText("Server unreachable");
-			}
+			contentType : false
+		});
+		
+		jqXHR.done(uploadSuccess);
+		
+		jqXHR.fail(function() {
+			console.log("Unable to upload photo.");
+			setUploadStatusText("Unable to upload image.");
 		});
 
 		event.preventDefault();
@@ -176,10 +183,12 @@
 
 		$("#uploadLink").click(function(event) {
 			event.preventDefault();
+			alert("click");
 			$("#photoFileInput").trigger('click');
 		});
 
 		$("#photoFileInput").change(function() {
+			alert("submit upload form");
 			$("#photoUploadForm").submit();
 		});
 

@@ -6,11 +6,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 4)   
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 6)   
 @EnableWebSecurity
 public class AjaxSecurityConfig  extends WebSecurityConfigurerAdapter {
 	
@@ -21,7 +21,6 @@ public class AjaxSecurityConfig  extends WebSecurityConfigurerAdapter {
 	 * may cause popups asking for username and password in some browsers.
 	 * 
 	 */
-	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -32,9 +31,6 @@ public class AjaxSecurityConfig  extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 					.anyRequest()
 					.authenticated()
-					.and()
-					.sessionManagement()
-			        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 					.and()
 					.addFilterBefore(new com.caveofprogramming.filters.ExpiredSessionFilter(), BasicAuthenticationFilter.class);
 				

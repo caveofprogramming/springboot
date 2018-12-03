@@ -88,6 +88,8 @@ public class AuthController {
 	@RequestMapping("/ajax/statuscheck")
 	@ResponseBody
 	Boolean checkUserStatus(HttpServletRequest request, Principal principal) {
+		
+		System.out.println("Status check requested");
 
 		Boolean isValidSession = request.isRequestedSessionIdValid();
 		Boolean isAuthenticated = principal != null;
