@@ -66,8 +66,18 @@ public class SiteUser {
 		this.setPlainPassword(password);
 		this.repeatPassword = password;
 		this.enabled = true;
-		this.firstname=firstname;
-		this.surname=surname;
+		this.firstname = firstname;
+		this.surname = surname;
+	}
+
+	public SiteUser(String email, String password, String firstname, String surname, String role) {
+		this.email = email;
+		this.setPlainPassword(password);
+		this.repeatPassword = password;
+		this.enabled = true;
+		this.firstname = firstname;
+		this.surname = surname;
+		this.role = role;
 	}
 
 	public Long getId() {
@@ -150,5 +160,4 @@ public class SiteUser {
 				+ repeatPassword + ", role=" + role + "]";
 	}
 
-	
 }

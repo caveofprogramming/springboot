@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.HashSet;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -55,6 +57,9 @@ public class ProfileTest {
 		for(int i=0; i<users.length; i++) {
 			SiteUser user = users[i];
 			String[] interestArray = interests[i];
+			
+			String name = new Random().ints(10, 0, 10).mapToObj(Integer::toString).collect(Collectors.joining(""));
+			user.setEmail(name + "@example.com");
 			
 			userService.register(user);
 			

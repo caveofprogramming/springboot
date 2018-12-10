@@ -55,7 +55,7 @@ public class ProfileControllerRestTest {
 	}
 
 	@Test
-	@WithMockUser(username = "test@caveofprogramming.com")
+	@WithMockUser(username = "test@example.com")
 	public void testSaveAndDeleteInterest() throws Exception {
 
 		String interestText = "some interest_here";
