@@ -21,8 +21,16 @@ public class SearchService {
 
 	public Page<SearchResult> search(String text, int pageNumber) {
 		PageRequest request = PageRequest.of(pageNumber-1, pageSize);
-		Page<Profile> results = profileDao.findByInterestsNameContainingIgnoreCase(text, request);
-				
+		
+		Page<Profile> results = null;
+		
+		if(text.trim().length() == 0) {
+			results = profileDao.findAll(request);
+		}
+		else {
+			 results = profileDao.findByInterestsNameContainingIgnoreCase(text, request);
+		}
+		
 		return results.map(p -> new SearchResult(p));
 	}
 
