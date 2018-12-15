@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/upload-profile-photo",
 						"/save-interest",
 						"/delete-interest",
-						"/chatview"
+						"/chatview/*"
 						)
 				.authenticated()
 				.anyRequest()

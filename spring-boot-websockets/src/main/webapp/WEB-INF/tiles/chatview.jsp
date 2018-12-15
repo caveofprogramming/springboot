@@ -6,6 +6,8 @@
 	<div class="col-md-12">
 	
 	<h2><c:out value="${thisUserID}" /></h2>
+	<h2><c:out value="${chatWithUserID}" /></h2>
+	<h2><c:out value="${chatWithUserName}" /></h2>
 
 		<div class="panel panel-default">
 

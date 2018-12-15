@@ -76,4 +76,11 @@ public class UserService implements UserDetailsService {
 	public Optional<SiteUser> get(Long id) {
 		return userDao.findById(id);
 	}
+
+	public String getUserName(Long chatWithUserID) {
+		Optional<SiteUser> userOptional = userDao.findById(chatWithUserID);
+		SiteUser user = userOptional.get();
+		
+		return user.getFirstname() + " " + user.getSurname();
+	}
 }
