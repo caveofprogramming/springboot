@@ -1,11 +1,14 @@
 package com.caveofprogramming.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.model.dto.SimpleMessage;
 import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.service.UserService;
 
@@ -30,5 +33,11 @@ public class ChatController {
 		modelAndView.getModel().put("chatWithUserName", chatWithUserName);
 		
 		return modelAndView;
+	}
+	
+	
+	@MessageMapping("/message/send/{toUserID}")
+	public void send(SimpleMessage message, @DestinationVariable Long toUserID) {
+		System.out.println(message);
 	}
 }
