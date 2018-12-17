@@ -1,8 +1,11 @@
 package com.caveofprogramming.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +17,9 @@ import com.caveofprogramming.service.UserService;
 
 @Controller
 public class ChatController {
+	
+	@Autowired
+	private SimpMessagingTemplate simpleMessagingTemplate;
 	
 	@Autowired
 	private Util util;
@@ -37,7 +43,16 @@ public class ChatController {
 	
 	
 	@MessageMapping("/message/send/{toUserID}")
-	public void send(SimpleMessage message, @DestinationVariable Long toUserID) {
+	public void send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserID) {
 		System.out.println(message);
+		
+		String fromUsername = principal.getName();
+		SiteUser fromUser = userService.get(fromUsername);
+		Long fromUserId = fromUser.getId();
+		
+		String returnReceiptQueue = String.format("/queue/%d", fromUserId);
+		
+		
+		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
 	}
 }

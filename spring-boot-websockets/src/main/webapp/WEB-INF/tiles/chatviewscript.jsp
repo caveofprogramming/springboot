@@ -11,7 +11,11 @@
     	
     	var text = $("#chat-message-text").val();
     	
-    	alert(text);
+    	var message = {
+    		'text': text	
+    	};
+    	
+    	client.send("${outboundDestination}", headers, JSON.stringify(message));
     	
     	$("#chat-message-text").val("");
     	$("#chat-message-text").focus();
