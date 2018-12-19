@@ -8,6 +8,7 @@
 <sec:authorize access="isAuthenticated()">
 
 <c:url var="webSocketEndpoint" value="/chat" scope="request" />
+<c:url var="inboundDestination" value="/user/queue/${thisUserID}" />
 
 	<script>
 	
@@ -25,6 +26,12 @@
 		
 		client.connect(headers, function() {
 			console.log("Established web socket connection");
+			
+			client.subscribe("${inboundDestination}", function(messageJson) {
+				var message = JSON.parse(messageJson.body);
+				
+				alert(message.text);
+			});
 		});
 		
 	
