@@ -12,6 +12,8 @@
 
 	<script>
 	
+		var connectionManager = new ConnectionManager();
+	
 		var csrfTokenName = $("meta[name='_csrf_header']").attr("content");
 		var csrfTokenValue = $("meta[name='_csrf']").attr("content");
 		

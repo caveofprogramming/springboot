@@ -6,6 +6,8 @@
   
     <script>
     
+    connectionManager.addSubscription();
+    
     function sendMessage() {
     	
     	var text = $("#chat-message-text").val();

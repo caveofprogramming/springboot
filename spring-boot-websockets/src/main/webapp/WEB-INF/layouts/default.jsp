@@ -36,7 +36,8 @@
 
 <script
 	src="${contextRoot}/js/tag-it.min.js"></script>
-	
+
+<script src="${contextRoot}/js/connectionmanager.js"></script>	
 <script src="/webjars/sockjs-client/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/stomp.min.js"></script>
 
@@ -113,6 +114,12 @@
 
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="${contextRoot}/js/bootstrap.min.js"></script>
+	
+	<sec:authorize access="isAuthenticated()">
+		<script>
+			connectionManager.connect();
+		</script>
+	</sec:authorize>
 
 </body>
 </html>
