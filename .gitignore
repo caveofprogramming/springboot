@@ -1,8 +1,13 @@
+messagingtest/.classpath
 /target/
 /.metadata/
 **/.classpath/**
 **/.settings/**
 **/.project/**
+*/.project
+*/.classpath
+
+
 
 
 
