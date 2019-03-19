@@ -74,7 +74,7 @@ public class BulkTests {
 		return items;
 	}
 
-	@Ignore
+	//@Ignore
 	@Test
 	public void createSpecificUsers() {
 		for (SiteUser user : testUsers) {
