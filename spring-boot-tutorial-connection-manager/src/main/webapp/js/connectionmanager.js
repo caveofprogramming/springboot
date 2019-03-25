@@ -16,7 +16,7 @@ function ConnectionManager(webSocketEndpoint) {
 	this.webSocketEndpoint = webSocketEndpoint;
 	this.client = null;
 	this.headers = [];
-	headers[csrfTokenName] = csrfTokenValue;
+	this.headers[csrfTokenName] = csrfTokenValue;
 	
 	this.subscriptions = [];
 }
@@ -27,7 +27,16 @@ ConnectionManager.prototype.connect = function() {
 	var wsocket = new SockJS(this.webSocketEndpoint);
 	this.client = Stomp.over(wsocket);
 	
-	client.connect(this.headers, this.connectSuccess);
+	var _self = this;
+	
+	this.client.connect(this.headers, function() { _self.connectSuccess() });
+	
+	
+}
+
+ConnectionManager.prototype.connectSuccess = function() {
+
+	console.log("Established web socket connection");
 	
 	for(var i=0; i<this.subscriptions.length; i++) {
 		var subscription = this.subscriptions[i];
@@ -35,20 +44,14 @@ ConnectionManager.prototype.connect = function() {
 		var inboundDestination = subscription.inboundDestination;
 		var newMessageCallback = subscription.newMessageCallback;
 		
+		this.client.subscribe(inboundDestination, newMessageCallback);
 		console.log(inboundDestination, ": ", newMessageCallback);
 	}
+
 }
 
-ConnectionManager.prototype.connectSuccess() {
-
-	console.log("Established web socket connection");
-	
-	this.client.subscribe("${inboundDestination}", function(messageJson) {
-		var message = JSON.parse(messageJson.body);
-		
-		alert(message.text);
-	});
-
+ConnectionManager.prototype.send = function(outboundDestination, message) {
+	this.client.send(outboundDestination, this.headers, JSON.stringify(message));
 }
 
 ConnectionManager.prototype.addSubscription = function(inboundDestination, newMessageCallback) {

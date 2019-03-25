@@ -14,7 +14,11 @@
 	
 		var connectionManager = new ConnectionManager("${webSocketEndpoint}");
 	
-		
+		connectionManager.addSubscription("${inboundDestination}", function(messageJson) {
+			var message = JSON.parse(messageJson.body);
+			
+			alert(message.text);
+		});
 		
 		
 		

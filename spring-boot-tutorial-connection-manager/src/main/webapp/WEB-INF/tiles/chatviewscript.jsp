@@ -21,7 +21,8 @@
     		'text': text	
     	};
     	
-    	client.send("${outboundDestination}", headers, JSON.stringify(message));
+    	connectionManager.send("${outboundDestination}", message);
+    	
     	
     	$("#chat-message-text").val("");
     	$("#chat-message-text").focus();
