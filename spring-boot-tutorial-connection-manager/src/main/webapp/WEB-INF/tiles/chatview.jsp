@@ -8,7 +8,7 @@
 		<div class="panel panel-default">
 
 			<div class="panel panel-heading">
-				<div class="panel-title">Chatting with something</div>
+				<div class="panel-title">Chatting with <c:out value="${chatWithUserName}" /></div>
 			</div>
 
 			<div class="panel-body">
