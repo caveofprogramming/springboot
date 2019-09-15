@@ -3,12 +3,13 @@
   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
   
   <c:url var="outboundDestination" value="/app/message/send/${chatWithUserID}" />  
-  <c:url var="inboundDestination" value="/user/queue/${thisUserID}" />
+  <c:url var="inboundDestination" value="/user/queue/${chatWithUserID}" />
 
     <script>
     
     function newMessageCallback(message) {
-    	console.log("Message received: ", message);
+    	console.log("Message received: ", JSON.parse(message.body).text);
+    	alert(JSON.parse(message.body).text);
     }
     
     connectionManager.addSubscription("${inboundDestination}", newMessageCallback);

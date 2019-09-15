@@ -42,16 +42,15 @@ public class ChatController {
 	}
 	
 	
-	@MessageMapping("/message/send/{toUserID}")
-	public void send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserID) {
+	@MessageMapping("/message/send/{toUserId}")
+	public void send(Principal principal, SimpleMessage message, @DestinationVariable Long toUserId) {
 		System.out.println(message);
 		
 		String fromUsername = principal.getName();
 		SiteUser fromUser = userService.get(fromUsername);
 		Long fromUserId = fromUser.getId();
 		
-		String returnReceiptQueue = String.format("/queue/%d", fromUserId);
-		
+		String returnReceiptQueue = String.format("/queue/%d", toUserId);
 		
 		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
 	}
