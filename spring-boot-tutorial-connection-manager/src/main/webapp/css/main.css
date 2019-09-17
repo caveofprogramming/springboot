@@ -219,6 +219,25 @@ div[role=status] {
 	margin-bottom: 1em;
 }
 
+.chat-message {
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+	margin: 5px;
+	padding: 5px;
+}
+
+.chat-message-sent {
+	width: 70vw;
+	background-color: blue;
+}
+
+.chat-message-reply {
+	width: 60vw;
+	margin-left: 10vw;
+	background-color: green;
+}
+
 
 
 

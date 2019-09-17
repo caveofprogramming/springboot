@@ -8,8 +8,20 @@
     <script>
     
     function newMessageCallback(message) {
-    	console.log("Message received: ", JSON.parse(message.body).text);
-    	alert(JSON.parse(message.body).text);
+    	addMessage(JSON.parse(message.body));
+    }
+    
+    function addMessage(message) {
+    	var text = message.text;
+    	var isReply = message.isReply;
+    	
+    	var className = isReply ? 'chat-message-reply' : 'chat-message-sent';
+    	
+    	var div = document.createElement('div');
+    	div.className = 'chat-message ' + className;
+    	div.innerHTML = text;
+    	
+    	$('#chat-message-record').append(div);
     }
     
     connectionManager.addSubscription("${inboundDestination}", newMessageCallback);

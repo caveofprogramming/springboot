@@ -60,7 +60,10 @@ public class ChatController {
 		String returnReceiptQueue = String.format("/queue/%d", toUserId);
 		String toUserQueue = String.format("/queue/%d", fromUserId);
 		
+		message.setIsReply(false);
 		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
+		
+		message.setIsReply(true);
 		simpleMessagingTemplate.convertAndSendToUser(toUsername, toUserQueue, message);
 	}
 }
