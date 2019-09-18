@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,6 +42,13 @@ public class Message {
 
 	public Message() {
 
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		if(sent == null) {
+			sent = new Date();
+		}
 	}
 
 	public Message(SiteUser fromUser, SiteUser toUser, String text) {

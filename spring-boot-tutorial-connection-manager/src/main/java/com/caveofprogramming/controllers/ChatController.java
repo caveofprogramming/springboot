@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.dto.SimpleMessage;
 import com.caveofprogramming.model.entity.SiteUser;
+import com.caveofprogramming.service.MessageService;
 import com.caveofprogramming.service.UserService;
 
 @Controller
@@ -27,6 +28,9 @@ public class ChatController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MessageService messageService;
 
 	@RequestMapping("/chatview/{chatWithUserID}")
 	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long chatWithUserID) {
@@ -59,6 +63,8 @@ public class ChatController {
 		
 		String returnReceiptQueue = String.format("/queue/%d", toUserId);
 		String toUserQueue = String.format("/queue/%d", fromUserId);
+		
+		messageService.save(fromUser, toUser, message.getText());
 		
 		message.setIsReply(false);
 		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
