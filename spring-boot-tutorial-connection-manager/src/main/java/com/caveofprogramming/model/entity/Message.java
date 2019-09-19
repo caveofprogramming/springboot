@@ -56,6 +56,7 @@ public class Message {
 		this.fromUser = fromUser;
 		this.toUser = toUser;
 		this.text = text;
+		this.read = false;
 	}
 
 	public Long getId() {

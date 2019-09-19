@@ -1,6 +1,8 @@
 package com.caveofprogramming.controllers;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.dto.SimpleMessage;
@@ -31,6 +34,14 @@ public class ChatController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@RequestMapping(value="/convertion/{otherUserId}", method=RequestMethod.POST, produces="application/json")
+	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId) {
+		List<SimpleMessage> list = new ArrayList<SimpleMessage>();
+		list.add(new SimpleMessage("hello"));
+		
+		return list;
+	}
 
 	@RequestMapping("/chatview/{chatWithUserID}")
 	ModelAndView chatView(ModelAndView modelAndView, @PathVariable Long chatWithUserID) {
