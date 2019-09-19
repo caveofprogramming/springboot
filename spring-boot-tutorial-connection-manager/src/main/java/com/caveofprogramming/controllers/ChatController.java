@@ -36,7 +36,7 @@ public class ChatController {
 	@Autowired
 	private MessageService messageService;
 	
-	@RequestMapping(value="/conversation/{otherUserId}", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/conversation/{otherUserId}", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
 	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId) {
 		

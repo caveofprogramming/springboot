@@ -58,22 +58,14 @@
 			sendMessage();
 		});
 	});
+	
+	
+	function refreshMessages(messages) {
+		alert("Received " + messages.length + " messages");
+	}
 
 	
-	var jqXHR = $.ajax({
-		url: "${conversationAjaxUrl}",
-		dataType: 'json',
-		method: 'GET'
-	});
-	
-	jqXHR.fail(function(jqXHR, textStatus) {
-		console.log("Could not retrieve messages: ", textStatus);
-	});
-	
-	jqXHR.done(function(messages) {
-		alert("Received " + messages.length + " messages");
-	});
-	
+	connectionManager.fetchMessages("${conversationAjaxUrl}", refreshMessages, 0);
 	
     </script>
     
