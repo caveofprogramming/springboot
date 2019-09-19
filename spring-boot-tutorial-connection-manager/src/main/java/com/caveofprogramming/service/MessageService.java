@@ -1,9 +1,9 @@
 package com.caveofprogramming.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,8 @@ public class MessageService {
 	
 	public List<SimpleMessage> fetchConversation(Long fromUserId, Long toUserId, int page) {
 		
-		List<SimpleMessage> messages = new ArrayList<>();
+		PageRequest request = PageRequest.of(page, 10);
 		
-		return messages;
+		messageDao.fetchConversation(toUserId, fromUserId, request);
 	}
 }
