@@ -30,6 +30,6 @@ public class MessageService {
 		
 		Slice<Message> conversation =messageDao.fetchConversation(toUserId, fromUserId, request);
 		
-		return conversation.map(m -> new SimpleMessage(m, false)).getContent();
+		return conversation.map(m -> new SimpleMessage(m, m.getFromUser().getId().compareTo(toUserId) == 0)).getContent();
 	}
 }

@@ -61,7 +61,9 @@
 	
 	
 	function refreshMessages(messages) {
-		alert("Received " + messages.length + " messages");
+		for(var i=0; i<messages.length; i++) {
+			addMessage(messages[i]);
+		}
 	}
 
 	
