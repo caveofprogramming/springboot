@@ -4,6 +4,7 @@
   
   <c:url var="outboundDestination" value="/app/message/send/${chatWithUserID}" />  
   <c:url var="inboundDestination" value="/user/queue/${chatWithUserID}" />
+  <c:url var="conversationAjaxUrl" value="/conversation/${chatWithUserID}" />
 
     <script>
     
@@ -58,4 +59,29 @@
 		});
 	});
 
+	
+	var jqXHR = $.ajax({
+		url: "${conversationAjaxUrl}",
+		dataType: 'json',
+		method: 'GET'
+	});
+	
+	jqXHR.fail(function(jqXHR, textStatus) {
+		console.log("Could not retrieve messages: ", textStatus);
+	});
+	
+	jqXHR.done(function(messages) {
+		alert("Received " + messages.length + " messages");
+	});
+	
+	
     </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
