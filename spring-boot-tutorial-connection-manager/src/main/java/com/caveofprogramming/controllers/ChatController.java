@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.caveofprogramming.model.dto.SimpleMessage;
@@ -35,10 +36,13 @@ public class ChatController {
 	@Autowired
 	private MessageService messageService;
 	
-	@RequestMapping(value="/convertion/{otherUserId}", method=RequestMethod.POST, produces="application/json")
+	@RequestMapping(value="/conversation/{otherUserId}", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
 	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId) {
-		List<SimpleMessage> list = new ArrayList<SimpleMessage>();
-		list.add(new SimpleMessage("hello"));
+		
+		SiteUser thisUser = util.getUser();
+		
+		List<SimpleMessage> list = messageService.fetchConversation(thisUser.getId(), otherUserId, 0);
 		
 		return list;
 	}

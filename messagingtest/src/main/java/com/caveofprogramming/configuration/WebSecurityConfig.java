@@ -82,8 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/queue/**",
 						"/app/**",
 						"/chat/**",
-						"/conversation/*",
-						"/messagecount"
+						"/messagecount",
+						"/conversation/*"
 						)
 					.authenticated()
 				.anyRequest()
