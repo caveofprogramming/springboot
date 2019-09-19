@@ -2,6 +2,8 @@ package com.caveofprogramming.model.dto;
 
 import java.util.Date;
 
+import com.caveofprogramming.model.entity.Message;
+
 public class SimpleMessage {
 	private String from;
 	private String text;
@@ -17,6 +19,14 @@ public class SimpleMessage {
 	
 	public SimpleMessage() {
 		
+	}
+	
+	public SimpleMessage(Message m, Boolean isReply) {
+		this.from = m.getFromUser().getFirstname() + " " + m.getFromUser().getSurname();
+		this.text = m.getText();
+		this.sent = m.getSent();
+		this.fromUserId = m.getFromUser().getId();
+		this.isReply = isReply;
 	}
 	
 	public SimpleMessage(Date sent, Long fromUserId, String from, String text) {

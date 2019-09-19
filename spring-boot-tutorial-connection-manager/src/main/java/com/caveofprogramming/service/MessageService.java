@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,8 @@ public class MessageService {
 		
 		PageRequest request = PageRequest.of(page, 10);
 		
-		messageDao.fetchConversation(toUserId, fromUserId, request);
+		Slice<Message> conversation =messageDao.fetchConversation(toUserId, fromUserId, request);
+		
+		return conversation.map(m -> new SimpleMessage(m, false)).getContent();
 	}
 }
