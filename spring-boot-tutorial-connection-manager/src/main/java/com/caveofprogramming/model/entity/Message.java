@@ -43,10 +43,10 @@ public class Message {
 	public Message() {
 
 	}
-	
+
 	@PrePersist
 	protected void onCreate() {
-		if(sent == null) {
+		if (sent == null) {
 			sent = new Date();
 		}
 	}
