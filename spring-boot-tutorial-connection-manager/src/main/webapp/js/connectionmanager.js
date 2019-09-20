@@ -41,10 +41,16 @@ ConnectionManager.prototype.connect = function() {
 
 ConnectionManager.prototype.fetchMessages = function(conversationAjaxUrl,
 		refreshMessages, page) {
+	
+	var request = JSON.stringify({
+		'page': page
+	});
 
 	var jqXHR = $.ajax({
 		url : conversationAjaxUrl,
 		dataType : 'json',
+		data: request,
+		contentType: 'application/json',
 		method : 'POST'
 	});
 

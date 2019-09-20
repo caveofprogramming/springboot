@@ -1,7 +1,6 @@
 package com.caveofprogramming.controllers;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,11 +10,13 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.caveofprogramming.model.dto.ChatRequest;
 import com.caveofprogramming.model.dto.SimpleMessage;
 import com.caveofprogramming.model.entity.SiteUser;
 import com.caveofprogramming.service.MessageService;
@@ -38,11 +39,11 @@ public class ChatController {
 	
 	@RequestMapping(value="/conversation/{otherUserId}", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId) {
+	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId, @RequestBody ChatRequest request) {
 		
 		SiteUser thisUser = util.getUser();
-		
-		List<SimpleMessage> list = messageService.fetchConversation(thisUser.getId(), otherUserId, 0);
+
+		List<SimpleMessage> list = messageService.fetchConversation(thisUser.getId(), otherUserId, request.getPage());
 		
 		return list;
 	}
