@@ -9,10 +9,10 @@
     <script>
     
     function newMessageCallback(message) {
-    	addMessage(JSON.parse(message.body));
+    	addMessage(JSON.parse(message.body), true);
     }
     
-    function addMessage(message) {
+    function addMessage(message, isNew) {
     	var text = message.text;
     	var isReply = message.isReply;
     	
@@ -22,7 +22,13 @@
     	div.className = 'chat-message ' + className;
     	div.innerHTML = text;
     	
-    	$('#chat-message-record').append(div);
+    	if(isNew) {
+    		$('#chat-message-record').prepend(div);
+    	} 
+    	else {
+    		$('#chat-message-record').append(div);
+    	}
+    	
     }
     
     connectionManager.addSubscription("${inboundDestination}", newMessageCallback);
@@ -62,7 +68,7 @@
 	
 	function refreshMessages(messages) {
 		for(var i=0; i<messages.length; i++) {
-			addMessage(messages[i]);
+			addMessage(messages[i], false);
 		}
 	}
 

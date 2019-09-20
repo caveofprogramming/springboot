@@ -238,6 +238,13 @@ div[role=status] {
 	background-color: green;
 }
 
+#chat-message-record {
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column-reverse;
+	padding-bottom: 10px;
+}
+
 
 
 
