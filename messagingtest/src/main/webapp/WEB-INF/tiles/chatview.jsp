@@ -33,7 +33,7 @@
 						value="${_csrf.token}" />
 
 					<div id="chat-message-previous">
-						<a href="#">view older messages</a>
+						<a id="chat-older-messages" href="#">view older messages</a>
 					</div>
 					
 

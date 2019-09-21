@@ -8,6 +8,8 @@
 
     <script>
     
+    var pagesFetched = 1;
+    
     function newMessageCallback(message) {
     	addMessage(JSON.parse(message.body), true);
     }
@@ -48,6 +50,18 @@
     	$("#chat-message-text").focus();
     }
     
+    
+    function addPreviousMessages(messages) {
+    	
+    	for(var i=0; i<messages.length; i++) {
+			addMessage(messages[i], false);
+		}
+    	
+    	pagesFetched++;
+    	
+    	
+    }
+    
 	$(document).ready(function() {
 		
 		$(document).keypress(function(e) {
@@ -62,6 +76,12 @@
 		
 		$('#chat-send-button').click(function(){
 			sendMessage();
+		});
+		
+		$('#chat-older-messages').click(function() {
+			
+			
+			connectionManager.fetchMessages("${conversationAjaxUrl}", addPreviousMessages, pagesFetched);
 		});
 	});
 	

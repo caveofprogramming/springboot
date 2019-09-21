@@ -16,7 +16,7 @@
 				<div id="chat-message-view">
 					
 					<div id="chat-message-previous">
-						<a href="#">View older messages</a>
+						<a id="chat-older-messages" href="#">View older messages</a>
 					</div>
 				
 				
