@@ -10,6 +10,19 @@
     
     var pagesFetched = 1;
     
+    function sizeChatWindow() {
+    	$('#chat-message-record').height(0);
+    	
+    	var documentHeight = $(document).height();
+    	
+    	var sendMessageHeight = $('#chat-message-send').height();
+    	var messageRecordPos = $('#chat-message-record').offset().top;
+    	var panelBodyPadding = 15;
+    	
+    	var messageRecordHeight = documentHeight - (messageRecordPos + sendMessageHeight + 2 * panelBodyPadding);
+    	$('#chat-message-record').height(messageRecordHeight);
+    }
+    
     function newMessageCallback(message) {
     	addMessage(JSON.parse(message.body), true);
     }
@@ -59,7 +72,7 @@
     	
     	pagesFetched++;
     	
-    	
+    	$('#chat-message-record').animate({scrollTop: 0}, 800);
     }
     
 	$(document).ready(function() {
@@ -80,9 +93,11 @@
 		
 		$('#chat-older-messages').click(function() {
 			
-			
 			connectionManager.fetchMessages("${conversationAjaxUrl}", addPreviousMessages, pagesFetched);
 		});
+		
+		sizeChatWindow();
+		$(window).resize(sizeChatWindow);
 	});
 	
 	

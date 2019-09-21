@@ -26,7 +26,7 @@ public class MessageService {
 	
 	public List<SimpleMessage> fetchConversation(Long fromUserId, Long toUserId, int page) {
 		
-		PageRequest request = PageRequest.of(page, 10);
+		PageRequest request = PageRequest.of(page, 12);
 		
 		Slice<Message> conversation =messageDao.fetchConversation(toUserId, fromUserId, request);
 		
