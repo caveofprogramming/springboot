@@ -87,6 +87,9 @@ public class ChatController {
 		
 		message.setIsReply(true);
 		simpleMessagingTemplate.convertAndSendToUser(toUsername, toUserQueue, message);
+		
+		// Send a new message notification
+		simpleMessagingTemplate.convertAndSendToUser(toUsername, "/queue/newmessages", message);
 	}
 }
 

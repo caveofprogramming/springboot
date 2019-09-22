@@ -8,13 +8,13 @@
 <sec:authorize access="isAuthenticated()">
 
 <c:url var="webSocketEndpoint" value="/chat" scope="request" />
-<c:url var="inboundDestination" value="/user/queue/${thisUserID}" />
+<c:url var="notificationQueue" value="/user/queue/newmessages" />
 
 	<script>
 	
 		var connectionManager = new ConnectionManager("${webSocketEndpoint}");
 	
-		connectionManager.addSubscription("${inboundDestination}", function(messageJson) {
+		connectionManager.addSubscription("${notificationQueue}", function(messageJson) {
 			var message = JSON.parse(messageJson.body);
 			
 			alert(message.text);
