@@ -55,6 +55,10 @@
 		<put-attribute name="content" value="/WEB-INF/tiles/profile.jsp" />
 	</definition>
 	
+	<definition name="app.checkmessages" extends="app.default">
+		<put-attribute name="content" value="/WEB-INF/tiles/checkmessages.jsp" />
+	</definition>
+	
 	<definition name="app.editProfileAbout" extends="app.default">
 		<put-attribute name="content" value="/WEB-INF/tiles/editprofileabout.jsp" />
 	</definition>

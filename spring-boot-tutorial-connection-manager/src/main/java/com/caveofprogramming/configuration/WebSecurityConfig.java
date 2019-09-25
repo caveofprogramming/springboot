@@ -60,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/save-interest",
 						"/delete-interest",
 						"/conversation/*",
-						"/chatview/*"
+						"/chatview/*",
+						"/messages"
 						)
 				.authenticated()
 				.anyRequest()

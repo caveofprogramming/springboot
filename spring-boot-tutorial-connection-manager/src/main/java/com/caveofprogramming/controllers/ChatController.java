@@ -37,6 +37,13 @@ public class ChatController {
 	@Autowired
 	private MessageService messageService;
 	
+	
+	@RequestMapping("/messages")
+	ModelAndView expiredToken(ModelAndView modelAndView) {
+		modelAndView.setViewName("app.checkmessages");
+		return modelAndView;
+	}
+	
 	@RequestMapping(value="/conversation/{otherUserId}", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
 	List<SimpleMessage> fetchConversation(@PathVariable("otherUserId") Long otherUserId, @RequestBody ChatRequest request) {
