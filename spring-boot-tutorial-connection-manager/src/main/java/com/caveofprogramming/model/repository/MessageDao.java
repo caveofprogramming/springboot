@@ -17,5 +17,5 @@ public interface MessageDao extends CrudRepository<Message, Long> {
 	@Query("select m from Message m where (m.toUser.id=:toUser and m.fromUser.id=:fromUser) or (m.toUser.id=:fromUser and m.fromUser.id=:toUser) order by m.sent desc")
 	Slice<Message> fetchConversation(@Param("toUser") Long toUser, @Param("fromUser") Long fromUser, Pageable pageable);
 
-	Page<Message> findByToUserIdAndReadFalseOrderBySentDesc(Long toUserId, PageRequest request);
+	Page<Message> findByToUserIdAndReadFalseOrderBySentDesc(Long toUserId, Pageable request);
 }
