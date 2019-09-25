@@ -85,6 +85,8 @@ public class ChatController {
 		message.setIsReply(false);
 		simpleMessagingTemplate.convertAndSendToUser(fromUsername, returnReceiptQueue, message);
 		
+		message.setFrom(fromUser.getFirstname() + " " + fromUser.getSurname());
+		
 		message.setIsReply(true);
 		simpleMessagingTemplate.convertAndSendToUser(toUsername, toUserQueue, message);
 		
