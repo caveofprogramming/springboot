@@ -9,6 +9,7 @@
 
 	<c:url var="webSocketEndpoint" value="/chat" scope="request" />
 	<c:url var="notificationQueue" value="/user/queue/newmessages" />
+	<c:url var="notificationUrl" value="/" />
 
 	<script>
 		function alertUser(from, text) {
@@ -26,6 +27,10 @@
 			
 			if (Notification.permission === "granted") {
 				var notification = new Notification(from, { body: text });
+				
+				notification.onclick = function () {
+					window.location.href = "${notificationUrl}";
+				}
 			}
 		}
 
