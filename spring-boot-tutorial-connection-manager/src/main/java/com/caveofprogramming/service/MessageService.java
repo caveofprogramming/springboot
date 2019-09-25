@@ -3,6 +3,7 @@ package com.caveofprogramming.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Async;
@@ -31,5 +32,14 @@ public class MessageService {
 		Slice<Message> conversation =messageDao.fetchConversation(toUserId, fromUserId, request);
 		
 		return conversation.map(m -> new SimpleMessage(m, m.getFromUser().getId().compareTo(toUserId) == 0)).getContent();
+	}
+
+	public Page<SimpleMessage> fetchMessageListPage(Long toUserId, int pageNumber) {
+		
+		PageRequest request = PageRequest.of(pageNumber - 1, 5);
+		
+		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
+		
+		return results.map(m -> new SimpleMessage(m, true));
 	}
 }

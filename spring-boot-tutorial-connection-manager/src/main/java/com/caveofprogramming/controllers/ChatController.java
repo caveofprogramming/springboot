@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,7 +41,16 @@ public class ChatController {
 	
 	
 	@RequestMapping("/messages")
-	ModelAndView expiredToken(ModelAndView modelAndView) {
+	ModelAndView expiredToken(ModelAndView modelAndView, @RequestParam("p") int pageNumber) {
+		
+		
+		SiteUser user = util.getUser();
+		Page<SimpleMessage> messages = messageService.fetchMessageListPage(user.getId(), pageNumber);
+		
+		modelAndView.getModel().put("messageList", messages);
+		modelAndView.getModel().put("pageNumber", pageNumber);
+		modelAndView.getModel().put("userId", user.getId());
+		
 		modelAndView.setViewName("app.checkmessages");
 		return modelAndView;
 	}
