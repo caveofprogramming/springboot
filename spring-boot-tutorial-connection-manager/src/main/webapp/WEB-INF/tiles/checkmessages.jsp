@@ -7,8 +7,14 @@
 
 <c:forEach var="message" items="${messageList.content}">
 
-${message.from}
-${message.sent}<p/>
+	<c:url var="messageUrl" value="/chatview/${message.fromUserId}" />
+	
+	<div class="message-received">
+	
+	${message.sent} <a href="${messageUrl}">${message.from}</a>
+	
+	</div>
+<p/>
 
 </c:forEach>
 
