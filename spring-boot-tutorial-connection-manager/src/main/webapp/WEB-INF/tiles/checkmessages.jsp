@@ -7,7 +7,7 @@
 
 <c:forEach var="message" items="${messageList.content}">
 
-	<c:url var="messageUrl" value="/chatview/${message.fromUserId}" />
+	<c:url var="messageUrl" value="/markread?f=${message.fromUserId}&m=${message.id}" />
 	
 	<div class="message-received">
 	

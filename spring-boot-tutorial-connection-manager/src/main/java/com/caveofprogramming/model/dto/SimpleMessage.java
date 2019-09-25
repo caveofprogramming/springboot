@@ -5,6 +5,7 @@ import java.util.Date;
 import com.caveofprogramming.model.entity.Message;
 
 public class SimpleMessage {
+	private Long id;
 	private String from;
 	private String text;
 	private Date sent;
@@ -27,6 +28,7 @@ public class SimpleMessage {
 		this.sent = m.getSent();
 		this.fromUserId = m.getFromUser().getId();
 		this.isReply = isReply;
+		this.id = m.getId();
 	}
 	
 	public SimpleMessage(Date sent, Long fromUserId, String from, String text) {
@@ -38,6 +40,16 @@ public class SimpleMessage {
 
 	public String getFrom() {
 		return from;
+	}
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setFrom(String from) {
