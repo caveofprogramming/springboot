@@ -1,6 +1,7 @@
 package com.caveofprogramming.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,5 +42,13 @@ public class MessageService {
 		Page<Message> results = messageDao.findByToUserIdAndReadFalseOrderBySentDesc(toUserId, request);
 		
 		return results.map(m -> new SimpleMessage(m, true));
+	}
+
+	public Optional<Message> get(long messageId) {
+		return messageDao.findById(messageId);
+	}
+
+	public void save(Message message) {
+		messageDao.save(message);
 	}
 }

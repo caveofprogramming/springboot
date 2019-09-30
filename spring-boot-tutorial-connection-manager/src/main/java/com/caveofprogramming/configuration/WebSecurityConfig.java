@@ -61,7 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/delete-interest",
 						"/conversation/*",
 						"/chatview/*",
-						"/messages"
+						"/messages",
+						"/markread"
 						)
 				.authenticated()
 				.anyRequest()
