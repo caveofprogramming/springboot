@@ -17,6 +17,8 @@ function ConnectionManager(webSocketEndpoint) {
 	this.client = null;
 	this.headers = [];
 	this.headers[csrfTokenName] = csrfTokenValue;
+	
+	this.timedout=false;
 
 	this.subscriptions = [];
 
@@ -35,6 +37,8 @@ ConnectionManager.prototype.connect = function() {
 
 	this.client.connect(this.headers, function() {
 		_self.connectSuccess()
+	}, function() {
+		_self.timedout=true;
 	});
 
 }
@@ -81,8 +85,14 @@ ConnectionManager.prototype.connectSuccess = function() {
 }
 
 ConnectionManager.prototype.send = function(outboundDestination, message) {
-	this.client
-			.send(outboundDestination, this.headers, JSON.stringify(message));
+	
+	if(this.timedout == true) {
+		alert("Connection lost. Please refresh the page");
+	}
+	else {
+		this.client.send(outboundDestination, this.headers, JSON.stringify(message));
+	}
+	
 }
 
 ConnectionManager.prototype.addSubscription = function(inboundDestination,
