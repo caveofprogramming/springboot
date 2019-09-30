@@ -9,7 +9,7 @@
 
 	<c:url var="webSocketEndpoint" value="/chat" scope="request" />
 	<c:url var="notificationQueue" value="/user/queue/newmessages" />
-	<c:url var="notificationUrl" value="/" />
+	<c:url var="notificationUrl" value="/messages?p=1" />
 
 	<script>
 		function alertUser(from, text) {
