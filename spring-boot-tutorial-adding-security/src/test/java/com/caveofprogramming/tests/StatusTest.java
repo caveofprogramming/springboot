@@ -10,17 +10,16 @@ import javax.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.caveofprogramming.App;
 import com.caveofprogramming.model.StatusUpdate;
 import com.caveofprogramming.model.StatusUpdateDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(App.class)
-@WebAppConfiguration
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @Transactional
 public class StatusTest {
 	
@@ -36,7 +35,7 @@ public class StatusTest {
 		assertNotNull("Non-null ID", status.getId());
 		assertNotNull("Non-null Date", status.getAdded());
 		
-		StatusUpdate retrieved = statusUpdateDao.findOne(status.getId());
+		StatusUpdate retrieved = statusUpdateDao.findById(status.getId()).get();
 		
 		assertEquals("Matching StatusUpdate", status, retrieved);
 	}

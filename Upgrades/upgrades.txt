@@ -1,33 +1,38 @@
 Changes that were required to upgrade projects to Springboot 2.1.9.
 
-Some projects may be missing from this list, but the changes required to
-those projects are the same as the changes to other projects, listed below.
+Not all projects contain all of the below code or all of the below files, 
+so not all projects require all changes.
 
-spring-boot-checking-passwords-match
+After making changes, right-click project and run "Maven"->"Update Project"
 
-	App.java: organise imports to fix incorrect imports
-	StatusUpdateService.java: 
+You may need to set the time zone in MySQL, like this, for example:
+
+SET GLOBAL time_zone = '+1:00';  
+
+
+App.java: organise imports to fix incorrect imports
+StatusUpdateService.java: 
+
+	change "new PageRequest" to "PageRequest.of"
+	change "delete" to "deleteById"
+
+	change: return statusUpdateDao.findOne(id);
+	to: return statusUpdateDao.findById(id).get();
+
+StatusTest.java:
+
+	change: 
+	@SpringApplicationConfiguration(App.class)
+	@WebAppConfiguration
 	
-		change "new PageRequest" to "PageRequest.of"
-		change "delete" to "deleteById"
+	to:
+	@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+	@TestPropertySource(locations="classpath:test.properties")
 	
-		change: return statusUpdateDao.findOne(id);
-		to: return statusUpdateDao.findById(id).get();
+	change: statusUpdateDao.findOne(status.getId());
+	to: statusUpdateDao.findById(status.getId()).get();
 	
-	StatusTest.java:
-	
-		change: 
-		@SpringApplicationConfiguration(App.class)
-		@WebAppConfiguration
-		
-		to:
-		@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-		@TestPropertySource(locations="classpath:test.properties")
-		
-		change: statusUpdateDao.findOne(status.getId());
-		to: statusUpdateDao.findById(status.getId()).get();
-		
-	create the file "test.properties" in the resources directory.
+create the file "test.properties" in the resources directory.
 	
 		
 	
