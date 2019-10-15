@@ -1,0 +1,34 @@
+Changes that were required to upgrade projects to Springboot 2.1.9.
+
+Some projects may be missing from this list, but the changes required to
+those projects are the same as the changes to other projects, listed below.
+
+spring-boot-checking-passwords-match
+
+	App.java: organise imports to fix incorrect imports
+	StatusUpdateService.java: 
+	
+		change "new PageRequest" to "PageRequest.of"
+		change "delete" to "deleteById"
+	
+		change: return statusUpdateDao.findOne(id);
+		to: return statusUpdateDao.findById(id).get();
+	
+	StatusTest.java:
+	
+		change: 
+		@SpringApplicationConfiguration(App.class)
+		@WebAppConfiguration
+		
+		to:
+		@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+		@TestPropertySource(locations="classpath:test.properties")
+		
+		change: statusUpdateDao.findOne(status.getId());
+		to: statusUpdateDao.findById(status.getId()).get();
+		
+	create the file "test.properties" in the resources directory.
+	
+		
+	
+
