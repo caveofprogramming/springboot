@@ -36,7 +36,7 @@ public class StatusTest {
 		assertNotNull("Non-null ID", status.getId());
 		assertNotNull("Non-null Date", status.getAdded());
 		
-		StatusUpdate retrieved = statusUpdateDao.findOne(status.getId());
+		StatusUpdate retrieved = statusUpdateDao.findById(status.getId()).get();
 		
 		assertEquals("Matching StatusUpdate", status, retrieved);
 	}

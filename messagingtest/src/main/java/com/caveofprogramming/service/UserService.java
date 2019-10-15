@@ -86,11 +86,11 @@ public class UserService implements UserDetailsService {
 	}
 
 	public SiteUser get(Long id) {
-		return userDao.findOne(id);
+		return userDao.findById(id).get();
 	}
 	
 	public String getUserName(Long id) {
-		SiteUser user = userDao.findOne(id);
+		SiteUser user = userDao.findById(id).get();
 		return user.getFirstname() + " " + user.getSurname();
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 6)   
+@Order(SecurityProperties.BASIC_AUTH_ORDER - 6)   
 @EnableWebSecurity
 public class AjaxSecurityConfig  extends WebSecurityConfigurerAdapter {
 	

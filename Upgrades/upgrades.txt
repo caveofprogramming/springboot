@@ -9,15 +9,61 @@ You may need to set the time zone in MySQL, like this, for example:
 
 SET GLOBAL time_zone = '+1:00';  
 
+----------------
+
+Change all occurrences of "new PageRequest" to "PageRequest.of"
+
+----------------
+
 
 App.java: organise imports to fix incorrect imports
+
+	Replace: 
+	@Bean
+		EmbeddedServletContainerCustomizer errorHandler() {
+			return new EmbeddedServletContainerCustomizer() {
+	
+				@Override
+				public void customize(ConfigurableEmbeddedServletContainer container) {
+					container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));
+				}
+	
+			};
+		}
+		
+	With: 
+	
+	@Configuration
+	     public class ServerConfig {
+	             @Bean
+	             public ConfigurableServletWebServerFactory webServerFactory() {
+	                     TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+	                     
+	                     factory.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));
+	                     return factory;
+	             }
+	     }
+	     
+ErrorHandlerController.java:
+	organise the imports.
+
+
 StatusUpdateService.java: 
 
-	change "new PageRequest" to "PageRequest.of"
 	change "delete" to "deleteById"
 
 	change: return statusUpdateDao.findOne(id);
 	to: return statusUpdateDao.findById(id).get();
+	
+SearchService.java:
+	change: return results.map(converter);
+	to: return results.map(p -> new SearchResult(p));
+	
+	You can delete the now-unused "converter".
+	
+UserService.java:
+	change:  userDao.findOne(id);
+	to: userDao.findById(id).get();
 
 StatusTest.java:
 

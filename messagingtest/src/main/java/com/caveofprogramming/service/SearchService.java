@@ -31,7 +31,7 @@ public class SearchService {
 			pageNumber=1;
 		}
 		
-		PageRequest request = new PageRequest(pageNumber-1, pageSize);
+		PageRequest request = PageRequest.of(pageNumber-1, pageSize);
 		
 		Page<Profile> results = null;
 		
@@ -51,13 +51,7 @@ public class SearchService {
 			results = profileDao.findAllByUserIdNotAndInterestsNameContainingIgnoreCase(userId, text, request);
 		}
 		
-		Converter<Profile, SearchResult> converter = new Converter<Profile, SearchResult>() {
-			public SearchResult convert(Profile profile) {
-				return new SearchResult(profile);
-			}
-			
-		};
 		
-		return results.map(converter);
+		return results.map(p -> new SearchResult(p));
 	}
 }

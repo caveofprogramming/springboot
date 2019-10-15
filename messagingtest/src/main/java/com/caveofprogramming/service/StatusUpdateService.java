@@ -34,10 +34,10 @@ public class StatusUpdateService {
 	}
 
 	public void delete(Long id) {
-		statusUpdateDao.delete(id);
+		statusUpdateDao.deleteById(id);
 	}
 
 	public StatusUpdate get(Long id) {
-		return statusUpdateDao.findOne(id);
+		return statusUpdateDao.findById(id).get();
 	}
 }

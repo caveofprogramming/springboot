@@ -19,7 +19,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import com.caveofprogramming.service.UserService;
 
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 5)
+@Order(SecurityProperties.BASIC_AUTH_ORDER - 5)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
