@@ -1,5 +1,9 @@
 messagingtest/.classpath
 /target/
+*/bin/*
+*/target/*
+*/.settings/*
+/.settings
 /.metadata/
 **/.classpath/**
 **/.settings/**
