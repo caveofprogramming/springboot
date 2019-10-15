@@ -26,16 +26,16 @@ public class StatusUpdateService {
 	}
 	
 	public Page<StatusUpdate> getPage(int pageNumber) {
-		PageRequest request = new PageRequest(pageNumber-1, PAGESIZE, Sort.Direction.DESC, "added");
+		PageRequest request = PageRequest.of(pageNumber-1, PAGESIZE, Sort.Direction.DESC, "added");
 		
 		return statusUpdateDao.findAll(request);
 	}
 
 	public void delete(Long id) {
-		statusUpdateDao.delete(id);
+		statusUpdateDao.deleteById(id);
 	}
 
 	public StatusUpdate get(Long id) {
-		return statusUpdateDao.findOne(id);
+		return statusUpdateDao.findById(id).get();
 	}
 }
