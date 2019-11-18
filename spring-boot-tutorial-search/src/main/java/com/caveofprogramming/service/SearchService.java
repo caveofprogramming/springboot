@@ -21,17 +21,11 @@ public class SearchService {
 	private ProfileDao profileDao;
 
 	public Page<SearchResult> search(String text, int pageNumber) {
-		PageRequest request = new PageRequest(pageNumber-1, pageSize);
+		PageRequest request = PageRequest.of(pageNumber-1, pageSize);
 		Page<Profile> results = profileDao.findByInterestsNameContainingIgnoreCase(text, request);
 		
-		Converter<Profile, SearchResult> converter = new Converter<Profile, SearchResult>() {
-			public SearchResult convert(Profile profile) {
-				return new SearchResult(profile);
-			}
-			
-		};
-		
-		return results.map(converter);
+
+		return results.map(p -> new SearchResult(p));
 	}
 
 }

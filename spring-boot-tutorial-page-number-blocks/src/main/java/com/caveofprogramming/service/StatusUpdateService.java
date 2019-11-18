@@ -26,7 +26,7 @@ public class StatusUpdateService {
 	}
 	
 	public Page<StatusUpdate> getPage(int pageNumber) {
-		PageRequest request = new PageRequest(pageNumber-1, PAGESIZE, Sort.Direction.DESC, "added");
+		PageRequest request = PageRequest.of(pageNumber-1, PAGESIZE, Sort.Direction.DESC, "added");
 		
 		return statusUpdateDao.findAll(request);
 	}

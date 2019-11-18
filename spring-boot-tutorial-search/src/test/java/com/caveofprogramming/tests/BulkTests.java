@@ -12,17 +12,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.transaction.Transactional;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.caveofprogramming.App;
 import com.caveofprogramming.model.entity.Interest;
 import com.caveofprogramming.model.entity.Profile;
 import com.caveofprogramming.model.entity.SiteUser;
@@ -31,8 +28,7 @@ import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(App.class)
-@WebAppConfiguration
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 //@Transactional
 public class BulkTests {
 	

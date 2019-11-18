@@ -1,20 +1,20 @@
 package com.caveofprogramming.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.caveofprogramming.App;
 import com.caveofprogramming.model.Interest;
 import com.caveofprogramming.model.Profile;
 import com.caveofprogramming.model.SiteUser;
@@ -23,7 +23,7 @@ import com.caveofprogramming.service.ProfileService;
 import com.caveofprogramming.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(App.class)
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @WebAppConfiguration
 @Transactional
 public class ProfileTest {
