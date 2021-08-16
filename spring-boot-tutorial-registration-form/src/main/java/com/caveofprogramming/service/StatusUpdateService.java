@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.caveofprogramming.model.StatusUpdate;
 import com.caveofprogramming.model.StatusUpdateDao;
 
 @Service
+@Transactional
 public class StatusUpdateService {
 	
 	private final static int PAGESIZE = 10;
